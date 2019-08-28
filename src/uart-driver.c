@@ -1,9 +1,5 @@
-
-// Situations to consider:
-// The application tries to send a new character while the UART is busy transmitting the previous one
-//   Solution: Wait until the UART is finished transmitting the previous one by reading the flag
-// The application wants to be notified when a new character is received
-//   Solution: Provide a callback function that is called each time a character is recieved
+#ifndef UART_DRIVER
+#define UART_DRIVER
 
 // TODO: Include header file defining macros?
 
@@ -25,6 +21,7 @@ void uart_init() // ubrr = uart baud rate register
 
 void uart_transmit(char data)
 {
+    /** Transmit one char of data to the mcu */
     while (!(UCSRA & (1 << UDRE)))
         ; // Wait for transmit buffer to be empty
 
@@ -33,8 +30,10 @@ void uart_transmit(char data)
 
 char uart_recieve()
 {
+    /** Recieve one char of data from the mcu */
     while (!(UCSRA & (1 << RXC)))
         ; // Wait for data recieve
     
     return UDR; // Return the data in the data register
 }
+#endif /* UART_DRIVER */
