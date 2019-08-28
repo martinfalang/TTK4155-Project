@@ -8,7 +8,7 @@
 #define F_CPU 4915200
 
 #include <avr/io.h>
-#inclue <util/delay.h>
+#include <util/delay.h>
 
 
 int main(void)
