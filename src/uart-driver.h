@@ -2,8 +2,8 @@
   * Driver for communicating with the ATmega162 through UART
   */ 
 
-void uart_init();
+void uart_init(); // ubrr = uart baud rate register
 
-void send_char(char c);
+void uart_transmit(char data);
 
-char read_char();
+char uart_recieve();
