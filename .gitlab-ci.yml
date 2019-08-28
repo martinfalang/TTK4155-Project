@@ -1,7 +1,7 @@
 image: "ubuntu:16.04"
 
 before_script:
-  - apt-get update && apt-get upgrade
+  - apt-get update -y && apt-get upgrade -y
   - apt-get install binutils gcc-avr avr-libc uisp avrdude flex byacc bison
 
 stage_build:
