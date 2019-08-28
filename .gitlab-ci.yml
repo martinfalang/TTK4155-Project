@@ -6,4 +6,4 @@ before_script:
 
 build:
   script:
-    - make
+    - echo "INSERT \"make\" HERE WHEN MAKEFILE WORKS"
