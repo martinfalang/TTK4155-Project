@@ -10,7 +10,15 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "uart-driver.h"
+#include "uart.h"
+
+void heart_beat() {
+    PORTA ^= 1 << PA0;
+}
+
+void test_uart() {
+     uart_transmit('p');
+}
 
 int main(void)
 {
@@ -20,8 +28,10 @@ int main(void)
 
   while (1)
   {
-    uart_transmit('o');
+    heart_beat();
+    test_uart();
     _delay_ms(500);
-    PORTA ^= 1 << PA0;
+    
+
   }
 }

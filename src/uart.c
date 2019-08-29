@@ -2,7 +2,7 @@
 #define UART_DRIVER
 
 #include <avr/io.h>
-#include "uart-driver.h"
+#include "uart.h"
 
 // TODO: Include header file defining macros?
 
