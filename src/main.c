@@ -28,9 +28,14 @@ int main(void)
 
   while (1)
   {
-    heart_beat();
-    test_uart();
-    _delay_ms(500);
+    //heart_beat();
+    //test_uart();
+
+    if (uart_recieve()) {
+      heart_beat();
+    }
+
+    // _delay_ms(500);
     
 
   }
