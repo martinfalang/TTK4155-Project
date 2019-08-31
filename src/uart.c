@@ -1,14 +1,7 @@
-#ifndef UART_DRIVER
-#define UART_DRIVER
-
 #include <avr/io.h>
+
+#include "defines.h"
 #include "uart.h"
-
-// TODO: Include header file defining macros?
-
-#define FOSC 4915200 // Clock Speed
-#define BAUD 9600
-#define MYUBRR (FOSC / 16 / BAUD - 1) // Baud rate register
 
 void uart_init() // ubrr = uart baud rate register
 {
@@ -36,7 +29,6 @@ char uart_recieve()
     /** Recieve one char of data from the mcu */
     while (!(UCSR0A & (1 << RXC0)))
         ; // Wait for data recieve
-    
+
     return UDR0; // Return the data in the data register
 }
-#endif /* UART_DRIVER */
