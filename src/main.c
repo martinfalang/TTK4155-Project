@@ -30,9 +30,8 @@ void test_uart()
 
 int main(void)
 {
+  uart_init(); // So we can communicate with the terminal connected via JTAG
   SRAM_test(); // Test external RAM
-
-  // uart_init();
 
   // DDRA |= 1 << DDA0;
 }
