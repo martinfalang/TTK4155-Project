@@ -1,6 +1,3 @@
-#ifndef UART_DRIVER
-#define UART_DRIVER
-
 #include <avr/io.h>
 #include "uart.h"
 
@@ -31,7 +28,7 @@ void uart_transmit(char data)
     UDR0 = data; // Put data in UDR - usart data register
 }
 
-char uart_recieve()
+char uart_receive()
 {
     /** Recieve one char of data from the mcu */
     while (!(UCSR0A & (1 << RXC0)))
@@ -39,4 +36,3 @@ char uart_recieve()
     
     return UDR0; // Return the data in the data register
 }
-#endif /* UART_DRIVER */
