@@ -5,16 +5,17 @@
  * Author : eirik
  */
 
+#include "defines.h"
+
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "defines.h"
 #include "uart.h"
 #include "sram-test.h"
 
 void heart_beat()
 {
-  PORTA ^= 1 << PA0;
+  PORTB ^= 1 << PB0;
 }
 
 void test_uart()
@@ -29,8 +30,11 @@ void test_uart()
 
 int main(void)
 {
+  DDRB |= 1 << DDB0;
   uart_init(); // So we can communicate with the terminal connected via JTAG
   SRAM_test(); // Test external RAM
-
-  // DDRA |= 1 << DDA0;
+  while(1) {
+    heart_beat();
+    _delay_ms(100);
+  }
 }
