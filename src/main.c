@@ -9,9 +9,11 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdio.h>
 
 #include "uart.h"
 #include "sram-test.h"
+#include "sram.h"
 
 void heart_beat()
 {
@@ -20,21 +22,19 @@ void heart_beat()
 
 void test_uart()
 {
-  while (1)
-  {
-    heart_beat();
-    uart_transmit('p');
-    _delay_ms(500);
-  }
+  printf("Hei\n");
 }
 
 int main(void)
 {
   DDRB |= 1 << DDB0;
+  
   uart_init(); // So we can communicate with the terminal connected via JTAG
+  sram_init();
   SRAM_test(); // Test external RAM
   while(1) {
     heart_beat();
+    test_uart();
     _delay_ms(100);
   }
 }

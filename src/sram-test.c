@@ -15,6 +15,7 @@ void SRAM_test(void)
 
     // Write phase: Immediately check that the correct value was stored
     srand(seed);
+    printf("Starting write phase...\n");
     for (uint16_t i = 0; i < ext_ram_size; i++)
     {
         uint8_t some_value = rand();
@@ -27,7 +28,10 @@ void SRAM_test(void)
             write_errors++;
         }
     }
+    printf("End of write phase...\n\n");
     
+    printf("Starting reading phase...\n");
+
     // Retrieval phase: Check that no values were changed during or after the write phase
     srand(seed); // reset the PRNG to the state it had before the write phase
     for (uint16_t i = 0; i < ext_ram_size; i++)
