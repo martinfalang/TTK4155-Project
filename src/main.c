@@ -13,7 +13,7 @@
 
 #include "uart.h"
 #include "sram-test.h"
-#include "sram.h"
+#include "xmem.h"
 
 void heart_beat()
 {
@@ -30,7 +30,7 @@ int main(void)
   DDRB |= 1 << DDB0;
   
   uart_init(); // So we can communicate with the terminal connected via JTAG
-  sram_init();
+  xmem_init();
   SRAM_test(); // Test external RAM
   while(1) {
     heart_beat();
