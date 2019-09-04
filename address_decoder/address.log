@@ -5,8 +5,8 @@ Inspect circuit address
     Number of input ports   : 2
     Number of output ports  : 3
     Number of bidir ports   : 0
-    Number of instances     : 9
-    Number of nets          : 11
+    Number of instances     : 11
+    Number of nets          : 13
 
 No design errors found in circuit address
 

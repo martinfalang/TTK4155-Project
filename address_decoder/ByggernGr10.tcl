@@ -224,3 +224,89 @@ if [runCmd "\"$cpld_bin/fuseasm\" byggerngr10.tt3 -dev p16v8 -o byggerngr10.jed 
 
 ########## Tcl recorder end at 09/04/19 11:10:22 ###########
 
+
+########## Tcl recorder starts at 09/04/19 11:30:31 ##########
+
+# Commands to make the Process: 
+# Chip Report
+if [catch {open address.cmd w} rspFile] {
+	puts stderr "Cannot create response file address.cmd: $rspFile"
+} else {
+	puts $rspFile "STYFILENAME: byggerngr10.sty
+PROJECT: address
+WORKING_PATH: \"$proj_dir\"
+MODULE: address
+VHDL_FILE_LIST: address_decoder.vhd
+OUTPUT_FILE_NAME: address
+SUFFIX_NAME: edi
+"
+	close $rspFile
+}
+if [runCmd "\"$cpld_bin/Synpwrap\" -e address -target ispGAL -pro "] {
+	return
+} else {
+	vwait done
+	if [checkResult $done] {
+		return
+	}
+}
+file delete address.cmd
+if [runCmd "\"$cpld_bin/edif2blf\" -edf \"address.edi\" -out \"address.bl0\" -err automake.err -log \"address.log\" -prj byggerngr10 -lib \"$install_dir/ispcpld/dat/mach.edn\" -cvt YES -net_Vcc VCC -net_GND GND -nbx -dse -tlw"] {
+	return
+} else {
+	vwait done
+	if [checkResult $done] {
+		return
+	}
+}
+if [runCmd "\"$cpld_bin/iblifopt\" \"address.bl0\" -red bypin choose -collapse -pterms 8 -family -err automake.err "] {
+	return
+} else {
+	vwait done
+	if [checkResult $done] {
+		return
+	}
+}
+if [runCmd "\"$cpld_bin/iblflink\" \"address.bl1\" -o \"byggerngr10.bl2\" -omod address -family -err automake.err "] {
+	return
+} else {
+	vwait done
+	if [checkResult $done] {
+		return
+	}
+}
+if [runCmd "\"$cpld_bin/iblifopt\" byggerngr10.bl2 -red bypin choose -sweep -collapse all -pterms 8 -err automake.err "] {
+	return
+} else {
+	vwait done
+	if [checkResult $done] {
+		return
+	}
+}
+if [runCmd "\"$cpld_bin/idiofft\" byggerngr10.bl3 -pla -o byggerngr10.tt2 -dev p16v8 -define N -err automake.err "] {
+	return
+} else {
+	vwait done
+	if [checkResult $done] {
+		return
+	}
+}
+if [runCmd "\"$cpld_bin/fit\" byggerngr10.tt2 -dev p16v8 -str -err automake.err "] {
+	return
+} else {
+	vwait done
+	if [checkResult $done] {
+		return
+	}
+}
+if [runCmd "\"$cpld_bin/fuseasm\" byggerngr10.tt3 -dev p16v8 -o byggerngr10.jed -ivec NoInput.tmv -rep byggerngr10.rpt -doc brief -con ptblown -for brief -err automake.err "] {
+	return
+} else {
+	vwait done
+	if [checkResult $done] {
+		return
+	}
+}
+
+########## Tcl recorder end at 09/04/19 11:30:31 ###########
+

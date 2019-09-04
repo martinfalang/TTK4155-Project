@@ -1,5 +1,5 @@
 #$ TOOL ispLEVER Classic 2.0.00.17.20.15
-#$ DATE Wed Sep 04 11:10:34 2019
+#$ DATE Wed Sep 04 11:30:43 2019
 #$ MODULE address
 #$ PINS 5 a11:1'ke'  a10:2'ke'  ram_cs:19'ke'  adc_cs:18'ke'  oled_cs:17'ke' 
 
@@ -7,14 +7,14 @@
 .inputs a11.BLIF a10.BLIF
 .outputs ram_cs adc_cs oled_cs
 .names a11.BLIF ram_cs
-1 1
-0 0
+0 1
+1 0
 .names a11.BLIF a10.BLIF adc_cs
-01 1
-1- 0
--0 0
+1- 1
+-0 1
+01 0
 .names a11.BLIF a10.BLIF oled_cs
-00 1
-1- 0
--1 0
+1- 1
+-1 1
+00 0
 .end

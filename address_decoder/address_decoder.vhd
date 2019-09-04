@@ -38,11 +38,11 @@ architecture behavioral of address is
 begin
  -- implement the functionality here
 
- oled_cs <= ((NOT a10) and (NOT a11));
+ oled_cs <= NOT ((NOT a10) and (NOT a11));
 
- adc_cs <= (a10 AND (NOT a11));
+ adc_cs <= NOT (a10 and (NOT a11));
 
- ram_cs <= a11;
+ ram_cs <= NOT a11;
 
 end behavioral;
 
