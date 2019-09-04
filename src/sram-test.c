@@ -2,6 +2,16 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+#define BYTE_TO_BINARY(byte)  \
+  (byte & 0x80 ? '1' : '0'), \
+  (byte & 0x40 ? '1' : '0'), \
+  (byte & 0x20 ? '1' : '0'), \
+  (byte & 0x10 ? '1' : '0'), \
+  (byte & 0x08 ? '1' : '0'), \
+  (byte & 0x04 ? '1' : '0'), \
+  (byte & 0x02 ? '1' : '0'), \
+  (byte & 0x01 ? '1' : '0') 
 
 void SRAM_test(void)
 {
@@ -27,8 +37,8 @@ void SRAM_test(void)
         if (retreived_value != some_value)
         {
 
-            printf("Write phase error: ext_ram[%4d] = %02X (should be %02X)\n", i,
-                   retreived_value, some_value);
+            printf("Write phase error: ext_ram[%4d] = "BYTE_TO_BINARY_PATTERN" = %02X (should be "BYTE_TO_BINARY_PATTERN" = %02X)\n", 
+            i, BYTE_TO_BINARY(retreived_value), retreived_value, BYTE_TO_BINARY(some_value), some_value);
             write_errors++;
         }
     }
@@ -46,8 +56,8 @@ void SRAM_test(void)
         uint8_t retreived_value = ext_ram[i];
         if (retreived_value != some_value)
         {
-            printf("Retrieval phase error: ext_ram[%4d] = %02X (should be %02X)\n",
-                   i, retreived_value, some_value);
+            printf("Retrieval phase error: ext_ram[%4d] = "BYTE_TO_BINARY_PATTERN" = %02X (should be "BYTE_TO_BINARY_PATTERN" = %02X)\n",
+                   i, BYTE_TO_BINARY(retreived_value), retreived_value, BYTE_TO_BINARY(some_value), some_value);
             retrieval_errors++;
         }
     }
