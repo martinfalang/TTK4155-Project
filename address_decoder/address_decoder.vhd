@@ -10,18 +10,12 @@ entity address is
 
 	 a10 : In std_logic;
 
-	 a9 : In std_logic;
-
-	 a8 : In std_logic;
-
 
 	 ram_cs : Out std_logic;
 
 	 adc_cs : Out std_logic;
 
-	 oled_cs : Out std_logic;
-
-	 oled_dc : Out std_logic -- Not necessary…
+	 oled_cs : Out std_logic
 
  );
 
@@ -34,26 +28,21 @@ entity address is
 
  attribute LOC of oled_cs : signal is "P17";
 
- attribute LOC of oled_dc : signal is "P16"; -- Not necessary…
-
  attribute LOC of a11 : signal is "P1";
 
  attribute LOC of a10 : signal is "P2";
 
- attribute LOC of a9 : signal is "P3";
-
- attribute LOC of a8 : signal is "P4";
 end;
 
 architecture behavioral of address is
 begin
  -- implement the functionality here
 
- oled_cs <= ((NOT a11) and (NOT a12));
+ oled_cs <= ((NOT a10) and (NOT a11));
 
- adc_cs <= (a11 AND (NOT a12));
+ adc_cs <= (a10 AND (NOT a11));
 
- ram_cs <= a12;
+ ram_cs <= a11;
 
 end behavioral;
 

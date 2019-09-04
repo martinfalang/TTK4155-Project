@@ -1,0 +1,13 @@
+Section Cross Reference File
+Design 'address' created Wed Sep 04 11:10:34 2019
+   Type              New Name                               Original Name
+// ----------------------------------------------------------------------
+End
+Section Type      Name
+// ----------------------------------------------------------------------
+        Input     a11
+        Input     a10
+        Output     ram_cs
+        Output     adc_cs
+        Output     oled_cs
+End
