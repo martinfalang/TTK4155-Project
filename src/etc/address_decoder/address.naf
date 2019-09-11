@@ -1,0 +1,5 @@
+a11  i
+a10  i
+ram_cs  o
+adc_cs  o
+oled_cs  o

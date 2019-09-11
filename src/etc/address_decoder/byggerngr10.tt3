@@ -1,0 +1,19 @@
+#$ TOOL ispLEVER Classic 2.0.00.17.20.15
+#$ DATE Wed Sep 04 11:30:43 2019
+#$ MODULE address
+#$ DEVICE p16v8
+#$ PINS 5 a11:1 a10:2 ram_cs-:19 adc_cs-:18 oled_cs-:17
+.i 2 
+.o 3 
+.type fr
+.ilb a11 a10
+.ob ram_cs adc_cs oled_cs
+.phase 111
+.p 6
+1- 011
+0- 1~~
+-1 ~~1
+-0 ~1~
+01 ~0~
+00 ~~0
+.e

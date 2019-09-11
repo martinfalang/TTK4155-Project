@@ -1,0 +1,221 @@
+ispLEVER Auto-Make Log File
+---------------------------
+
+Updating: Chip Report
+Start to record tcl script...
+Finished recording TCL script.
+
+Starting: 'C:\ispLEVER_Classic2_0\ispcpld\bin\Synpwrap.exe -e address -target ispGAL -pro '
+
+Copyright (c) 1991-2010 Lattice Semiconductor Corporation,  All rights reserved.
+Version : 2.0.00.17.20.15
+
+Done sucessfully with exit code 0.
+#Build: Synplify Pro I-2014.03LC , Build 063R, May 27 2014
+#install: C:\ispLEVER_Classic2_0\synpbase
+#OS: Windows 7 6.1
+#Hostname: ITK-D660
+
+#Implementation: address_decoder
+
+$ Start of Compile
+#Wed Sep 04 11:30:38 2019
+
+Synopsys VHDL Compiler, version comp201403rcp1, Build 060R, built May 27 2014
+@N|Running in 64-bit mode
+Copyright (C) 1994-2014 Synopsys, Inc. This software and the associated documentation are proprietary to Synopsys, Inc. This software may only be used in accordance with the terms and conditions of a written license agreement with Synopsys, Inc.  All other use, reproduction, or distribution of this software is strictly prohibited.
+
+@N: CD720 :"C:\ispLEVER_Classic2_0\synpbase\lib\vhd\std.vhd":123:18:123:21|Setting time resolution to ns
+@N:"C:\users\eirikff\byggern\pingpong\address_decoder\address_decoder.vhd":6:7:6:13|Top entity is set to address.
+File C:\users\eirikff\byggern\pingpong\address_decoder\address_decoder.vhd changed - recompiling
+VHDL syntax check successful!
+File C:\users\eirikff\byggern\pingpong\address_decoder\address_decoder.vhd changed - recompiling
+@N: CD630 :"C:\users\eirikff\byggern\pingpong\address_decoder\address_decoder.vhd":6:7:6:13|Synthesizing work.address.behavioral 
+Post processing for work.address.behavioral
+@END
+
+At c_vhdl Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 68MB peak: 69MB)
+
+Process took 0h:00m:01s realtime, 0h:00m:01s cputime
+# Wed Sep 04 11:30:38 2019
+
+###########################################################]
+Synopsys Netlist Linker, version comp201403rcp1, Build 060R, built May 27 2014
+@N|Running in 64-bit mode
+File C:\users\eirikff\byggern\pingpong\address_decoder\synwork\address_comp.srs changed - recompiling
+
+At syn_nfilter Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 67MB peak: 68MB)
+
+Process took 0h:00m:01s realtime, 0h:00m:01s cputime
+# Wed Sep 04 11:30:39 2019
+
+###########################################################]
+Map & Optimize Report
+
+Synopsys CPLD Technology Mapper, Version maplat, Build 923R, Built May  6 2014
+Copyright (C) 1994-2013, Synopsys, Inc. This software and the associated documentation are proprietary to Synopsys, Inc. This software may only be used in accordance with the terms and conditions of a written license agreement with Synopsys, Inc.  All other use or distribution of the software is strictly prohibited.
+Product Version I-2014.03LC 
+@N: MF248 |Running in 64-bit mode.
+---------------------------------------
+Resource Usage Report
+
+Simple gate primitives:
+IBUF            2 uses
+OBUF            3 uses
+AND2            2 uses
+INV             4 uses
+
+
+@N: FC100 |Timing Report not generated for this device, please use place and route tools for timing analysis.
+I-2014.03LC 
+Mapper successful!
+
+At Mapper Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 38MB peak: 102MB)
+
+Process took 0h:00m:01s realtime, 0h:00m:01s cputime
+# Wed Sep 04 11:30:40 2019
+
+###########################################################]
+
+Synplicity VHDL/Verilog HDL Synthesizer finished successfully
+
+Done: completed successfully.
+
+Starting: 'C:\ispLEVER_Classic2_0\ispcpld\bin\edif2blf.exe -edf "address.edi" -out "address.bl0" -err automake.err -log "address.log" -prj byggerngr10 -lib "C:\ispLEVER_Classic2_0\ispcpld/dat/mach.edn" -cvt YES -net_Vcc VCC -net_GND GND -nbx -dse -tlw'
+
+Starting EDIF2BLIF....
+readEDIF ended normally.
+
+Inspect circuit address
+    Number of input ports   : 2
+    Number of output ports  : 3
+    Number of bidir ports   : 0
+    Number of instances     : 11
+    Number of nets          : 13
+
+No design errors found in circuit address
+
+WriteBLIF ended normally.
+
+Done: completed successfully.
+
+Starting: 'C:\ispLEVER_Classic2_0\ispcpld\bin\iblifopt.exe "address.bl0" -red bypin choose -collapse -pterms 8 -family -err automake.err -gui'
+
+BLIFOPT  Open-ABEL Optimizer 
+ispLEVER Classic 2.0 Copyright(C), 1992-2005, Lattice Semiconductor Corporation. All rights reserved
+Portions Copyright(c), 1992-1999, Vantis Corporation
+Portions Copyright(C), 1993-1998, Data I/O Corporation
+Portions Copyright(C), 1997-1998, MINC Washington Corporation
+Portions Copyright(C), Alan Phillips, Lancaster University Computer Centre 1992-1998
+U.C. Berkeley, SIS Ver. 1.0, supported by Lattice Semiconductor Corp.
+Reading Open-ABEL 2 file address.bl0...
+Node a10_i has been collapsed.
+Node a11_c has been collapsed.
+Node a10_c has been collapsed.
+Node un1_oled_cs has been collapsed.
+Node adc_cs_1 has been collapsed.
+Node un1_oled_cs_i has been collapsed.
+Node adc_cs_1_i has been collapsed.
+Node a11_i has been collapsed.
+Performing 'bypin choose' optimization...
+Writing Open-ABEL 2 (BLIF) file address.bl1...
+
+BLIFOPT complete - 0 errors, 0 warnings. Time: 1 seconds
+
+Done: completed successfully.
+
+Starting: 'C:\ispLEVER_Classic2_0\ispcpld\bin\iblflink.exe "address.bl1" -o "byggerngr10.bl2" -omod address -family -err automake.err -gui'
+
+BLIFLINK  Top-Down Design Linker
+ispLEVER Classic 2.0 Copyright(C), 1992-2005, Lattice Semiconductor Corporation. All rights reserved
+Portions Copyright(c), 1992-1999, Vantis Corporation
+Portions Copyright(C), 1993-1998, Data I/O Corporation
+Portions Copyright(C), 1997-1998, MINC Washington Corporation
+Portions Copyright(C), Alan Phillips, Lancaster University Computer Centre 1992-1998
+
+Top-level file: 'address.bl1'
+
+Hierarchical BLIF: 'byggerngr10.bl2'
+
+BLIFLINK complete.  Time: 1 second 
+
+Done: completed successfully.
+
+Starting: 'C:\ispLEVER_Classic2_0\ispcpld\bin\iblifopt.exe byggerngr10.bl2 -red bypin choose -sweep -collapse all -pterms 8 -err automake.err -gui'
+
+BLIFOPT  Open-ABEL Optimizer 
+ispLEVER Classic 2.0 Copyright(C), 1992-2005, Lattice Semiconductor Corporation. All rights reserved
+Portions Copyright(c), 1992-1999, Vantis Corporation
+Portions Copyright(C), 1993-1998, Data I/O Corporation
+Portions Copyright(C), 1997-1998, MINC Washington Corporation
+Portions Copyright(C), Alan Phillips, Lancaster University Computer Centre 1992-1998
+U.C. Berkeley, SIS Ver. 1.0, supported by Lattice Semiconductor Corp.
+Reading Open-ABEL 2 file byggerngr10.bl2...
+Performing 'bypin choose' optimization...
+Writing Open-ABEL 2 (BLIF) file byggerngr10.bl3...
+
+BLIFOPT complete - 0 errors, 0 warnings. Time: 1 seconds
+
+Done: completed successfully.
+
+Starting: 'C:\ispLEVER_Classic2_0\ispcpld\bin\idiofft.exe byggerngr10.bl3 -pla -o byggerngr10.tt2 -dev p16v8 -define N -err automake.err -gui'
+
+DIOFFT  Flip-Flop Transformation program
+ispLEVER Classic 2.0 Copyright(C), 1992-2005, Lattice Semiconductor Corporation. All rights reserved
+Portions Copyright(c), 1992-1999, Vantis Corporation
+Portions Copyright(C), 1993-1998, Data I/O Corporation
+Portions Copyright(C), 1997-1998, MINC Washington Corporation
+Portions Copyright(C), Alan Phillips, Lancaster University Computer Centre 1992-1998
+Input file: byggerngr10.bl3.
+Output file: byggerngr10.tt2.
+Cross reference file: byggerngr10.xrf.
+
+Shortening signal names...
+Writing signal name cross reference file byggerngr10.xrf... 
+
+DIOFFT complete. - Time 0 seconds
+
+Done: completed successfully.
+
+Starting: 'C:\ispLEVER_Classic2_0\ispcpld\bin\fit.exe byggerngr10.tt2 -dev p16v8 -str -err automake.err -gui'
+
+FIT  Generic Device Fitter
+ispLEVER Classic 2.0 Copyright(C), 1992-2005, Lattice Semiconductor Corporation. All rights reserved
+Portions Copyright(c), 1992-1999, Vantis Corporation
+Portions Copyright(C), 1993-1998, Data I/O Corporation
+Portions Copyright(C), 1997-1998, MINC Washington Corporation
+Portions Copyright(C), Alan Phillips, Lancaster University Computer Centre 1992-1998
+Input file: 'byggerngr10.tt2'
+Device 'p16v8'
+Note 4161: Using device architecture type P16V8AS.
+Design FITS
+Pin-assigned pla: 'byggerngr10.tt3'
+
+FIT complete.  Time: 1 second.
+
+Done: completed successfully.
+
+Starting: 'C:\ispLEVER_Classic2_0\ispcpld\bin\fuseasm.exe byggerngr10.tt3 -dev p16v8 -o byggerngr10.jed -ivec NoInput.tmv -rep byggerngr10.rpt -doc brief -con ptblown -for brief -err automake.err -gui'
+
+FUSEASM  Fusemap Assembler
+ispLEVER Classic 2.0 Copyright(C), 1992-2005, Lattice Semiconductor Corporation. All rights reserved
+Portions Copyright(c), 1992-1999, Vantis Corporation
+Portions Copyright(C), 1993-1998, Data I/O Corporation
+Portions Copyright(C), 1997-1998, MINC Washington Corporation
+Portions Copyright(C), Alan Phillips, Lancaster University Computer Centre 1992-1998
+Note 5144: Could not open vector file NoInput.tmv
+
+Input file: 'byggerngr10.tt3'
+Device: 'P16V8AS'
+Building model...
+Choosing best polarities...
+Mapping equations...
+.
+2 of 64 terms used; 0 vectors loaded
+Programmer load file: 'byggerngr10.jed'
+Generating report...
+Report file: 'byggerngr10.rpt'
+
+FUSEASM complete.  Time: 1 second 
+
+Done: completed successfully.
