@@ -11,13 +11,12 @@ void adc_init() {
     // Enable pull up resistor
     PORTD |= (1 << PD2);
     
-
-
     // Trigger on falling edge
     MCUCR |= (1 << ISC01); 
     MCUCR &= ~(1 << ISC00);
 
-    GICR |= (1 << INT0);  // Enable interrupt 0
+    // Enable interrupt 0
+    GICR |= (1 << INT0);
 }
 
 
