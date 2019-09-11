@@ -25,5 +25,9 @@
 #define ADC_OFFSET 0x1400
 #define SRAM_OFFSET 0x1800
 
+// OLED
+#define OLED_WIDTH 128
+#define OLED_HEIGHT 64
+#define OLED_PAGES 8
 
 #endif /* DEFINES_H */
