@@ -18,11 +18,11 @@ void terminal_oled_buffer_test() {
     }
 
     // Print empty array
-    printf("Printing empty mock buffer array:");
+    printf("Printing empty mock buffer array:\n");
     print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
 
     // Set some vital pixels in the array
-    printf("Setting corners high, and one pixel near the middle");
+    printf("Setting corners high, and one pixel near the middle:\n");
     
     set_pixel(0, 0, true, buffer);
     set_pixel(0, OLED_HEIGHT - 1, true, buffer);

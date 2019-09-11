@@ -32,16 +32,16 @@ void set_pixel(int x, int y, bool val, uint8_t *arr)
 
     if (val)
     {
-        arr[index] |= (1 << y % 8); // Set the bit at the given position
+        arr[index] |= (1 << (y % 8)); // Set the bit at the given position
     }
     else
     {
-        arr[index] &= !(1 << y % 8); // Clear the bit at the given position
+        arr[index] &= !(1 << (y % 8)); // Clear the bit at the given position
     }
 }
 
 bool get_pixel(int x, int y, uint8_t *arr) {
-    return arr[get_index(x, y)];
+    return (bool) ((1 << (y % 8)) & arr[get_index(x, y)]);
 }
 
 void write_to_screen();
