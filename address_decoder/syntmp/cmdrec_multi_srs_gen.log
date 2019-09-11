@@ -1,7 +1,0 @@
-C:\ispLEVER_Classic2_0\synpbase\bin64\syn_nfilter.exe  -link  -top  address  -multisrs  C:\users\eirikff\byggern\pingpong\address_decoder\synwork\address_comp.srs  -osyn  C:\users\eirikff\byggern\pingpong\address_decoder\synwork\address_mult.srs  -log  C:\users\eirikff\byggern\pingpong\address_decoder\synlog\address_multi_srs_gen.srr 
-rc:0 success:1
-C:\users\eirikff\byggern\pingpong\address_decoder\synwork\address_comp.srs|i|1567589438|1734
-C:\users\eirikff\byggern\pingpong\address_decoder\synwork\address_mult.srs|o|1567589439|1789
-C:\users\eirikff\byggern\pingpong\address_decoder\synlog\address_multi_srs_gen.srr|o|1567589439|479
-C:\ispLEVER_Classic2_0\synpbase\bin\syn_nfilter.exe|i|1401223936|2741760
-C:\ispLEVER_Classic2_0\synpbase\bin64\syn_nfilter.exe|i|1401224132|6337536
