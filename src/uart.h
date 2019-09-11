@@ -5,10 +5,14 @@
 #ifndef UART_H
 #define UART_H
 
+#include <stdio.h>
+
 void uart_init(); // ubrr = uart baud rate register
 
-void uart_transmit(char data);
+int uart_transmit(char data, FILE *f);
 
-char uart_recieve();
+int uart_recieve(FILE *f);
+
+extern FILE *uart;
 
 #endif /* UART_H */
