@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <stdio.h> // TODO: REMOVE
+
 /*
     About buffer memory mapping:
     The buffer is written in a way minimize the amount of operations needed to update the screen .
@@ -64,6 +66,8 @@ void oled_clear_screen(uint8_t *arr)
 void oled_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_end, uint8_t *arr)
 {
     // Make sure x_start <= x_end and y_start <= y_end
+    printf("(%d, %d),  (%d, %d)\n", x_start, y_start, x_end, y_end);
+    
     if (x_start > x_end)
     {
         oled_draw_line(x_end, x_start, y_start, y_end, arr);
@@ -77,19 +81,22 @@ void oled_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_e
 
     if (x_start != x_end) // To avoid dividing by zero
     {
+        printf("x-iteration\n");
         uint8_t y_coefficient = (y_end - y_start) / (x_end - x_start);
         for (uint8_t x = x_start; x <= x_end; ++x)
         {
-            oled_set_pixel(x, y_coefficient * x, true, arr);
+            printf("(%d, %d)\n", x, (uint8_t) y_coefficient * x + y_start);
+            oled_set_pixel(x, (uint8_t) y_coefficient * x + y_start, true, arr);
         }
     }
 
     if (y_start != y_end) 
     {
-        uint8_t x_coefficient = (y_end - y_start) / (x_end - x_start);
+        printf("y-iteration\n");
+        uint8_t x_coefficient = (x_end - x_start) / (y_end - y_start);
         for (uint8_t y = y_start; y <= y_end; ++y)
         {
-            oled_set_pixel(x_coefficient * y, y, true, arr);
+            oled_set_pixel((uint8_t) x_coefficient * y + x_start, y, true, arr);
         }
     }
 }

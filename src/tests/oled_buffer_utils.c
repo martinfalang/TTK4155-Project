@@ -9,11 +9,11 @@ void print_mock_buffer_to_stdout(uint8_t *arr, int width, int height)
     char high_char = 'X';
     char low_char = '.';
 
-    for (int j = 0; j < OLED_HEIGHT; ++j)
+    for (int y = 0; y < OLED_HEIGHT; ++y)
     {
-        for (int i = 0; i < OLED_WIDTH; ++i)
+        for (int x = 0; x < OLED_WIDTH; ++x)
         {
-            printf("%c", oled_get_pixel(i, j, arr) ? high_char : low_char);
+            printf("%c", oled_get_pixel(x, y, arr) ? high_char : low_char);
         }
         printf("\n");
     }
