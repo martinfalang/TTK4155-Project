@@ -16,9 +16,7 @@ typedef enum adc_ch {
 
 void adc_init();
 
-void adc_start_conversion(adc_channel_t channel);
-
-uint8_t adc_read();
+uint8_t adc_read(adc_channel_t channel);
 
 
 #endif /* ADC_H */

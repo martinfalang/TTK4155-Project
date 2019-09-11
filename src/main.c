@@ -43,8 +43,7 @@ int main(void)
     heartbeat();
 
     // uint8_t adc_data = adc_read(ADC_CH1);
-    adc_start_conversion(ADC_CH1);
-    uint8_t adc_data = adc_read();
+    uint8_t adc_data = adc_read(ADC_CH1);
     printf("ADC data: %i\n", adc_data);
   }
 }
