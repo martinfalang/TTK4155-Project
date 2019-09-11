@@ -49,7 +49,7 @@ void oled_set_page_column(int page, int column, uint8_t data, uint8_t *arr)
 
 bool oled_get_pixel(uint8_t x, uint8_t y, uint8_t *arr)
 {
-    return (bool)((1 << (y % 8)) & arr[oled_get_index(x, y)]);
+    return (bool)((1 << (y % 8)) & arr[oled_get_index(x, y)]); // Mask out the relevant bit
 }
 
 void oled_clear_screen(uint8_t *arr)
@@ -66,7 +66,7 @@ void oled_clear_screen(uint8_t *arr)
 void oled_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_end, uint8_t *arr)
 {
     // Make sure x_start <= x_end and y_start <= y_end
-    printf("(%d, %d),  (%d, %d)\n", x_start, y_start, x_end, y_end);
+    // printf("(%d, %d),  (%d, %d)\n", x_start, y_start, x_end, y_end);
     
     if (x_start > x_end)
     {
@@ -81,22 +81,21 @@ void oled_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_e
 
     if (x_start != x_end) // To avoid dividing by zero
     {
-        printf("x-iteration\n");
-        uint8_t y_coefficient = (y_end - y_start) / (x_end - x_start);
+        // printf("x-iteration\n");
+        float y_coefficient = ((float)(y_end - y_start)) / (x_end - x_start);
         for (uint8_t x = x_start; x <= x_end; ++x)
         {
-            printf("(%d, %d)\n", x, (uint8_t) y_coefficient * x + y_start);
-            oled_set_pixel(x, (uint8_t) y_coefficient * x + y_start, true, arr);
+            // printf("(%d, %d)\n", x, (uint8_t) y_coefficient * x + y_start);
+            oled_set_pixel(x, (uint8_t) (y_coefficient * x + y_start), true, arr);
         }
-    }
-
+    } 
     if (y_start != y_end) 
     {
-        printf("y-iteration\n");
-        uint8_t x_coefficient = (x_end - x_start) / (y_end - y_start);
+        // printf("y-iteration\n");
+        float x_coefficient = (float)((x_end - x_start)) / (y_end - y_start);
         for (uint8_t y = y_start; y <= y_end; ++y)
         {
-            oled_set_pixel((uint8_t) x_coefficient * y + x_start, y, true, arr);
+            oled_set_pixel((uint8_t) (x_coefficient * y + x_start), y, true, arr);
         }
     }
 }

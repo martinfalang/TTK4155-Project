@@ -55,4 +55,12 @@ void terminal_oled_buffer_test()
     oled_draw_line(OLED_WIDTH - 1, 0, OLED_WIDTH - 1, OLED_HEIGHT - 1, buffer); // Right line
 
     print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
+
+    printf("Clear the screen and draw a diagonal line from top right to bottom left edge:\n");
+    
+    oled_clear_screen(buffer);
+    oled_draw_line(0, 0, OLED_WIDTH - 1, OLED_HEIGHT - 1, buffer);
+    
+    print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
+
 }
