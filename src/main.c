@@ -16,6 +16,7 @@
 #include "uart.h"
 #include "sram-test.h"
 #include "xmem.h"
+#include "adc.h"
 
 void heart_beat()
 {
@@ -34,9 +35,11 @@ int main(void)
   uart_init(); // So we can communicate with the terminal connected via JTAG
   xmem_init();
   SRAM_test(); // Test external RAM
+
+  adc_init();
+
   while(1) {
     heart_beat();
-    test_uart();
     _delay_ms(100);
   }
 }
