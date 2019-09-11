@@ -21,14 +21,14 @@
 
 */
 
-int get_index(int x, int y)
+uint16_t oled_get_index(uint8_t x, uint8_t y)
 {
     return (y / OLED_PAGES) * OLED_WIDTH + x; // Calculate index corresponding to x, y in buffer array "arr"
 }
 
-void set_pixel(int x, int y, bool val, uint8_t *arr)
+void oled_set_pixel(uint8_t x, uint8_t y, bool val, uint8_t *arr)
 {
-    int index = get_index(x, y);
+    int index = oled_get_index(x, y);
 
     if (val)
     {
@@ -40,8 +40,58 @@ void set_pixel(int x, int y, bool val, uint8_t *arr)
     }
 }
 
-bool get_pixel(int x, int y, uint8_t *arr) {
-    return (bool) ((1 << (y % 8)) & arr[get_index(x, y)]);
+void oled_set_page_column(int page, int column, uint8_t data, uint8_t *arr)
+{
+    arr[page * OLED_WIDTH + column] = data;
+}
+
+bool oled_get_pixel(uint8_t x, uint8_t y, uint8_t *arr)
+{
+    return (bool)((1 << (y % 8)) & arr[oled_get_index(x, y)]);
+}
+
+void oled_clear_screen(uint8_t *arr)
+{
+    for (uint8_t p = 0; p < OLED_PAGES; ++p)
+    {
+        for (uint8_t col = 0; col < OLED_WIDTH; ++col)
+        {
+            oled_set_page_column(p, col, 0, arr);
+        }
+    }
+}
+
+void oled_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_end, uint8_t *arr)
+{
+    // Make sure x_start <= x_end and y_start <= y_end
+    if (x_start > x_end)
+    {
+        oled_draw_line(x_end, x_start, y_start, y_end, arr);
+    }
+    else if (y_start > y_end)
+    {
+        oled_draw_line(x_start, x_end, y_end, y_start, arr);
+    }
+
+    // Iterates both ways, to smooth the line against sudden jumps
+
+    if (x_start != x_end) // To avoid dividing by zero
+    {
+        uint8_t y_coefficient = (y_end - y_start) / (x_end - x_start);
+        for (uint8_t x = x_start; x <= x_end; ++x)
+        {
+            oled_set_pixel(x, y_coefficient * x, true, arr);
+        }
+    }
+
+    if (y_start != y_end) 
+    {
+        uint8_t x_coefficient = (y_end - y_start) / (x_end - x_start);
+        for (uint8_t y = y_start; y <= y_end; ++y)
+        {
+            oled_set_pixel(x_coefficient * y, y, true, arr);
+        }
+    }
 }
 
 void write_to_screen();

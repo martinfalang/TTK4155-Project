@@ -24,12 +24,24 @@ void terminal_oled_buffer_test() {
     // Set some vital pixels in the array
     printf("Setting corners high, and one pixel near the middle:\n");
     
-    set_pixel(0, 0, true, buffer);
-    set_pixel(0, OLED_HEIGHT - 1, true, buffer);
-    set_pixel(OLED_WIDTH - 1, OLED_HEIGHT - 1, true, buffer);
-    set_pixel(OLED_WIDTH - 1, 0, true, buffer);
+    oled_set_pixel(0, 0, true, buffer);
+    oled_set_pixel(0, OLED_HEIGHT - 1, true, buffer);
+    oled_set_pixel(OLED_WIDTH - 1, OLED_HEIGHT - 1, true, buffer);
+    oled_set_pixel(OLED_WIDTH - 1, 0, true, buffer);
+    oled_set_pixel(OLED_WIDTH / 2 - 1, OLED_HEIGHT / 2 - 1, true, buffer);
 
     print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
     
+    printf("Setting third column in second page high:\n");
+
+    oled_set_page_column(1, 2, 0b11111111, buffer);
+
+    print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
+
+    printf("Clear the mock buffer:\n");
+
+    oled_clear_screen(buffer);
+
+    print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
 
 }
