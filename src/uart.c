@@ -32,7 +32,11 @@ int uart_transmit(char data, FILE *f)
     return data; //Return data only to not get compiler warnings
 }
 
+<<<<<<< HEAD
 int uart_recieve(FILE *f)
+=======
+char uart_receive()
+>>>>>>> origin
 {
     //Including FILE *f to not get compiler warnings
     /** Recieve one char of data from the mcu */
