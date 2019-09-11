@@ -5,6 +5,7 @@
 #include <avr/io.h>
 #include "defines.h"
 
+#define ADC_MAX_VALUE 255;
 
 typedef enum adc_ch {
     ADC_CH1 = 0b0100,

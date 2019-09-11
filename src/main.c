@@ -15,10 +15,10 @@
 #include <avr/interrupt.h>
 
 #include "uart.h"
-#include "sram-test.h"
 #include "xmem.h"
 #include "adc.h"
-
+#include "joystick.h"
+#include "touch.h"
 
 void heartbeat_init() {
   DDRB |= 1 << DDB0;
@@ -35,15 +35,14 @@ int main(void)
   uart_init(); // So we can communicate with the terminal connected via JTAG
   xmem_init();
   adc_init();
-  sei();  // set enable global interrupt flag
+  joystick_init();
+  touch_init();
+
   printf("All inits ran successfully!\n");
 
   while(1) {
-    _delay_ms(100);
     heartbeat();
 
-    // uint8_t adc_data = adc_read(ADC_CH1);
-    uint8_t adc_data = adc_read(ADC_CH1);
-    printf("ADC data: %i\n", adc_data);
+    _delay_ms(100);
   }
 }
