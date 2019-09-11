@@ -23,23 +23,23 @@ void heart_beat()
   PORTB ^= 1 << PB0;
 }
 
-void test_uart()
-{
-  printf("Hei\n");
-}
-
 int main(void)
 {
+
   DDRB |= 1 << DDB0;
   
+  SREG |= (1 << SREG_I);  // global interrupt enable
   uart_init(); // So we can communicate with the terminal connected via JTAG
+  printf("Reset\n");
   xmem_init();
-  SRAM_test(); // Test external RAM
+  //SRAM_test(); // Test external RAM
 
   adc_init();
 
   while(1) {
     heart_beat();
+    uint8_t adc_data = adc_read(adc_channel_1);
+    printf("ADC data: %i\n", adc_data);
     _delay_ms(100);
   }
 }

@@ -1,49 +1,29 @@
-#include <util/delay.h>
 #include "adc.h"
 #include "defines.h"
 
 
+
 void adc_init() {
-    // ensure CS is pulled low by GAL
-    // PORTC |= 1 << 3;
-    // PORTC &= ~(1 << 4);
-    *EXT_ADC;
+    // Setting Pin D2 (INTR) to input
+    DDRD &= ~(1 << DDD2);
+    // Enable pull up resistor
+    PORTD |= (1 << PD2);
     
-    // set PA0-3 according to MUX table
-    uint8_t porta_temp = PORTA;  // store current state
-    PORTA = CH1_bm;
-    
-    // keep RD high
-    PORTE |= (1 << RD);
-    
-    // set WR low
-    PORTE &= ~(1 << WR);
-    
-    // wait tDS = 100 ns
-    _delay_us(100);
+    // Trigger falling edge
+    MCUCR |= (1 << ISC01); 
+    MCUCR &= ~(1 << ISC00);
 
-    // write WR high
-    PORTE |= 1 << WR;
+    // Enable interrupt 0, this crashes the entire thing so i feel like its wrong :-) 
+    //GICR |= (1 << INT0);
     
-    // CH1 is now selected
-    PORTA = porta_temp;  // necessary?? 
 }
 
 
-
-void adc_start_read() {
-    // ensure CS is pulled low by GAL
-    // write WR and RD low
-    // INTR is reset high
-    // wait until INTR is pulled low by AD
-    //      can be done by interrupt or polling
-    // new data is now ready
-    // can adc_read() to extract data from data bus
-}
-
-
-uint8_t adc_read() {
-    // read data from data bus
-
-    return *EXT_ADC;  // correct???
+uint8_t adc_read(uint8_t channel) {
+    
+    volatile uint8_t *adc = (uint8_t *) EXT_ADC;
+    
+    *adc = channel;
+    
+    return *adc;
 }
