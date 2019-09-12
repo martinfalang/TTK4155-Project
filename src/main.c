@@ -40,9 +40,15 @@ int main(void)
 
   printf("All inits ran successfully!\n");
 
+  
+  volatile uint8_t* oled_data = (uint8_t*)OLED_DATA_BASE;
+  volatile uint8_t* oled_cmd = (uint8_t*)OLED_CMD_BASE;
+
   while(1) {
     heartbeat();
-
     _delay_ms(100);
+
+    *oled_data = 0;
   }
+
 }
