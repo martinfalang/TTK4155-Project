@@ -1,14 +1,14 @@
 #--  Synopsys, Inc.
 #--  Version I-2014.03LC 
-#--  Project file C:\users\eirikff\byggern\pingpong\address_decoder\scratchproject.prs
+#--  Project file C:\users\eirikff\byggern-gr10\pingpong\src\etc\address_decoder\scratchproject.prs
 
 #project files
-add_file -vhdl -lib work "C:/users/eirikff/byggern/pingpong/address_decoder/address_decoder.vhd"
+add_file -vhdl -lib work "C:/users/eirikff/byggern-gr10/pingpong/src/etc/address_decoder/address_decoder.vhd"
 
 
 
 #implementation: "address_decoder"
-impl -add C:\users\eirikff\byggern\pingpong\address_decoder -type fpga
+impl -add C:\users\eirikff\byggern-gr10\pingpong\src\etc\address_decoder -type fpga
 
 #device options
 set_option -technology ispGAL
@@ -47,8 +47,8 @@ set_option -auto_infer_blackbox 0
 set_option -write_apr_constraint 1
 
 #set result format/file last
-project -result_file "C:/users/eirikff/byggern/pingpong/address_decoder/address.edi"
+project -result_file "C:/users/eirikff/byggern-gr10/pingpong/src/etc/address_decoder/address.edi"
 
 #set log file 
-set_option log_file "C:/users/eirikff/byggern/pingpong/address_decoder/address.srf" 
+set_option log_file "C:/users/eirikff/byggern-gr10/pingpong/src/etc/address_decoder/address.srf" 
 impl -active "address_decoder"
