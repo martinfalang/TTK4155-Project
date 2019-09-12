@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "../defines.h"
-#include "../oled.h"
+#include "../src/defines.h"
+#include "../src/oled.h"
 #include "oled_buffer_utils.h"
 
 void terminal_oled_buffer_test()
