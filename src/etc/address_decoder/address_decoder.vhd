@@ -37,7 +37,7 @@ begin
 
  ram_cs <= NOT a11;
 
- oled_dc <= (NOT a12) and (NOT a11) and a10;
+ oled_dc <= (NOT oled_cs) and a9; -- might be unnecessary with NOT oled_cs
 
 end behavioral;
 
