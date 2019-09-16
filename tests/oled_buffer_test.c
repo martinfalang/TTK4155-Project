@@ -63,4 +63,23 @@ void terminal_oled_buffer_test()
     
     print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
 
+    // Test output of single char
+    printf("Clear the screen and draw a medium 'K' in the top left:\n");
+
+    oled_clear_screen(buffer);
+    oled_print_char('K', MEDIUM, 0, 0, buffer);   
+
+    print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
+
+    oled_clear_screen(buffer);
+    printf("Clear the screen and print a test string:\n");
+
+    char str[] = "Funker dette?";
+    oled_print_string(str, 13, MEDIUM, 0, buffer);
+    
+    oled_print_string("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 52, SMALL, 1, buffer); // Should be cut off short
+
+    print_mock_buffer_to_stdout(buffer, OLED_WIDTH, OLED_HEIGHT);
+
+
 }
