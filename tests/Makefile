@@ -1,5 +1,4 @@
 # Makefile for tests that can be run on a computer, i.e. without the microcontroller
-# List all source files to be compiled; separate with space
 
 # Define the paths in order of where make should look for them
 # This means that source files can be both in the tests folder and the src folder
@@ -7,20 +6,21 @@
 # for more info
 VPATH := . ../src
 
+# List all source files to be compiled; separate with space
 SOURCE_FILES := oled.c test_main.c oled_buffer_test.c oled_buffer_utils.c
 
 BUILD_DIR := build
 
 CC := gcc
-CFLAGS := -O -std=c11
+CFLAGS := -O -std=c11 -D COMPILE_FOR_TESTS
 
 OBJECT_FILES = $(SOURCE_FILES:%.c=$(BUILD_DIR)/%.o)
 # TEST_SRC := $(TEST_SOURCE_FILES:%.c=$(TEST_SRC_DIR)/%.c)
 
 .DEFAULT_GOAL := test_main
 
-test_main : $(TEST_OBJECT_FILES) $(OBJECT_FILES)
-	$(CC) $(CFLAGS) $(TEST_OBJECT_FILES) $(OBJECT_FILES) -o $@
+test_main : $(OBJECT_FILES)
+	$(CC) $(CFLAGS) $(OBJECT_FILES) -o $@
 
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
