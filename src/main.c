@@ -32,14 +32,6 @@ void heartbeat()
     PORTB ^= 1 << PB0;
 }
 
-void buzzer_test()
-{
-    buzzer_play_note(NOTE_C4);
-    _delay_ms(1000);
-    buzzer_play_note(NOTE_A4);
-    _delay_ms(1000);
-    buzzer_stop();
-}
 
 int main(void)
 {
@@ -49,11 +41,15 @@ int main(void)
     adc_init();
     joystick_init();
     touch_init();
+
     pwm0_init(PRE256);
-    buzzer_init();
+    // buzzer_init();
+    
     printf("All inits ran successfully!\n");
 
-    buzzer_test();
+
+    pwm0_set_freq(440);
+    // buzzer_play_note(NOTE_A4);
 
     while (1)
     {

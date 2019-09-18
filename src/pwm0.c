@@ -22,11 +22,11 @@ void pwm0_set_freq(uint16_t freq) {
 }
 
 
-void pwm0_set_prescaler(pwm0_prescaler_t mode) {
+void pwm0_set_prescaler(pwm0_prescaler_t ps) {
     // Set all prescaler bits to zero
     TCCR0 &= ~( (1 << CS00) | (1 << CS01) | (1 << CS02) );
 
-    switch (mode) {
+    switch (ps) {
         case PREOFF:
             prescaler = 0;
             break;
@@ -51,7 +51,7 @@ void pwm0_set_prescaler(pwm0_prescaler_t mode) {
 
     // By not setting a prescaler (i.e. to 0) the PWM is turned off
     if (prescaler != 0) {
-        TCCR0 |= mode;
+        TCCR0 |= ps;
     }
 }
 

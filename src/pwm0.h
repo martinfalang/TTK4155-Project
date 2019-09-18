@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 typedef enum pwm0_prescaler {
-    PREOFF         = (1 << CS02) | (1 << CS01) | (1 << CS00),  // clock stopped
+    PREOFF      = (1 << CS02) | (1 << CS01) | (1 << CS00),  // clock stopped
     PRE1        = (1 << CS00),  // prescaler = 1
     PRE8        = (1 << CS01),  // prescaler = 8
     PRE64       = (1 << CS00) | (1 << CS01),  // prescaler = 64
