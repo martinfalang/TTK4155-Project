@@ -9,9 +9,8 @@ void pwm_init() {
 
     TCCR0 |= (1 << FOC0);
     TCCR0 |= (1 << WGM01);  // Set in CTC mode
-    TCCR0 |= (1 << COM01);  // Set OC0 to toggle
+    TCCR0 |= (1 << COM00);  // Set OC0 to clear on match
     TCCR0 |= (1 << CS00);   // Set prescaler = 1
-
 }
 
 
