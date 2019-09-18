@@ -1,9 +1,12 @@
 #ifndef PITCHES_H
 #define PITCHES_H
-
 /*************************************************
  * Public Constants (available at http://arduino.cc/en/Tutorial/tone )
  *************************************************/
+
+#include <stdint.h>
+
+typedef uint16_t note_t;
 
 #define NOTE_B0  31
 #define NOTE_C1  33

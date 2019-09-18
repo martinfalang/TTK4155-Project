@@ -19,34 +19,43 @@
 #include "adc.h"
 #include "joystick.h"
 #include "touch.h"
-#include "pwm.h"
+#include "pwm0.h"
+#include "buzzer.h"
 
-void heartbeat_init() {
-  DDRB |= 1 << DDB0;
+void heartbeat_init()
+{
+    DDRB |= 1 << DDB0;
 }
 
 void heartbeat()
 {
-  PORTB ^= 1 << PB0;
+    PORTB ^= 1 << PB0;
+}
+
+void buzzer_test()
+{
+    buzzer_play_note(NOTE_C4);
+    _delay_ms(1000);
+    buzzer_play_note(NOTE_A4);
+    _delay_ms(1000);
+    buzzer_stop();
 }
 
 int main(void)
 {
-  heartbeat_init();
-  uart_init(); // So we can communicate with the terminal connected via JTAG
-  xmem_init();
-  adc_init();
-  joystick_init();
-  touch_init();
-  pwm_init();
+    heartbeat_init();
+    uart_init(); // So we can communicate with the terminal connected via JTAG
+    xmem_init();
+    adc_init();
+    joystick_init();
+    touch_init();
+    pwm0_init(PRE256);
+    buzzer_init();
+    printf("All inits ran successfully!\n");
 
-  pwm_set_freq(440);
+    buzzer_test();
 
-  printf("All inits ran successfully!\n");
-
-  while(1) {
-    heartbeat();
-
-    _delay_ms(100);
-  }
+    while (1)
+    {
+    }
 }
