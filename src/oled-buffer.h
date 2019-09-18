@@ -8,6 +8,8 @@
     General OLED-buffer (given 8-bit column height)
 */
 
+void oled_buffer_clear();
+
 // Low level functions
 void oled_set_pixel(uint8_t x, uint8_t y, bool val, uint8_t *buffer);
 

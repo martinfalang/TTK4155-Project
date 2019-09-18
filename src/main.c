@@ -19,6 +19,8 @@
 #include "adc.h"
 #include "joystick.h"
 #include "touch.h"
+#include "oled-buffer.h"
+#include "oled.h"
 
 void heartbeat_init() {
   DDRB |= 1 << DDB0;
@@ -27,6 +29,18 @@ void heartbeat_init() {
 void heartbeat()
 {
   PORTB ^= 1 << PB0;
+}
+
+void oled_test_screen_2(void)
+{
+  uint8_t* buffer = OLED_BUFFER_BASE;
+  oled_init();
+
+  // Try to write a string
+  oled_print_string("asdf", 4, MEDIUM, 0, buffer);
+
+  // Print buffer to screen
+  
 }
 
 int main(void)

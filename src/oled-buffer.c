@@ -24,6 +24,14 @@
 
 */
 
+void oled_buffer_clear(uint8_t *buffer)
+{
+    for (uint16_t i = 0; i < OLED_BUFFER_SIZE; ++i)
+    {
+        buffer[i] = 0;
+    }
+}
+
 uint16_t oled_get_index(uint8_t x, uint8_t y)
 {
     return (y / OLED_PAGES) * OLED_WIDTH + x; // Calculate index corresponding to x, y in buffer array
@@ -143,22 +151,25 @@ void oled_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t column, 
     }
 }
 
-void oled_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer) {
+void oled_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer)
+{
     // Clears the page and prints the string s to the oled buffer
-    
+
     // In case we don't want to start drawing right next to the left-most wall
-    const uint8_t left_margin = 2; 
+    const uint8_t left_margin = 2;
     const uint8_t spacing = 1; // space between letters
 
     // Clear the current page (line)
     oled_clear_page(page, buffer);
 
     // In case the supplied string is too long, cut it short
-    if (length * (size + spacing) + left_margin > OLED_WIDTH) {
+    if (length * (size + spacing) + left_margin > OLED_WIDTH)
+    {
         length = (OLED_WIDTH - left_margin) / (size + spacing); // TODO: Verify this math?
     }
 
-    for (uint8_t i = 0; i < length; ++i) {
-        oled_print_char(s[i], size, page, left_margin + i * ((uint8_t) size + spacing), buffer);
+    for (uint8_t i = 0; i < length; ++i)
+    {
+        oled_print_char(s[i], size, page, left_margin + i * ((uint8_t)size + spacing), buffer);
     }
 }
