@@ -22,7 +22,8 @@
 #include "oled-buffer.h"
 #include "oled.h"
 
-void heartbeat_init() {
+void heartbeat_init()
+{
   DDRB |= 1 << DDB0;
 }
 
@@ -33,9 +34,8 @@ void heartbeat()
 
 void oled_test_screen_2(void)
 {
-  uint8_t* buffer = OLED_BUFFER_BASE;
-  oled_init();
-
+  uint8_t *buffer = OLED_BUFFER_BASE;
+  oled_buffer_clear(buffer);
   // Try to write a string
   // oled_print_string("asdf", 4, MEDIUM, 0, buffer);
   oled_draw_line(10, 10, 20, 20, buffer);
@@ -52,18 +52,13 @@ int main(void)
   adc_init();
   joystick_init();
   touch_init();
+  oled_init();
 
   printf("All inits ran successfully!\n");
 
-  
-  volatile uint8_t* oled_data = (uint8_t*)OLED_DATA_BASE;
-  volatile uint8_t* oled_cmd = (uint8_t*)OLED_CMD_BASE;
-
-  while(1) {
+  while (1)
+  {
     heartbeat();
     _delay_ms(100);
-
-    *oled_data = 0;
   }
-
 }

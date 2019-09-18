@@ -12,7 +12,21 @@
 #define OLED_SET_COL_LO_MASK 0b00010000
 
 #define OLED_SET_DISPLAY_ON 0xAF
+#define OLED_SET_PAGE_ADDR_MODE 0b00100010
+#define OLED_RESET_RAM_START_LINE 0b01000000
 
+
+void oled_init(void)
+{
+    // Set to page addressing mode
+    *OLED_CMD_BASE = OLED_SET_PAGE_ADDR_MODE;
+
+    *OLED_CMD_BASE = OLED_RESET_RAM_START_LINE;
+
+    // Set display on (default off after reset)
+    *OLED_CMD_BASE = OLED_SET_DISPLAY_ON;
+
+}
 
 void oled_set_page(uint8_t page)
 {
@@ -37,13 +51,6 @@ void oled_set_col(uint8_t col)
     }
 }
 
-void oled_init(void)
-{
-    // Set display on (default off after reset)
-    *OLED_CMD_BASE = OLED_SET_DISPLAY_ON;
-
-    oled_buffer_clear(OLED_BUFFER_BASE);
-}
 
 void oled_test_screen(void)
 {
