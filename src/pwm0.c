@@ -1,7 +1,7 @@
 #include "pwm0.h"
 #include "defines.h"
 
-static uint16_t prescaler = 0;
+static uint16_t prescaler = 256;
 
 void pwm0_init(pwm0_prescaler_t ps) {
     DDRB |= (1 << PB0);     // Set pin as output
@@ -10,7 +10,7 @@ void pwm0_init(pwm0_prescaler_t ps) {
     TCCR0 |= (1 << FOC0);
     TCCR0 |= (1 << WGM01);  // Set in CTC mode
     TCCR0 |= (1 << COM00);  // Set OC0 to clear on match
-    pwm0_set_prescaler(ps);
+    TCCR0 |= (1 << CS02);  // prescaler = 256
 }
 
 
