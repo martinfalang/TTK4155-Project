@@ -18,28 +18,28 @@
 
 void oled_init(void)
 {
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xae; // display off
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xa0; // Segment no remap //0xa1; //segment remap
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xda; //common pads hardware: alternative
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x12;
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xc0; // Not alternative //0xc8; //common output scan direction:com63~com0
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xa8; //multiplex ration mode:63
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x3f;
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xd5; //display divide ratio/osc. freq. mode
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x80;
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x81; //contrast control
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x50;
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xd9; //set pre-charge period
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x21;
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x20; //Set Memory Addressing Mode
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x02;
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xdb; //VCOM deselect level mode
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x30;
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xad; //master configuration
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0x00;
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xa4; //out follows RAM content
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xa6; //set normal display
-    *((volatile uint16_t*)OLED_CMD_BASE) = 0xaf; // display on
+    *OLED_CMD_BASE = 0xae; // display off
+    *OLED_CMD_BASE = 0xa0; // Segment no remap//0xa1; //segment remap
+    *OLED_CMD_BASE = 0xda; //common pads hardware: alternative
+    *OLED_CMD_BASE = 0x12;
+    *OLED_CMD_BASE = 0xc0; // Not alternative //0xc8; //common output scan direction:com63~com0
+    *OLED_CMD_BASE = 0xa8; //multiplex ration mode:63
+    *OLED_CMD_BASE = 0x3f;
+    *OLED_CMD_BASE = 0xd5; //display divide ratio/osc. freq. mode
+    *OLED_CMD_BASE = 0x80;
+    *OLED_CMD_BASE = 0x81; //contrast control
+    *OLED_CMD_BASE = 0x50;
+    *OLED_CMD_BASE = 0xd9; //set pre-charge period
+    *OLED_CMD_BASE = 0x21;
+    *OLED_CMD_BASE = 0x20; //Set Memory Addressing Mode
+    *OLED_CMD_BASE = 0x02;
+    *OLED_CMD_BASE = 0xdb; //VCOM deselect level mode
+    *OLED_CMD_BASE = 0x30;
+    *OLED_CMD_BASE = 0xad; //master configuration
+    *OLED_CMD_BASE = 0x00;
+    *OLED_CMD_BASE = 0xa4; //out follows RAM content
+    *OLED_CMD_BASE = 0xa6; //set normal display
+    *OLED_CMD_BASE = 0xaf; // display on
 
     // Set to page addressing mode
     // *OLED_CMD_BASE = OLED_SET_MEM_ADDR_MODE;
