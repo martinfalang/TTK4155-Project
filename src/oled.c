@@ -19,10 +19,10 @@
 void oled_init(void)
 {
     *OLED_CMD_BASE = 0xae; // display off
-    *OLED_CMD_BASE = 0xa1; //segment remap
+    *OLED_CMD_BASE = 0xa0; // Segment no remap //0xa1; //segment remap
     *OLED_CMD_BASE = 0xda; //common pads hardware: alternative
     *OLED_CMD_BASE = 0x12;
-    *OLED_CMD_BASE = 0xc8; //common output scan direction:com63~com0
+    *OLED_CMD_BASE = 0xc0; // Not alternative //0xc8; //common output scan direction:com63~com0
     *OLED_CMD_BASE = 0xa8; //multiplex ration mode:63
     *OLED_CMD_BASE = 0x3f;
     *OLED_CMD_BASE = 0xd5; //display divide ratio/osc. freq. mode
