@@ -14,40 +14,41 @@ Done sucessfully with exit code 0.
 #Build: Synplify Pro I-2014.03LC , Build 063R, May 27 2014
 #install: C:\ispLEVER_Classic2_0\synpbase
 #OS: Windows 7 6.1
-#Hostname: ITK-D660
+#Hostname: ITK-D674
 
 #Implementation: address_decoder
 
 $ Start of Compile
-#Wed Sep 04 11:30:38 2019
+#Thu Sep 12 17:12:41 2019
 
 Synopsys VHDL Compiler, version comp201403rcp1, Build 060R, built May 27 2014
 @N|Running in 64-bit mode
 Copyright (C) 1994-2014 Synopsys, Inc. This software and the associated documentation are proprietary to Synopsys, Inc. This software may only be used in accordance with the terms and conditions of a written license agreement with Synopsys, Inc.  All other use, reproduction, or distribution of this software is strictly prohibited.
 
 @N: CD720 :"C:\ispLEVER_Classic2_0\synpbase\lib\vhd\std.vhd":123:18:123:21|Setting time resolution to ns
-@N:"C:\users\eirikff\byggern\pingpong\address_decoder\address_decoder.vhd":6:7:6:13|Top entity is set to address.
-File C:\users\eirikff\byggern\pingpong\address_decoder\address_decoder.vhd changed - recompiling
+@N:"C:\users\eirikff\byggern-gr10\pingpong\src\etc\address_decoder\address_decoder.vhd":6:7:6:13|Top entity is set to address.
+File C:\users\eirikff\byggern-gr10\pingpong\src\etc\address_decoder\address_decoder.vhd changed - recompiling
+@W: CD266 :"C:\users\eirikff\byggern-gr10\pingpong\src\etc\address_decoder\address_decoder.vhd":38:17:38:23|oled_cs is not readable.  This may cause a simulation mismatch.
 VHDL syntax check successful!
-File C:\users\eirikff\byggern\pingpong\address_decoder\address_decoder.vhd changed - recompiling
-@N: CD630 :"C:\users\eirikff\byggern\pingpong\address_decoder\address_decoder.vhd":6:7:6:13|Synthesizing work.address.behavioral 
+File C:\users\eirikff\byggern-gr10\pingpong\src\etc\address_decoder\address_decoder.vhd changed - recompiling
+@N: CD630 :"C:\users\eirikff\byggern-gr10\pingpong\src\etc\address_decoder\address_decoder.vhd":6:7:6:13|Synthesizing work.address.behavioral 
 Post processing for work.address.behavioral
 @END
 
 At c_vhdl Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 68MB peak: 69MB)
 
 Process took 0h:00m:01s realtime, 0h:00m:01s cputime
-# Wed Sep 04 11:30:38 2019
+# Thu Sep 12 17:12:41 2019
 
 ###########################################################]
 Synopsys Netlist Linker, version comp201403rcp1, Build 060R, built May 27 2014
 @N|Running in 64-bit mode
-File C:\users\eirikff\byggern\pingpong\address_decoder\synwork\address_comp.srs changed - recompiling
+File C:\users\eirikff\byggern-gr10\pingpong\src\etc\address_decoder\synwork\address_comp.srs changed - recompiling
 
 At syn_nfilter Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 67MB peak: 68MB)
 
 Process took 0h:00m:01s realtime, 0h:00m:01s cputime
-# Wed Sep 04 11:30:39 2019
+# Thu Sep 12 17:12:42 2019
 
 ###########################################################]
 Map & Optimize Report
@@ -60,9 +61,9 @@ Product Version I-2014.03LC
 Resource Usage Report
 
 Simple gate primitives:
-IBUF            2 uses
-OBUF            3 uses
-AND2            2 uses
+IBUF            3 uses
+OBUF            4 uses
+AND2            3 uses
 INV             4 uses
 
 
@@ -73,7 +74,7 @@ Mapper successful!
 At Mapper Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 38MB peak: 102MB)
 
 Process took 0h:00m:01s realtime, 0h:00m:01s cputime
-# Wed Sep 04 11:30:40 2019
+# Thu Sep 12 17:12:43 2019
 
 ###########################################################]
 
@@ -87,11 +88,11 @@ Starting EDIF2BLIF....
 readEDIF ended normally.
 
 Inspect circuit address
-    Number of input ports   : 2
-    Number of output ports  : 3
+    Number of input ports   : 3
+    Number of output ports  : 4
     Number of bidir ports   : 0
-    Number of instances     : 11
-    Number of nets          : 13
+    Number of instances     : 14
+    Number of nets          : 17
 
 No design errors found in circuit address
 
@@ -110,13 +111,15 @@ Portions Copyright(C), Alan Phillips, Lancaster University Computer Centre 1992-
 U.C. Berkeley, SIS Ver. 1.0, supported by Lattice Semiconductor Corp.
 Reading Open-ABEL 2 file address.bl0...
 Node a10_i has been collapsed.
+Node a9_c has been collapsed.
 Node a11_c has been collapsed.
 Node a10_c has been collapsed.
-Node un1_oled_cs has been collapsed.
 Node adc_cs_1 has been collapsed.
+Node un1_oled_cs has been collapsed.
 Node un1_oled_cs_i has been collapsed.
 Node adc_cs_1_i has been collapsed.
 Node a11_i has been collapsed.
+Node oled_dc_c has been collapsed.
 Performing 'bypin choose' optimization...
 Writing Open-ABEL 2 (BLIF) file address.bl1...
 
@@ -211,7 +214,7 @@ Building model...
 Choosing best polarities...
 Mapping equations...
 .
-2 of 64 terms used; 0 vectors loaded
+3 of 64 terms used; 0 vectors loaded
 Programmer load file: 'byggerngr10.jed'
 Generating report...
 Report file: 'byggerngr10.rpt'
