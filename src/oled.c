@@ -12,41 +12,43 @@
 #define OLED_SET_COL_LO_MASK 0b00010000
 
 #define OLED_SET_DISPLAY_ON 0xAF
-#define OLED_SET_PAGE_ADDR_MODE 0b00100010
+#define OLED_SET_MEM_ADDR_MODE 0x20
+#define OLED_PAGE_ADDR_MODE 0x2
 #define OLED_RESET_RAM_START_LINE 0b01000000
 
 void oled_init(void)
 {
-    *OLED_CMD_BASE = 0xae; // display off
-    *OLED_CMD_BASE = 0xa1; //segment remap
-    *OLED_CMD_BASE = 0xda; //common pads hardware: alternative
-    *OLED_CMD_BASE = 0x12;
-    *OLED_CMD_BASE = 0xc8; //common output scan direction:com63~com0
-    *OLED_CMD_BASE = 0xa8; //multiplex ration mode:63
-    *OLED_CMD_BASE = 0x3f;
-    *OLED_CMD_BASE = 0xd5; //display divide ratio/osc. freq. mode
-    *OLED_CMD_BASE = 0x80;
-    *OLED_CMD_BASE = 0x81; //contrast control
-    *OLED_CMD_BASE = 0x50;
-    *OLED_CMD_BASE = 0xd9; //set pre-charge period
-    *OLED_CMD_BASE = 0x21;
-    *OLED_CMD_BASE = 0x20; //Set Memory Addressing Mode
-    *OLED_CMD_BASE = 0x02;
-    *OLED_CMD_BASE = 0xdb; //VCOM deselect level mode
-    *OLED_CMD_BASE = 0x30;
-    *OLED_CMD_BASE = 0xad; //master configuration
-    *OLED_CMD_BASE = 0x00;
-    *OLED_CMD_BASE = 0xa4; //out follows RAM content
-    *OLED_CMD_BASE = 0xa6; //set normal display
-    *OLED_CMD_BASE = 0xaf; // display on
+    // *OLED_CMD_BASE = 0xae; // display off
+    // // *OLED_CMD_BASE = 0xa1; //segment remap
+    // *OLED_CMD_BASE = 0xda; //common pads hardware: alternative
+    // // *OLED_CMD_BASE = 0x12; // Higher col start address
+    // // *OLED_CMD_BASE = 0xc8; //common output scan direction:com63~com0
+    // *OLED_CMD_BASE = 0xa8; //multiplex ration mode:63
+    // *OLED_CMD_BASE = 0x3f;
+    // *OLED_CMD_BASE = 0xd5; //display divide ratio/osc. freq. mode
+    // *OLED_CMD_BASE = 0x80;
+    // *OLED_CMD_BASE = 0x81; //contrast control
+    // *OLED_CMD_BASE = 0x50;
+    // *OLED_CMD_BASE = 0xd9; //set pre-charge period
+    // *OLED_CMD_BASE = 0x21;
+    // *OLED_CMD_BASE = 0x20; //Set Memory Addressing Mode
+    // *OLED_CMD_BASE = 0x02;
+    // *OLED_CMD_BASE = 0xdb; //VCOM deselect level mode
+    // *OLED_CMD_BASE = 0x30;
+    // *OLED_CMD_BASE = 0xad; //master configuration
+    // *OLED_CMD_BASE = 0x00;
+    // *OLED_CMD_BASE = 0xa4; //out follows RAM content
+    // *OLED_CMD_BASE = 0xa6; //set normal display
+    // *OLED_CMD_BASE = 0xaf; // display on
 
-    // // Set to page addressing mode
-    // *OLED_CMD_BASE = OLED_SET_PAGE_ADDR_MODE;
+    // Set to page addressing mode
+    *OLED_CMD_BASE = OLED_SET_MEM_ADDR_MODE;
+    *OLED_CMD_BASE = OLED_PAGE_ADDR_MODE; // Parameter
 
-    // *OLED_CMD_BASE = OLED_RESET_RAM_START_LINE;
+    *OLED_CMD_BASE = OLED_RESET_RAM_START_LINE;
 
-    // // Set display on (default off after reset)
-    // *OLED_CMD_BASE = OLED_SET_DISPLAY_ON;
+    // Set display on (default off after reset)
+    *OLED_CMD_BASE = OLED_SET_DISPLAY_ON;
 }
 
 void oled_set_page(uint8_t page)
