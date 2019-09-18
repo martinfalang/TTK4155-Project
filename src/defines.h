@@ -30,7 +30,7 @@
 #define ADC_BASE    (uint8_t*)0x1400
 #define ADC_SIZE    1024
 #define SRAM_BASE   (uint8_t*)0x1800
-#define OLED_BUFFER_BASE (volatile SRAM_BASE + 1024)
+#define OLED_BUFFER_BASE (SRAM_BASE + 1024)
 #define SRAM_SIZE   2048
 
 // OLED
