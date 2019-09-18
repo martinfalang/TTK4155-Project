@@ -24,17 +24,17 @@ void oled_clear_screen(uint8_t *buffer);
 // void write_to_screen();
 
 
-// // Text functions
-// enum TEXT_SIZE
-// {
-//     SMALL = 4,
-//     MEDIUM = 5,
-//     LARGE = 8
-// };
+// Text functions
+enum TEXT_SIZE
+{
+    SMALL = 4,
+    MEDIUM = 5,
+    LARGE = 8
+};
 
-// void oled_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t column, uint8_t *buffer);
+void oled_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t column, uint8_t *buffer);
 
-// void oled_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer);
+void oled_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer);
 
 // Drawing functions
 void oled_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_end, uint8_t *buffer);

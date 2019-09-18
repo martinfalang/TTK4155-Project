@@ -1,11 +1,15 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <avr/pgmspace.h>
+
 #include <stdio.h> // TODO: REMOVE
 
 #include "oled-buffer.h"
 #include "defines.h"
 #include "fonts.h"
+
+
 
 /*
     About buffer memory mapping:
@@ -114,62 +118,65 @@ void oled_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_e
     }
 }
 
-// // void write_to_screen();
+// void write_to_screen();
 
-// uint8_t char_to_index(char c)
-// {
-//     // The fonts in fonts.h are the ascii characters from 32 - 126 (normally 0 - 127)
-//     // but skips control chars 0 - 31 and 127 (DEL)
-//     // Therefore, we can compute the chars as:
-//     return (uint8_t)c - 32;
-// }
+uint8_t char_to_index(char c)
+{
+    // The fonts in fonts.h are the ascii characters from 32 - 126 (normally 0 - 127)
+    // but skips control chars 0 - 31 and 127 (DEL)
+    // Therefore, we can compute the chars as:
+    return (uint8_t)c - 32;
+}
 
-// void oled_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t column, uint8_t *buffer)
-// {
-//     uint8_t font_index = char_to_index(c);
-//     // printf("Char: '%c' chosen index: %d\n", c, font_index);
+void oled_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t column, uint8_t *buffer)
+{
+    uint8_t font_index = char_to_index(c);
+    // printf("Char: '%c' chosen index: %d\n", c, font_index);
 
-//     const unsigned char *chosen_font;
+    const unsigned char *chosen_font;
 
-//     if (size == SMALL)
-//     {
-//         chosen_font = font4;
-//     }
-//     else if (size == MEDIUM)
-//     {
-//         chosen_font = font5;
-//     }
-//     else
-//     {
-//         // Large, default value
-//         chosen_font = font8;
-//     }
+    if (size == SMALL)
+    {
+        chosen_font = font4;
+    }
+    else if (size == MEDIUM)
+    {
+        chosen_font = font5;
+    }
+    else
+    {
+        // Large, default value
+        chosen_font = font8;
+    }
 
-//     for (uint8_t i = 0; i < (uint8_t)size; ++i)
-//     {
-//         oled_set_page_column(page, column + i, *(chosen_font + font_index * size + i), buffer);
-//     }
-// }
+    for (uint8_t i = 0; i < (uint8_t)size; ++i)
+    {
+        // #ifndef COMPILE_FOR_TESTS
+        oled_set_page_column(page, column + i, pgm_read_byte(&chosen_font[font_index * size + i]), buffer);
+        // #else
+        // oled_set_page_column(page, column + i, chosen_font[font_index * size + i], buffer);
+    }
+}
 
-// void oled_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer)
-// {
-//     // Clears the page and prints the string s to the oled buffer
+void oled_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer)
+{
+    // Clears the page and prints the string s to the oled buffer
 
-//     // In case we don't want to start drawing right next to the left-most wall
-//     const uint8_t left_margin = 2;
-//     const uint8_t spacing = 1; // space between letters
+    // In case we don't want to start drawing right next to the left-most wall
+    const uint8_t left_margin = 2;
+    const uint8_t spacing = 1; // space between letters
 
-//     // Clear the current page (line)
-//     oled_clear_page(page, buffer);
+    // Clear the current page (line)
+    oled_clear_page(page, buffer);
 
-//     // In case the supplied string is too long, cut it short
-//     if (length * (size + spacing) + left_margin > OLED_WIDTH)
-//     {
-//         length = (OLED_WIDTH - left_margin) / (size + spacing); // TODO: Verify this math?
-//     }
+    // In case the supplied string is too long, cut it short
+    if (length * (size + spacing) + left_margin > OLED_WIDTH)
+    {
+        length = (OLED_WIDTH - left_margin) / (size + spacing); // TODO: Verify this math?
+    }
 
-//     for (uint8_t i = 0; i < length; ++i)
-//     {
-//         oled_print_char(s[i], size, page, left_margin + i * ((uint8_t)size + spacing), buffer);
-//     }
-// }
+    for (uint8_t i = 0; i < length; ++i)
+    {
+        oled_print_char(s[i], size, page, left_margin + i * ((uint8_t)size + spacing), buffer);
+    }
+}
