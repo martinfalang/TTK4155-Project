@@ -13,7 +13,7 @@ typedef enum pwm0_prescaler {
     PRE1024     = (1 << CS02) | (1 << CS00)  // prescaler = 1024
 } pwm0_prescaler_t;
 
-void pwm0_init(pwm0_prescaler_t ps);
+void pwm0_init();
 
 void pwm0_set_freq(uint16_t freq);
 

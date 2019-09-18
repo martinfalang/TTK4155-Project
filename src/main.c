@@ -42,14 +42,13 @@ int main(void)
     joystick_init();
     touch_init();
 
-    pwm0_init(PRE256);
-    // buzzer_init();
-    
+    pwm0_init();
+    pwm0_set_freq(440);
+    _delay_ms(1000);
+    pwm0_set_freq(262);
+
     printf("All inits ran successfully!\n");
 
-
-    pwm0_set_freq(440);
-    // buzzer_play_note(NOTE_A4);
 
     while (1)
     {

@@ -3,14 +3,14 @@
 
 static uint16_t prescaler = 256;
 
-void pwm0_init(pwm0_prescaler_t ps) {
+void pwm0_init() {
     DDRB |= (1 << PB0);     // Set pin as output
     OCR0 = 0xFF;
 
     TCCR0 |= (1 << FOC0);
     TCCR0 |= (1 << WGM01);  // Set in CTC mode
     TCCR0 |= (1 << COM00);  // Set OC0 to clear on match
-    TCCR0 |= (1 << CS02);  // prescaler = 256
+    TCCR0 |= (1 << CS02);   // prescaler = 256
 }
 
 
@@ -18,7 +18,7 @@ void pwm0_set_freq(uint16_t freq) {
     if (prescaler == 0) return;  // clock stopped
 
     int new_oc0 = F_CPU / freq / (2 * prescaler) - 1;
-    OCR0 = new_oc0 & 0xFF;
+    OCR0 = new_oc0;
 }
 
 
