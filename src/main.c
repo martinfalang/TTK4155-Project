@@ -37,10 +37,11 @@ void oled_test_screen_2(void)
   oled_init();
 
   // Try to write a string
-  oled_print_string("asdf", 4, MEDIUM, 0, buffer);
+  // oled_print_string("asdf", 4, MEDIUM, 0, buffer);
+  oled_draw_line(10, 10, 20, 20, buffer);
 
   // Print buffer to screen
-  
+  oled_draw_screen(buffer);
 }
 
 int main(void)

@@ -6,4 +6,4 @@
 void oled_init(void);
 
 // Drawing functions
-void draw_screen(uint8_t *buffer);
+void oled_draw_screen(uint8_t *buffer);

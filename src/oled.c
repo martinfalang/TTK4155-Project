@@ -68,7 +68,7 @@ void draw_page_to_screen(uint8_t page, uint8_t *buffer)
     }
 }
 
-void draw_screen(uint8_t *buffer)
+void oled_draw_screen(uint8_t *buffer)
 {
     for (int page = 0; page < OLED_PAGES; ++page)
     {
