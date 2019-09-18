@@ -20,7 +20,6 @@
 #include "joystick.h"
 #include "touch.h"
 #include "pwm0.h"
-#include "buzzer.h"
 
 void heartbeat_init()
 {
@@ -33,8 +32,7 @@ void heartbeat()
 }
 
 
-int main(void)
-{
+int main(void) {
     heartbeat_init();
     uart_init(); // So we can communicate with the terminal connected via JTAG
     xmem_init();
@@ -53,5 +51,6 @@ int main(void)
 
     while (1)
     {
+	printf("Loop!\n");
     }
 }
