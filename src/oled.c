@@ -19,10 +19,10 @@
 void oled_init(void)
 {
     *OLED_CMD_BASE = 0xae; // display off
-    *OLED_CMD_BASE = 0xa0; // Segment no remap//0xa1; //segment remap
+    *OLED_CMD_BASE = 0xa1; //segment remap
     *OLED_CMD_BASE = 0xda; //common pads hardware: alternative
     *OLED_CMD_BASE = 0x12;
-    *OLED_CMD_BASE = 0xc0; // Not alternative //0xc8; //common output scan direction:com63~com0
+    *OLED_CMD_BASE = 0xc8; //common output scan direction:com63~com0
     *OLED_CMD_BASE = 0xa8; //multiplex ration mode:63
     *OLED_CMD_BASE = 0x3f;
     *OLED_CMD_BASE = 0xd5; //display divide ratio/osc. freq. mode
@@ -56,7 +56,7 @@ void oled_set_page(uint8_t page)
     // Page must be in range [0, 7]
     if (0 <= page && page < OLED_PAGES)
     {
-        *OLED_CMD_BASE = OLED_SET_PAGE_MASK | page;
+        *OLED_CMD_BASE = OLED_SET_PAGE_MASK | (7 - page);
     }
 }
 
@@ -66,6 +66,9 @@ void oled_set_col(uint8_t col)
 
     // Note that in page addressing mode, the column auto-increments after write, s.t.
     // calling this function is only required when starting to write to the beginning of a page
+
+    col = 127 - col;
+    
     if (0 <= col && col < OLED_WIDTH)
     {
         // Set lower nibble
@@ -91,13 +94,13 @@ void draw_page_to_screen(uint8_t page, uint8_t *buffer)
     for (int col = 0; col < OLED_WIDTH; ++col)
     {
         // Write from buffer to screen
-        *OLED_DATA_BASE = buffer[page_start_index + col];
+        *OLED_DATA_BASE = 0xf - buffer[page_start_index + col];
     }
 }
 
 void oled_draw_screen(uint8_t *buffer)
 {
-    for (int page = 0; page < OLED_PAGES; ++page)
+    for (int page = OLED_PAGES - 1; page >= 0; --page)
     {
         draw_page_to_screen(page, buffer);
     }
