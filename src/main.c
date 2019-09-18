@@ -43,6 +43,7 @@ int main(void)
     touch_init();
 
     pwm0_init();
+    pwm0_set_prescaler(PRE256);
     pwm0_set_freq(440);
     _delay_ms(1000);
     pwm0_set_freq(262);
