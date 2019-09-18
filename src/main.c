@@ -19,36 +19,38 @@
 #include "adc.h"
 #include "joystick.h"
 #include "touch.h"
+#include "oled.h"
 
-void heartbeat_init() {
-  DDRB |= 1 << DDB0;
+void heartbeat_init()
+{
+    DDRB |= 1 << DDB0;
 }
 
 void heartbeat()
 {
-  PORTB ^= 1 << PB0;
+    PORTB ^= 1 << PB0;
 }
 
 int main(void)
 {
-  heartbeat_init();
-  uart_init(); // So we can communicate with the terminal connected via JTAG
-  xmem_init();
-  adc_init();
-  joystick_init();
-  touch_init();
+    heartbeat_init();
+    uart_init(); // So we can communicate with the terminal connected via JTAG
+    xmem_init();
+    adc_init();
+    joystick_init();
+    touch_init();
 
-  printf("All inits ran successfully!\n");
+    oled_init();
 
-  
-  volatile uint8_t* oled_data = (uint8_t*)OLED_DATA_BASE;
-  volatile uint8_t* oled_cmd = (uint8_t*)OLED_CMD_BASE;
+    printf("All inits ran successfully!\n");
 
-  while(1) {
-    heartbeat();
-    _delay_ms(100);
 
-    *oled_data = 0;
-  }
+    while (1)
+    {
+        heartbeat();
+        //_delay_ms(100);
 
+        oled_test();
+
+    }
 }
