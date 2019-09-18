@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "../src/defines.h"
-#include "../src/oled.h"
+#include "../src/oled-buffer.h"
 
 void print_mock_buffer_to_stdout(uint8_t *arr, int width, int height)
 {

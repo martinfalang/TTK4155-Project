@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 #include "../src/defines.h"
-#include "../src/oled.h"
+#include "../src/oled-buffer.h"
 #include "oled_buffer_utils.h"
 
 void terminal_oled_buffer_test()

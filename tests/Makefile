@@ -7,7 +7,7 @@
 VPATH := . ../src
 
 # List all source files to be compiled; separate with space
-SOURCE_FILES := oled.c test_main.c oled_buffer_test.c oled_buffer_utils.c
+SOURCE_FILES := oled-buffer.c test_main.c oled_buffer_test.c oled_buffer_utils.c
 
 BUILD_DIR := build
 
