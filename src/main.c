@@ -40,6 +40,8 @@ int main(void)
   touch_init();
   pwm_init();
 
+  pwm_set_freq(440);
+
   printf("All inits ran successfully!\n");
 
   while(1) {
