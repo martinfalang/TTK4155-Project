@@ -19,30 +19,34 @@
 #include "adc.h"
 #include "joystick.h"
 #include "touch.h"
+#include "spi.h"
+#include "mcp2515.h"
 
 void heartbeat_init() {
-  DDRB |= 1 << DDB0;
+    DDRB |= 1 << DDB0;
 }
 
 void heartbeat()
 {
-  PORTB ^= 1 << PB0;
+    PORTB ^= 1 << PB0;
 }
 
 int main(void)
 {
-  heartbeat_init();
-  uart_init(); // So we can communicate with the terminal connected via JTAG
-  xmem_init();
-  adc_init();
-  joystick_init();
-  touch_init();
+    heartbeat_init();
+    uart_init(); // So we can communicate with the terminal connected via JTAG
+    xmem_init();
+    adc_init();
+    joystick_init();
+    touch_init();
 
-  printf("All inits ran successfully!\n");
+    spi_master_init();
 
-  while(1) {
-    heartbeat();
+    printf("All inits ran successfully!\n");
 
-    _delay_ms(100);
+    while(1) {
+        heartbeat();
+        mcp2515_test();
+        _delay_ms(100);
   }
 }
