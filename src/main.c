@@ -37,6 +37,7 @@ int main(void)
   adc_init();
   joystick_init();
   touch_init();
+  pwm_init();
 
   printf("All inits ran successfully!\n");
 
