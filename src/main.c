@@ -19,6 +19,7 @@
 #include "adc.h"
 #include "joystick.h"
 #include "touch.h"
+#include "pwm.h"
 
 void heartbeat_init() {
   DDRB |= 1 << DDB0;
