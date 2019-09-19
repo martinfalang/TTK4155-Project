@@ -13,8 +13,13 @@ void buzzer_init() {
 }
 
 
-void buzzer_play_note(note_t note) {
+void buzzer_play_note(note_t note, uint8_t duration) {
     pwm0_set_freq(note);
+    // to calculate note duration in ms, take 1 sec and divide by 
+    // note type (half = 2, fourth = 4, etc.)
+    int note_duration = 1000 / duration;
+    _delay_ms(note_duration);
+    buzzer_stop();
 }
 
 
@@ -23,6 +28,6 @@ void buzzer_stop() {
 }
 
 
-void buzzer_play_nyan_cat() {
+void buzzer_play_song(uint16_t* melody, uint8_t* durations) {
 
 }
