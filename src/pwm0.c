@@ -17,8 +17,57 @@ void pwm0_init() {
 void pwm0_set_freq(uint16_t freq) {
     if (prescaler == 0) return;  // clock stopped
 
-    int new_oc0 = F_CPU / freq / (2 * prescaler) - 1;
-    OCR0 = new_oc0;
+    // search for best prescaler
+    // taken a lot of inspiration from arduino's `tone` function
+    int ocr = F_CPU / freq / 2;
+    prescaler = 1;
+
+    if (ocr > 255 + 1) {
+        prescaler = 8;
+        ocr = ocr / 8;  // try next prescaler
+
+        if (ocr > 255 + 1) {
+            prescaler = 64;
+            ocr = ocr / 8;  // 1 / 8 / 8 = 1 / 64
+
+            if (ocr > 255 + 1) {
+                prescaler = 256;
+                ocr = ocr / 4;
+                
+                if (ocr > 255 + 1) {
+                    prescaler = 1024;
+                    ocr = ocr / 4;
+                }
+            }
+        }
+    }
+
+    // we need to subtract one to get the correct OCR0 value, but by doing it
+    // last, after selecting the correct prescaler, we can do less calculations
+    // and hopefully don't use too much resources on calculating this. 
+    ocr = ocr - 1;
+    OCR0 = ocr;
+    
+    switch (prescaler)
+    {
+    case 1:
+        pwm0_set_prescaler(PRE1);
+        break;
+    case 8:
+        pwm0_set_prescaler(PRE8);
+        break;
+    case 64:
+        pwm0_set_prescaler(PRE64);
+        break;
+    case 256:
+        pwm0_set_prescaler(PRE256);
+        break;
+    case 1024:
+        pwm0_set_prescaler(PRE1024);
+        break;
+    default:
+        break;
+    }
 }
 
 
