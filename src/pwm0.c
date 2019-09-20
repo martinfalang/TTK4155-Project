@@ -1,6 +1,10 @@
 #include "pwm0.h"
 #include "defines.h"
 
+#include <stdio.h>
+
+#define DEBUG 0
+
 static uint16_t prescaler = 256;
 
 void pwm0_init() {
@@ -15,7 +19,10 @@ void pwm0_init() {
 
 
 void pwm0_set_freq(uint16_t freq) {
-    if (prescaler == 0) return;  // clock stopped
+    if (freq == 0) {  // turn off pwm signal
+        prescaler = 0;
+        pwm0_set_prescaler(PREOFF);
+    }
 
     // search for best prescaler
     // taken a lot of inspiration from arduino's `tone` function
@@ -41,6 +48,10 @@ void pwm0_set_freq(uint16_t freq) {
             }
         }
     }
+
+#if DEBUG
+    printf("pwm0_set_freq: prescaler = %d\n", prescaler);
+#endif
 
     // we need to subtract one to get the correct OCR0 value, but by doing it
     // last, after selecting the correct prescaler, we can do less calculations
@@ -97,7 +108,11 @@ void pwm0_set_prescaler(pwm0_prescaler_t ps) {
         default:
             break;
     }
-    
+
+#if DEBUG
+    printf("pwm0_set_prescaler: %d\n", prescaler); 
+#endif
+
     // By not setting all prescaler bits to 0, the PWM is turned off
     TCCR0 |= ps;
 }

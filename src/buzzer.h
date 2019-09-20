@@ -6,10 +6,13 @@
 
 void buzzer_init();
 
-void buzzer_play_note(note_t note, uint8_t duration);
+// type is type of note (whole (1), half (2), quarter (4), etc.)
+void buzzer_play_note(const note_t note, const uint8_t type);
 
 void buzzer_stop();
 
-void buzzer_play_song_P(uint16_t* melody, uint8_t* durations, uint16_t length);
+void buzzer_play_song_P(const uint16_t* melody, 
+                        const uint8_t* durations, 
+                        const uint16_t length);
 
 #endif // BUZZER_H

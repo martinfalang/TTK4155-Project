@@ -20,6 +20,11 @@
 #include "joystick.h"
 #include "touch.h"
 #include "pwm0.h"
+#include "delay.h"
+#include "buzzer.h"
+
+// #include "nyan_cat.h"
+#include "mario_theme.h"
 
 void heartbeat_init()
 {
@@ -39,17 +44,37 @@ int main(void) {
     adc_init();
     joystick_init();
     touch_init();
-
     pwm0_init();
-    pwm0_set_prescaler(PRE256);
-    pwm0_set_freq(440);
-    _delay_ms(1000);
-    pwm0_set_freq(262);
 
     printf("All inits ran successfully!\n");
 
+    //buzzer_play_song_P(nyancat_melody, nyancat_note_durations, NYAN_CAT_MELODY_LENGTH);
+
+    // Star Wars theme
+    // C D E F G A H C
+    buzzer_play_note(NOTE_C4, 2);
+    buzzer_play_note(NOTE_G4, 2);
+    buzzer_play_note(NOTE_F4, 4);
+    buzzer_play_note(NOTE_E4, 4); 
+    buzzer_play_note(NOTE_D4, 4); 
+    buzzer_play_note(NOTE_C5, 2);
+    buzzer_play_note(NOTE_G4, 2);
+    buzzer_play_note(NOTE_F4, 4);
+    buzzer_play_note(NOTE_E4, 4);
+    buzzer_play_note(NOTE_D4, 4);
+    buzzer_play_note(NOTE_C5, 2);
+    buzzer_play_note(NOTE_G4, 2);
+    buzzer_play_note(NOTE_F4, 4);
+    buzzer_play_note(NOTE_E4, 4);
+    buzzer_play_note(NOTE_F4, 4);
+    buzzer_play_note(NOTE_D4, 2);
+    buzzer_stop();
+
+
+
     while (1)
     {
-	printf("Loop!\n");
+	    printf("Loop!\n");
+        _delay_ms(100);
     }
 }

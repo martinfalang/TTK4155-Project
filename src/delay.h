@@ -1,13 +1,10 @@
 #ifndef DELAY_H
 #define DELAY_H
 
-#include <util/delay.h>
+#include <stdint.h>
 
-void var_delay_ms(int ms) {
-    while (ms--) {
-        _delay_ms(1);
-    }
-}
+
+void var_delay_ms(uint16_t ms);
 
 
 #endif // DELAY_H
