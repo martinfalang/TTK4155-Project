@@ -1,16 +1,18 @@
 #ifndef NYAN_CAT_H
 #define NYAN_CAT_H
 
-#include "pitches.h"
+#include "notes.h"
 #include <stdint.h>
 #include <avr/pgmspace.h>
 
-#define NYAN_CAT_MELODY_LENGTH 459  // words (2 bytes)
+// sheet music: https://musescore.com/namvet/scores/50457 
+// these notes are not based off of that link. they were instead
+// found on a github project
+
+#define NYAN_CAT_MELODY_LENGTH 428  // words (2 bytes)
 
 //notes in the melody:
-const uint16_t nyancat_melody[] PROGMEM = {
-  NOTE_DS5, NOTE_E5, NOTE_FS5, 0, NOTE_B5, NOTE_E5, NOTE_DS5, NOTE_E5, NOTE_FS5, NOTE_B5, NOTE_DS6, NOTE_E6, NOTE_DS6, NOTE_AS5, NOTE_B5, 0,
-  NOTE_FS5, 0, NOTE_DS5, NOTE_E5, NOTE_FS5, 0, NOTE_B5, NOTE_CS6, NOTE_AS5, NOTE_B5, NOTE_CS6, NOTE_E6, NOTE_DS6, NOTE_E6, NOTE_CS6,
+const note_t nyancat_melody[] PROGMEM = {
   NOTE_FS4, NOTE_GS4, NOTE_D4, NOTE_DS4, NOTE_FS2, NOTE_CS4, NOTE_D4, NOTE_CS4, NOTE_B3, NOTE_B3, NOTE_CS4,
   NOTE_D4, NOTE_D4, NOTE_CS4, NOTE_B3, NOTE_CS4, NOTE_DS4, NOTE_FS4, NOTE_GS4, NOTE_DS4, NOTE_FS4, NOTE_CS4, NOTE_DS4, NOTE_B3, NOTE_CS4, NOTE_B3,
   NOTE_DS4, NOTE_FS4, NOTE_GS4, NOTE_DS4, NOTE_FS4, NOTE_CS4, NOTE_DS4, NOTE_B3, NOTE_D4, NOTE_DS4, NOTE_D4, NOTE_CS4, NOTE_B3, NOTE_CS4,
@@ -46,9 +48,7 @@ const uint16_t nyancat_melody[] PROGMEM = {
 };
 
 // note durations: 4 = quarter note, 8 = eighth note, etc
-const uint8_t nyancat_note_durations[] PROGMEM = {
-  16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
-  16,16,16,16,16,16,8,16,16,16,16,16,16,16,16,
+const note_type_t nyancat_note_note_types[] PROGMEM = {
   8,8,16,16,16,16,16,16,8,8,8,
   8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
   8,8,16,16,16,16,16,16,16,16,16,16,16,16,

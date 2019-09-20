@@ -1,0 +1,19 @@
+#ifndef {song_name!u}_H
+#define {song_name!u}_H
+
+#include "notes.h"
+#include <stdint.h>
+#include <avr/pgmspace.h>
+
+
+#define {song_name!u}_LENGTH {song_length}
+
+const note_t {song_name!l}_melody[] PROGMEM = {
+ 
+};
+
+const note_type_t {song_name!l}_note_types[] PROGMEM = {
+
+};
+
+#endif // {song_name!u}_H

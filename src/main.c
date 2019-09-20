@@ -23,8 +23,7 @@
 #include "delay.h"
 #include "buzzer.h"
 
-// #include "nyan_cat.h"
-#include "mario_theme.h"
+#include "songs/star_wars.h"
 
 void heartbeat_init()
 {
@@ -47,29 +46,6 @@ int main(void) {
     pwm0_init();
 
     printf("All inits ran successfully!\n");
-
-    //buzzer_play_song_P(nyancat_melody, nyancat_note_durations, NYAN_CAT_MELODY_LENGTH);
-
-    // Star Wars theme
-    // C D E F G A H C
-    buzzer_play_note(NOTE_C4, 2);
-    buzzer_play_note(NOTE_G4, 2);
-    buzzer_play_note(NOTE_F4, 4);
-    buzzer_play_note(NOTE_E4, 4); 
-    buzzer_play_note(NOTE_D4, 4); 
-    buzzer_play_note(NOTE_C5, 2);
-    buzzer_play_note(NOTE_G4, 2);
-    buzzer_play_note(NOTE_F4, 4);
-    buzzer_play_note(NOTE_E4, 4);
-    buzzer_play_note(NOTE_D4, 4);
-    buzzer_play_note(NOTE_C5, 2);
-    buzzer_play_note(NOTE_G4, 2);
-    buzzer_play_note(NOTE_F4, 4);
-    buzzer_play_note(NOTE_E4, 4);
-    buzzer_play_note(NOTE_F4, 4);
-    buzzer_play_note(NOTE_D4, 2);
-    buzzer_stop();
-
 
 
     while (1)

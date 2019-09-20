@@ -6,7 +6,13 @@
 
 #include <stdint.h>
 
+// Denotes which note, i.e. A4, C#4 (CS4), etc.
 typedef uint16_t note_t;
+// Denotes which type of note, i.e. half (2), quarter (4), etc. 
+typedef uint8_t  note_type_t;
+
+
+#define BAR_LENGTH_MS 1000  // ms
 
 #define NOTE_B0  31
 #define NOTE_C1  33
