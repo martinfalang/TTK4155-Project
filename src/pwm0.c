@@ -4,6 +4,16 @@
 #include <stdio.h>
 
 #define DEBUG 0
+#define F_OC0_FPWM F_CPU / 256  // Only valid when using in DAC mode (Fast PWM)
+// From datasheet:
+// F_OC0 = F_CPU / N / 256 = 4 195 200 / 256 / 1 = 16 388 Hz
+// By Nyquist sampling theorem, the highest frequency we can modulate without
+// aliasing is 8 194 Hz. 
+// This is low, but should be okay since the highest note defined in pitches.h
+// is a D#8 at 4 978 Hz, giving us enough PWM cycles to make a somewhat decent
+// signal. However, such high notes will problably never be played since it's
+// really tiring for your ear. 
+
 
 static uint16_t prescaler = 256;
 
@@ -120,4 +130,37 @@ void pwm0_set_prescaler(pwm0_prescaler_t ps) {
 
 uint16_t pwm0_get_prescaler() {
     return prescaler;
+}
+
+
+
+
+void pwm0_init_sine() {
+    DDRB |= (1 << PB0);     // Set pin as output
+    OCR0 = 0x7F;  // 50% duty cycle
+
+    TCCR0 |= (1 << WGM01) | (1 << WGM00);  // Set in Fast PWM mode
+    TCCR0 |= (1 << COM01);  // Set OC0 to clear on match
+    TCCR0 |= (1 << CS00);   // no prescaler
+}
+
+
+void pwm0_sine_wave(uint16_t freq) {
+    static const uint8_t DAC_RES = 32;
+    static const uint8_t DAC_OCR_LOOKUP[DAC_RES] = {127, 152, 176, 198, 217, 233, 245, 252, 
+                255, 252, 245, 233, 217, 198, 176, 152, 127, 102, 78, 56, 37, 
+                21, 9, 2, 0, 2, 9, 21, 37, 56, 78, 102};
+
+    for (uint8_t i = 0; i < DAC_RES; ++i) {
+        OCR0 = DAC_OCR_LOOKUP[i];
+        
+        uint8_t max_count = 5;  // TODO: change this to be dependent on `freq`
+        uint8_t period_count = 0;
+        while (period_count < max_count) {
+            while (TIFR & (1 << TOV0));
+            TIFR |= (1 << TOV0);
+            ++period_count;
+        }
+        // TODO: do this with interrupt and timer2
+    }
 }

@@ -21,4 +21,10 @@ void pwm0_set_prescaler(pwm0_prescaler_t mode);
 
 uint16_t pwm0_get_prescaler();
 
+// ---------- Sine modulation --------------
+
+void pwm0_init_sine();
+
+void pwm0_sine_wave(uint16_t freq);
+
 #endif /* PWM_H */
