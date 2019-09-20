@@ -3,9 +3,12 @@
 
 #include "pitches.h"
 #include <stdint.h>
+#include <avr/pgmspace.h>
+
+#define NYAN_CAT_MELODY_LENGTH 459  // words (2 bytes)
 
 //notes in the melody:
-uint16_t nyancat_melody[] = {
+const uint16_t nyancat_melody[] PROGMEM = {
   NOTE_DS5, NOTE_E5, NOTE_FS5, 0, NOTE_B5, NOTE_E5, NOTE_DS5, NOTE_E5, NOTE_FS5, NOTE_B5, NOTE_DS6, NOTE_E6, NOTE_DS6, NOTE_AS5, NOTE_B5, 0,
   NOTE_FS5, 0, NOTE_DS5, NOTE_E5, NOTE_FS5, 0, NOTE_B5, NOTE_CS6, NOTE_AS5, NOTE_B5, NOTE_CS6, NOTE_E6, NOTE_DS6, NOTE_E6, NOTE_CS6,
   NOTE_FS4, NOTE_GS4, NOTE_D4, NOTE_DS4, NOTE_FS2, NOTE_CS4, NOTE_D4, NOTE_CS4, NOTE_B3, NOTE_B3, NOTE_CS4,
@@ -43,7 +46,7 @@ uint16_t nyancat_melody[] = {
 };
 
 // note durations: 4 = quarter note, 8 = eighth note, etc
-uint8_t nyancat_note_durations[] = {
+const uint8_t nyancat_note_durations[] PROGMEM = {
   16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
   16,16,16,16,16,16,8,16,16,16,16,16,16,16,16,
   8,8,16,16,16,16,16,16,8,8,8,

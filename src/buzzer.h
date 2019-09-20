@@ -10,6 +10,6 @@ void buzzer_play_note(note_t note, uint8_t duration);
 
 void buzzer_stop();
 
-void buzzer_play_song(uint16_t* melody, uint8_t* durations);
+void buzzer_play_song_P(uint16_t* melody, uint8_t* durations, uint16_t length);
 
 #endif // BUZZER_H

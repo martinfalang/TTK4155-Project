@@ -48,7 +48,6 @@ int main(void) {
 
     printf("All inits ran successfully!\n");
 
-
     while (1)
     {
 	printf("Loop!\n");
