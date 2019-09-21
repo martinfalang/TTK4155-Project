@@ -1,7 +1,7 @@
 #ifndef STAR_WARS_H
 #define STAR_WARS_H
 
-#include "notes.h"
+#include "../notes.h"
 #include <stdint.h>
 #include <avr/pgmspace.h>
 

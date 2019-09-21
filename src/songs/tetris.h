@@ -1,7 +1,7 @@
 #ifndef TETRIS_THEME_H
 #define TETRIS_THEME_H
 
-#include "notes.h"
+#include "../notes.h"
 #include <stdint.h>
 #include <avr/pgmspace.h>
 

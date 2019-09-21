@@ -1,7 +1,8 @@
 #ifndef MARIO_H
 #define MARIO_H
 
-#include "notes.h"
+
+#include "../notes.h"
 #include <stdint.h>
 #include <avr/pgmspace.h>
 

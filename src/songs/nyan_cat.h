@@ -1,7 +1,7 @@
 #ifndef NYAN_CAT_H
 #define NYAN_CAT_H
 
-#include "notes.h"
+#include "../notes.h"
 #include <stdint.h>
 #include <avr/pgmspace.h>
 
