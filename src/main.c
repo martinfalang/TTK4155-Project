@@ -23,7 +23,7 @@
 #include "delay.h"
 #include "buzzer.h"
 
-#include "songs/star_wars.h"
+#include "songs/nyan_cat.h"
 
 void heartbeat_init()
 {
@@ -46,6 +46,8 @@ int main(void) {
     pwm0_init();
 
     printf("All inits ran successfully!\n");
+
+    buzzer_play_song_P(nyan_cat_melody, nyan_cat_note_types, NYAN_CAT_LENGTH);
 
 
     while (1)

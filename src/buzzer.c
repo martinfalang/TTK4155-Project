@@ -42,10 +42,6 @@ void buzzer_play_song_P(const note_t* melody,
         printf("Inside song loop. \tfreq: %d \ttype: %d\n", note,type);
 #endif
         buzzer_play_note(note, type);
-        
-        // +30% seemed to be a suitable pause duration
-        uint16_t pause_between_notes = 1.3 * BAR_LENGTH_MS / type;
-        var_delay_ms(pause_between_notes);
     }
     buzzer_stop();
 }
