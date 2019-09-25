@@ -21,6 +21,7 @@
 #include "touch.h"
 #include "oled-buffer.h"
 #include "oled.h"
+#include "oled-menu.h"
 
 void heartbeat_init()
 {
@@ -61,13 +62,17 @@ int main(void)
     touch_init();
     oled_init();
 
+    oled_menu_init(OLED_BUFFER_BASE);
+
     printf("All inits ran successfully!\n");
 
-    oled_test_screen_2();
+    
 
-    while (1)
-    {
-        heartbeat();
-        _delay_ms(100);
-    }
+    // oled_test_screen_2();
+
+    // while (1)
+    // {
+    //     heartbeat();
+        // _delay_ms(100);
+    // }
 }
