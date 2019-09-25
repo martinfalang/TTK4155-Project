@@ -11,31 +11,27 @@
 #define OLED_SET_COL_HI_MASK 0x10
 #define OLED_SET_COL_LO_MASK 0x00
 
-#define OLED_SET_DISPLAY_ON 0xAF
-#define OLED_SET_MEM_ADDR_MODE 0x20
-#define OLED_PAGE_ADDR_MODE 0x2
-#define OLED_RESET_RAM_START_LINE 0b01000000
+volatile char *const oled_cmd_ptr = (char *)0x1000;
+volatile char *const oled_data_ptr = (char *)0x1200;
 
-volatile char * const oled_cmd_ptr = (char *)0x1000;
-volatile char * const oled_data_ptr = (char *)0x1200;
-
-void oled_write_c(uint8_t cmd) {
+void oled_write_c(uint8_t cmd)
+{
     *oled_cmd_ptr = cmd;
 }
 
-void oled_write_d(uint8_t data) {
+void oled_write_d(uint8_t data)
+{
     *oled_data_ptr = data;
 }
 
 void oled_init(void)
 {
-    
-    // *oled_cmd_ptr = 0xae; // display off
+
+    oled_write_c(0xae); // display off
     oled_write_c(0xa1); //segment remap
     oled_write_c(0xda); //common pads hardware: alternative
     oled_write_c(0x12);
-
-    oled_write_c(0xc8); // 0xc0; //common output scan direction:com63~com0   //0xc8
+    oled_write_c(0xc8); //common output scan direction:com63~com0
     oled_write_c(0xa8); //multiplex ration mode:63
     oled_write_c(0x3f);
     oled_write_c(0xd5); //display divide ratio/osc. freq. mode
@@ -53,15 +49,6 @@ void oled_init(void)
     oled_write_c(0xa4); //out follows RAM content
     oled_write_c(0xa6); //set normal display
     oled_write_c(0xaf); // display on
-
-    // Set to page addressing mode
-    // *oled_cmd_ptr = OLED_SET_MEM_ADDR_MODE;
-    // *oled_cmd_ptr = OLED_PAGE_ADDR_MODE; // Parameter
-
-    // *oled_cmd_ptr = OLED_RESET_RAM_START_LINE;
-
-    // // Set display on (default off after reset)
-    // *oled_cmd_ptr = OLED_SET_DISPLAY_ON;
 }
 
 void oled_set_page(uint8_t page)
@@ -86,10 +73,6 @@ void oled_set_col(uint8_t col)
         // Set higher nibbler
         oled_write_c(OLED_SET_COL_HI_MASK | (0x0F & (col >> 4))); // Mask out higher four bits
     }
-}
-
-void oled_test_screen(void)
-{
 }
 
 void draw_page_to_screen(uint8_t page, uint8_t *buffer)

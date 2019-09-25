@@ -35,19 +35,17 @@ void heartbeat()
 void oled_test_screen_2(void)
 {
     uint8_t *buffer = OLED_BUFFER_BASE;
-    oled_buffer_clear(buffer);
-    // Try to write a string
+    oled_buffer_clear_screen(buffer);
+    // Try to write some strings
 
-    oled_print_string("asdf", 4, MEDIUM, 0, buffer);
-    oled_print_string("sdfg", 4, MEDIUM, 1, buffer);
-    oled_print_string("dfhh", 4, MEDIUM, 2, buffer);
-    oled_print_string("fgjj", 4, MEDIUM, 3, buffer);
-    oled_print_string("ghjk", 4, MEDIUM, 4, buffer);
-    oled_print_string("hjkl", 4, MEDIUM, 5, buffer);
-    oled_print_string("qwer", 4, MEDIUM, 6, buffer);
-    oled_print_string("wert", 4, MEDIUM, 7, buffer);
-
-    // oled_draw_line(10, 10, 20, 10, buffer);
+    oled_buffer_print_string("asdf", 4, MEDIUM, 0, buffer);
+    oled_buffer_print_string("sdfg", 4, MEDIUM, 1, buffer);
+    oled_buffer_print_string("dfhh", 4, MEDIUM, 2, buffer);
+    oled_buffer_print_string("fgjj", 4, MEDIUM, 3, buffer);
+    oled_buffer_print_string("ghjk", 4, MEDIUM, 4, buffer);
+    oled_buffer_print_string("hjkl", 4, MEDIUM, 5, buffer);
+    oled_buffer_print_string("nytt", 4, MEDIUM, 6, buffer);
+    oled_buffer_print_string("jaja", 4, MEDIUM, 7, buffer);
 
     // Print buffer to screen
     oled_draw_screen(buffer);
