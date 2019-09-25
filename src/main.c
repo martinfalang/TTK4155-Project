@@ -37,7 +37,8 @@ void oled_test_screen_2(void)
   uint8_t *buffer = OLED_BUFFER_BASE;
   oled_buffer_clear(buffer);
   // Try to write a string
-  oled_print_string("asdf", 4, MEDIUM, 0, buffer);
+
+  oled_print_string("fdas", 4, MEDIUM, 4, buffer);
   // oled_draw_line(10, 10, 20, 10, buffer);
   
 

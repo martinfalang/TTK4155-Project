@@ -8,8 +8,8 @@
 // Masks for page addressing mode
 // See p. 27-29 in SSD1780 datasheet to verify
 #define OLED_SET_PAGE_MASK 0b10110000
-#define OLED_SET_COL_HI_MASK 0b00000000
-#define OLED_SET_COL_LO_MASK 0b00010000
+#define OLED_SET_COL_HI_MASK 0x10
+#define OLED_SET_COL_LO_MASK 0x00
 
 #define OLED_SET_DISPLAY_ON 0xAF
 #define OLED_SET_MEM_ADDR_MODE 0x20
@@ -18,11 +18,14 @@
 
 void oled_init(void)
 {
-    *OLED_CMD_BASE = 0xae; // display off
+    volatile char *oled_cmd_ptr = (char *)0x1000; // Start address for the SRAM    
+    
+    // *OLED_CMD_BASE = 0xae; // display off
     *OLED_CMD_BASE = 0xa1; //segment remap
     *OLED_CMD_BASE = 0xda; //common pads hardware: alternative
     *OLED_CMD_BASE = 0x12;
-    *OLED_CMD_BASE = 0xc8; //common output scan direction:com63~com0
+
+    *OLED_CMD_BASE = 0xc0; // 0xc0; //common output scan direction:com63~com0   //0xc8
     *OLED_CMD_BASE = 0xa8; //multiplex ration mode:63
     *OLED_CMD_BASE = 0x3f;
     *OLED_CMD_BASE = 0xd5; //display divide ratio/osc. freq. mode
