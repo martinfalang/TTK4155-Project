@@ -148,7 +148,7 @@ void oled_buffer_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t c
     }
 }
 
-void oled_buffer_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer)
+void oled_buffer_print_string(char *s, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer)
 {
     // Clears the page and prints the string s to the oled buffer
 
@@ -158,6 +158,8 @@ void oled_buffer_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint
 
     // Clear the current page (line)
     oled_buffer_clear_page(page, buffer);
+
+    uint8_t length = strlen(s);
 
     // In case the supplied string is too long, cut it short
     if (length * (size + spacing) + left_margin > OLED_WIDTH)

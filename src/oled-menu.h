@@ -7,16 +7,18 @@
 
 #include <stdint.h>
 
+// Forward declaration to allow pointer from both element to menu
+// and menu to element
+typedef struct oled_menu oled_menu_t; 
+
 typedef struct oled_menu_el {
     char *element_text;
-    uint8_t text_length; // Length of element_text
     void (*on_select)(void);
-    oled_menu_el_t *prev_menu;
+    oled_menu_t *prev_menu;
 } oled_menu_el_t;
 
 typedef struct oled_menu {
     char *header_string; // Unselectable header shown on first row/page
-    uint8_t header_length; // Lenght of header_string
     oled_menu_el_t *elements;
     uint8_t num_elements;
     uint8_t selected_idx; // Index of selected menu element in elements-array

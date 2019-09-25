@@ -31,7 +31,7 @@ enum TEXT_SIZE
 
 void oled_buffer_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t column, uint8_t *buffer);
 
-void oled_buffer_print_string(char *s, uint8_t length, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer);
+void oled_buffer_print_string(char *s, enum TEXT_SIZE size, uint8_t page, uint8_t *buffer);
 
 // Drawing functions
 void oled_buffer_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_end, uint8_t *buffer);

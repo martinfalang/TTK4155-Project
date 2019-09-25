@@ -39,14 +39,14 @@ void oled_test_screen_2(void)
     oled_buffer_clear_screen(buffer);
     // Try to write some strings
 
-    oled_buffer_print_string("asdf", 4, MEDIUM, 0, buffer);
-    oled_buffer_print_string("sdfg", 4, MEDIUM, 1, buffer);
-    oled_buffer_print_string("dfhh", 4, MEDIUM, 2, buffer);
-    oled_buffer_print_string("fgjj", 4, MEDIUM, 3, buffer);
-    oled_buffer_print_string("ghjk", 4, MEDIUM, 4, buffer);
-    oled_buffer_print_string("hjkl", 4, MEDIUM, 5, buffer);
-    oled_buffer_print_string("nytt", 4, MEDIUM, 6, buffer);
-    oled_buffer_print_string("jaja", 4, MEDIUM, 7, buffer);
+    oled_buffer_print_string("asdf", MEDIUM, 0, buffer);
+    oled_buffer_print_string("sdfg", MEDIUM, 1, buffer);
+    oled_buffer_print_string("dfhh", MEDIUM, 2, buffer);
+    oled_buffer_print_string("fgjj", MEDIUM, 3, buffer);
+    oled_buffer_print_string("ghjk", MEDIUM, 4, buffer);
+    oled_buffer_print_string("hjkl", MEDIUM, 5, buffer);
+    oled_buffer_print_string("nytt", MEDIUM, 6, buffer);
+    oled_buffer_print_string("jaja", MEDIUM, 7, buffer);
 
     // Print buffer to screen
     oled_draw_screen(buffer);
