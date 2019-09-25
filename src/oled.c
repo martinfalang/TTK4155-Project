@@ -16,42 +16,52 @@
 #define OLED_PAGE_ADDR_MODE 0x2
 #define OLED_RESET_RAM_START_LINE 0b01000000
 
+volatile char * const oled_cmd_ptr = (char *)0x1000;
+volatile char * const oled_data_ptr = (char *)0x1200;
+
+void oled_write_c(uint8_t cmd) {
+    *oled_cmd_ptr = cmd;
+}
+
+void oled_write_d(uint8_t data) {
+    *oled_data_ptr = data;
+}
+
 void oled_init(void)
 {
-    volatile char *oled_cmd_ptr = (char *)0x1000; // Start address for the SRAM    
     
-    // *OLED_CMD_BASE = 0xae; // display off
-    *OLED_CMD_BASE = 0xa1; //segment remap
-    *OLED_CMD_BASE = 0xda; //common pads hardware: alternative
-    *OLED_CMD_BASE = 0x12;
+    // *oled_cmd_ptr = 0xae; // display off
+    oled_write_c(0xa1); //segment remap
+    oled_write_c(0xda); //common pads hardware: alternative
+    oled_write_c(0x12);
 
-    *OLED_CMD_BASE = 0xc0; // 0xc0; //common output scan direction:com63~com0   //0xc8
-    *OLED_CMD_BASE = 0xa8; //multiplex ration mode:63
-    *OLED_CMD_BASE = 0x3f;
-    *OLED_CMD_BASE = 0xd5; //display divide ratio/osc. freq. mode
-    *OLED_CMD_BASE = 0x80;
-    *OLED_CMD_BASE = 0x81; //contrast control
-    *OLED_CMD_BASE = 0x50;
-    *OLED_CMD_BASE = 0xd9; //set pre-charge period
-    *OLED_CMD_BASE = 0x21;
-    *OLED_CMD_BASE = 0x20; //Set Memory Addressing Mode
-    *OLED_CMD_BASE = 0x02;
-    *OLED_CMD_BASE = 0xdb; //VCOM deselect level mode
-    *OLED_CMD_BASE = 0x30;
-    *OLED_CMD_BASE = 0xad; //master configuration
-    *OLED_CMD_BASE = 0x00;
-    *OLED_CMD_BASE = 0xa4; //out follows RAM content
-    *OLED_CMD_BASE = 0xa6; //set normal display
-    *OLED_CMD_BASE = 0xaf; // display on
+    oled_write_c(0xc8); // 0xc0; //common output scan direction:com63~com0   //0xc8
+    oled_write_c(0xa8); //multiplex ration mode:63
+    oled_write_c(0x3f);
+    oled_write_c(0xd5); //display divide ratio/osc. freq. mode
+    oled_write_c(0x80);
+    oled_write_c(0x81); //contrast control
+    oled_write_c(0x50);
+    oled_write_c(0xd9); //set pre-charge period
+    oled_write_c(0x21);
+    oled_write_c(0x20); //Set Memory Addressing Mode
+    oled_write_c(0x02);
+    oled_write_c(0xdb); //VCOM deselect level mode
+    oled_write_c(0x30);
+    oled_write_c(0xad); //master configuration
+    oled_write_c(0x00);
+    oled_write_c(0xa4); //out follows RAM content
+    oled_write_c(0xa6); //set normal display
+    oled_write_c(0xaf); // display on
 
     // Set to page addressing mode
-    // *OLED_CMD_BASE = OLED_SET_MEM_ADDR_MODE;
-    // *OLED_CMD_BASE = OLED_PAGE_ADDR_MODE; // Parameter
+    // *oled_cmd_ptr = OLED_SET_MEM_ADDR_MODE;
+    // *oled_cmd_ptr = OLED_PAGE_ADDR_MODE; // Parameter
 
-    // *OLED_CMD_BASE = OLED_RESET_RAM_START_LINE;
+    // *oled_cmd_ptr = OLED_RESET_RAM_START_LINE;
 
     // // Set display on (default off after reset)
-    // *OLED_CMD_BASE = OLED_SET_DISPLAY_ON;
+    // *oled_cmd_ptr = OLED_SET_DISPLAY_ON;
 }
 
 void oled_set_page(uint8_t page)
@@ -59,7 +69,7 @@ void oled_set_page(uint8_t page)
     // Page must be in range [0, 7]
     if (0 <= page && page < OLED_PAGES)
     {
-        *OLED_CMD_BASE = OLED_SET_PAGE_MASK | page;
+        oled_write_c(OLED_SET_PAGE_MASK | page);
     }
 }
 
@@ -72,9 +82,9 @@ void oled_set_col(uint8_t col)
     if (0 <= col && col < OLED_WIDTH)
     {
         // Set lower nibble
-        *OLED_CMD_BASE = OLED_SET_COL_LO_MASK | (0x0F & col); // Mask out lower four bits
+        oled_write_c(OLED_SET_COL_LO_MASK | (0x0F & col)); // Mask out lower four bits
         // Set higher nibbler
-        *OLED_CMD_BASE = OLED_SET_COL_HI_MASK | (0x0F & (col >> 4)); // Mask out higher four bits
+        oled_write_c(OLED_SET_COL_HI_MASK | (0x0F & (col >> 4))); // Mask out higher four bits
     }
 }
 
@@ -94,7 +104,7 @@ void draw_page_to_screen(uint8_t page, uint8_t *buffer)
     for (int col = 0; col < OLED_WIDTH; ++col)
     {
         // Write from buffer to screen
-        *OLED_DATA_BASE = buffer[page_start_index + col];
+        oled_write_d(buffer[page_start_index + col]);
     }
 }
 
