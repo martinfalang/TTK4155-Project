@@ -4,7 +4,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-void spi_master_init(void) {
+void spi_init(void) {
     
     // Set MOSI, SCK and SS as output 
     DDR_SPI |= (1 << DD_MOSI) | (1 << DD_SCK) | (1 << DD_SS);

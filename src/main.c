@@ -40,13 +40,13 @@ int main(void)
     joystick_init();
     touch_init();
 
-    spi_master_init();
+    spi_init();
 
     printf("All inits ran successfully!\n");
 
     while(1) {
         heartbeat();
-        mcp2515_test();
+       
         _delay_ms(100);
   }
 }

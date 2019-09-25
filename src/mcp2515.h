@@ -17,6 +17,4 @@
 
 void mcp2515_test(void);
 
-unsigned char mcp2515_read(void);
-
 #endif // MCP2515_H
