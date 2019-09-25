@@ -5,7 +5,7 @@
 
 #include "oled-menu.h"
 #include "defines.h"
-#include "joystick.h"
+#include "touch.h"
 #include "oled-buffer.h"
 #include "oled.h"
 
@@ -67,7 +67,7 @@ void oled_menu_init(uint8_t * buffer)
     oled_menu_el_t test_element;
 
     test_element.element_text = "Example element";
-    test_element.text_length = 9;
+    test_element.text_length = 15;
     test_element.on_select = &toggle_led;
     test_element.on_back = &toggle_led;
 
@@ -80,21 +80,22 @@ void oled_menu_init(uint8_t * buffer)
     mm.header_length = 6;
     mm.selected_idx = 0;
 
-    bool btn_is_pressed = false;
+    bool right_btn_is_pressed = false;
     while (1)
     {
-        if (joystick_read_btn)
+        touch_btn_t buttons = touch_read_btns();
+        if (buttons.right)
         {
-            if (!btn_is_pressed)
+            if (!right_btn_is_pressed)
             {
                 // Button was not pressed before, but was during this iteration
-                btn_is_pressed = true;
+                right_btn_is_pressed = true;
                 oled_menu_select(mm.elements[mm.selected_idx]);
             }
         }
         else
         {
-            btn_is_pressed = false;
+            right_btn_is_pressed = false;
         }
 
         draw_oled_menu(&mm, buffer);
