@@ -24,54 +24,52 @@
 
 void heartbeat_init()
 {
-  DDRB |= 1 << DDB0;
+    DDRB |= 1 << DDB0;
 }
 
 void heartbeat()
 {
-  PORTB ^= 1 << PB0;
+    PORTB ^= 1 << PB0;
 }
 
 void oled_test_screen_2(void)
 {
-  uint8_t *buffer = OLED_BUFFER_BASE;
-  oled_buffer_clear(buffer);
-  // Try to write a string
+    uint8_t *buffer = OLED_BUFFER_BASE;
+    oled_buffer_clear(buffer);
+    // Try to write a string
 
-  oled_print_string("asdf", 4, MEDIUM, 0, buffer);
-  oled_print_string("sdfg", 4, MEDIUM, 1, buffer);
-  oled_print_string("dfhh", 4, MEDIUM, 2, buffer);
-  oled_print_string("fgjj", 4, MEDIUM, 3, buffer);
-  oled_print_string("ghjk", 4, MEDIUM, 4, buffer);
-  oled_print_string("hjkl", 4, MEDIUM, 5, buffer);
-  oled_print_string("qwer", 4, MEDIUM, 6, buffer);
-  oled_print_string("wert", 4, MEDIUM, 7, buffer);
+    oled_print_string("asdf", 4, MEDIUM, 0, buffer);
+    oled_print_string("sdfg", 4, MEDIUM, 1, buffer);
+    oled_print_string("dfhh", 4, MEDIUM, 2, buffer);
+    oled_print_string("fgjj", 4, MEDIUM, 3, buffer);
+    oled_print_string("ghjk", 4, MEDIUM, 4, buffer);
+    oled_print_string("hjkl", 4, MEDIUM, 5, buffer);
+    oled_print_string("qwer", 4, MEDIUM, 6, buffer);
+    oled_print_string("wert", 4, MEDIUM, 7, buffer);
 
+    // oled_draw_line(10, 10, 20, 10, buffer);
 
-  // oled_draw_line(10, 10, 20, 10, buffer);
-  
-
-  // Print buffer to screen
-  oled_draw_screen(buffer);
+    // Print buffer to screen
+    oled_draw_screen(buffer);
 }
 
 int main(void)
 {
-  heartbeat_init();
-  uart_init(); // So we can communicate with the terminal connected via JTAG
-  xmem_init();
-  adc_init();
-  joystick_init();
-  touch_init();
-  oled_init();
+    heartbeat_init();
+    uart_init(); // So we can communicate with the terminal connected via JTAG
+    xmem_init();
+    adc_init();
+    joystick_init();
+    touch_init();
+    oled_init();
 
-  printf("All inits ran successfully!\n");
+    printf("All inits ran successfully!\n");
 
-  oled_test_screen_2();
+    oled_test_screen_2();
 
-  while (1)
-  {
-    heartbeat();
-    _delay_ms(100);
-  }
+    while (1)
+    {
+        heartbeat();
+        _delay_ms(100);
+    }
 }
