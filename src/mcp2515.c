@@ -5,16 +5,17 @@
 #include <stdio.h>
 
 void mcp2515_test(void) {
+    spi_select();
+
+    spi_write_byte(MCP2515_READ_RX_BUFFER);
+
+    unsigned char data = spi_read_byte();
+
+    spi_deselect();
+
+    printf("MCP2515 status: %x\n", data);
+
     
-    char data = mcp2515_read();
-    printf("MCP2515 status: %c\n", data);
 }
 
-
-unsigned char mcp2515_read(void) { // TODO: make this function more general
-    spi_master_transmit(MCP2515_READ_STATUS);
-
-    char data = spi_read();
-    return data;
-}
 

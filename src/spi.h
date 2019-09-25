@@ -10,10 +10,12 @@
 #define SPI_PORT    PORTB 
 
 void spi_master_init(void);
-void spi_master_transmit(char data);
-unsigned char spi_read(void);
 
-// For testing
-unsigned char spi_trancieve(unsigned char data);
+void spi_select(void);
+void spi_deselect(void);
+
+void spi_write_byte(unsigned char data);
+unsigned char spi_read_byte(void);
+
 
 #endif // SPI_H

@@ -4,29 +4,33 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include <stdio.h> // Remove after testing
-
 void spi_master_init(void) {
     
-    // Set MOSI and SCK output
-    DDR_SPI |= (1 << DD_MOSI) | (1 << DD_SCK);
-    // Set MISO and SS input
-    DDR_SPI &= ~((1 << DD_MISO) | (1 << DD_SS));
+    // Set MOSI, SCK and SS as output 
+    DDR_SPI |= (1 << DD_MOSI) | (1 << DD_SCK) | (1 << DD_SS);
+    
+    // Set MISO (used SS as input earlier)
+    DDR_SPI &= ~(1 << DD_MISO);// | (1 << DD_SS));
 
-    // Enable SPI, set ATmega162 to master, //enable SPI interrupt
-    SPCR |= (1 << SPE) | (1 << MSTR);// | (1 << SPIE);
-
-    // Enable global interrupts
-    //sei();
-
-    // Set clock speed to f_osc/16
-    SPCR |= (1 << SPR0);
+    // Enable SPI, set ATmega162 to master, set clock speed to f_osc/16
+    SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);
 
     // Set SS pin high
-    SPI_PORT |= (1 << DD_SS);
+    spi_deselect();
 }
 
-void spi_master_transmit(char data) {
+void spi_select(void) {
+    // Set SS low
+    SPI_PORT &= ~(1 << DD_SS);
+}
+
+void spi_deselect(void) {
+    // Set SS high
+    SPI_PORT &= ~(1 << DD_SS);
+}
+
+void spi_write_byte(unsigned char data) {
+
     // Start transmission
     SPDR = data;
 
@@ -34,11 +38,15 @@ void spi_master_transmit(char data) {
     while(!(SPSR & (1 << SPIF)));
 }
 
-unsigned char spi_read(void) {
+unsigned char spi_read_byte(void) {
+
+    // Write dummy byte to start reading process
     SPDR = 0x00;
     
+    // Wait for transmission to complete
     while(!(SPSR & (1 << SPIF)));
     
+    // Read the byte sent from slave
     unsigned char data = SPDR;
 
     return data;
