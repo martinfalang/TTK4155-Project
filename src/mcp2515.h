@@ -15,6 +15,12 @@
 #define MCP2515_RX_STATUS       0b10110000
 #define MCP2515_BIT_MODIFY      0b00000101
 
-void mcp2515_test(void);
+void mcp2515_test_read(void);
+void mcp2515_test_write(void);
+
+void mcp2515_read(unsigned char address, unsigned char *out_data, unsigned char out_data_length);
+void mcp2515_write(unsigned char start_address, unsigned char *data, unsigned char data_length);
+
+void mcp2515_one_byte_write_test();
 
 #endif // MCP2515_H

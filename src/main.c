@@ -44,6 +44,11 @@ int main(void)
 
     printf("All inits ran successfully!\n");
 
+    mcp2515_test_write();
+    mcp2515_test_read();
+
+    // mcp2515_one_byte_write_test();
+
     while(1) {
         heartbeat();
        
