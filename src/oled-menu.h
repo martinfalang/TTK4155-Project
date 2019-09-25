@@ -11,7 +11,7 @@ typedef struct oled_menu_el {
     char *element_text;
     uint8_t text_length; // Length of element_text
     void (*on_select)(void);
-    void (*on_back)(void);
+    oled_menu_el_t *prev_menu;
 } oled_menu_el_t;
 
 typedef struct oled_menu {
