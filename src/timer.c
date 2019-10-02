@@ -2,12 +2,14 @@
 
 #include "defines.h"
 
+#include "timer.h"
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 #include "oled-menu.h"
 
-void timer_init(void) {
+void oled_timer_init(void) {
     // Initializes a timer that raises an interrupt calling a function
     // reading the joystick and setting a flag telling if the screen should be updated
 

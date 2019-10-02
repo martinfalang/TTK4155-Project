@@ -64,7 +64,7 @@ int main(void)
     oled_init();
 
     oled_menu_init(OLED_BUFFER_BASE);
-    timer_init();
+    oled_timer_init();
 
     printf("All inits ran successfully!\n");
 
