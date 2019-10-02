@@ -24,8 +24,8 @@ void oled_timer_init(void) {
     TCCR2 |= (1 << COM21);
     TCCR2 &= ~(1 << COM20);
 
-    // Set CLT_T2_S/1024
-    TCCR2 |= CS20 | CS21 | CS22;
+    // Set initial value of counter to 0
+    TCNT2 = 0; 
 
     // Set output compare register to 80, which should amount to 
     // interrupts about 60 times per second
@@ -36,6 +36,9 @@ void oled_timer_init(void) {
 
     // Enable the interrupt mask bit
     TIMSK |= OCIE2;
+
+    // Set CLT_T2_S/1024
+    TCCR2 |= CS20 | CS21 | CS22;
 }
 
 ISR(TIMER2_COMP_vect) {
