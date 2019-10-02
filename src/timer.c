@@ -13,9 +13,6 @@ void oled_timer_init(void) {
     // Initializes a timer that raises an interrupt calling a function
     // reading the joystick and setting a flag telling if the screen should be updated
 
-    // Enable interrupts globally
-    SREG |= SREG_I;
-
     // Set Force Output Compare high
     TCCR2 |= (1 << FOC2);
 
@@ -33,6 +30,12 @@ void oled_timer_init(void) {
     // Set output compare register to 80, which should amount to 
     // interrupts about 60 times per second
     OCR2 = 80;
+
+    // Enable interrupts globally
+    SREG |= SREG_I;
+
+    // Enable the interrupt mask bit
+    TIMSK |= OCIE2;
 }
 
 ISR(TIMER2_COMP_vect) {
