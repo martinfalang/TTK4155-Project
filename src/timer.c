@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "defines.h"
 
 #include <avr/io.h>
@@ -35,4 +37,5 @@ ISR(TIMER2_COMP_vect) {
     // Interrupt service routine for checking joystick if new input has occured
     // s.t. the screen should be updated
     oled_menu_check_if_needs_update();
+    printf("Timer2 interrupt!");
 }
