@@ -62,6 +62,7 @@ int main(void)
     touch_init();
     oled_init();
 
+    // oled_test_screen_2();
     oled_menu_init(OLED_BUFFER_BASE);
 
     printf("All inits ran successfully!\n");
