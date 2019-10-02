@@ -1,3 +1,5 @@
+#include "defines.h"
+
 #include <avr/io.h> // For led toggle
 #include <util/delay.h>
 
@@ -6,7 +8,6 @@
 #include <string.h>
 
 #include "oled-menu.h"
-#include "defines.h"
 #include "joystick.h"
 #include "oled-buffer.h"
 #include "oled.h"

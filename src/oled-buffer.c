@@ -1,9 +1,10 @@
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
+#include <stdio.h> // TODO: REMOVE
 
 #include <avr/pgmspace.h>
 
-#include <stdio.h> // TODO: REMOVE
 
 #include "oled-buffer.h"
 #include "defines.h"
