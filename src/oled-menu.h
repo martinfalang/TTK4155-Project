@@ -48,7 +48,7 @@ void oled_menu_back(oled_menu_el_t element);
 
 // Draws the menu to the buffer
 void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer);
-
+void oled_menu_check_if_needs_update(void);
 
 // Project specific
 void oled_menu_init(uint8_t * buffer);

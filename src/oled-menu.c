@@ -61,12 +61,12 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
 // Pointers to menus
 // Allows to change menus by calling functions
 static oled_menu_t *p_current_menu;
+static bool g_oled_should_update = true;
+static joy_btn_dir_t prev_dir = NEUTRAL;
 
-// static oled_menu_t *p_main_menu; // TODO remove
-// static oled_menu_t *p_sub_menu;
-
-oled_menu_action_t oled_menu_get_empty_action(void) {
-    // Returns an empty action, e.g. for use with menu elements that do not have 
+oled_menu_action_t oled_menu_get_empty_action(void)
+{
+    // Returns an empty action, e.g. for use with menu elements that do not have
     oled_menu_action_t action;
     action.ptr.p_menu = NULL;
     action.is_func_ptr = false;
@@ -74,7 +74,8 @@ oled_menu_action_t oled_menu_get_empty_action(void) {
     return action;
 }
 
-oled_menu_action_t oled_menu_create_menu_ptr_action(oled_menu_t * p_menu) {
+oled_menu_action_t oled_menu_create_menu_ptr_action(oled_menu_t *p_menu)
+{
     oled_menu_action_t action;
 
     action.is_func_ptr = false;
@@ -83,7 +84,8 @@ oled_menu_action_t oled_menu_create_menu_ptr_action(oled_menu_t * p_menu) {
     return action;
 }
 
-oled_menu_action_t oled_menu_create_func_ptr_action(void * p_func) {
+oled_menu_action_t oled_menu_create_func_ptr_action(void *p_func)
+{
     oled_menu_action_t action;
 
     action.is_func_ptr = true;
@@ -94,12 +96,15 @@ oled_menu_action_t oled_menu_create_func_ptr_action(void * p_func) {
 
 void oled_menu_perform_action(oled_menu_action_t action)
 {
-    if (action.is_func_ptr && action.ptr.p_func != NULL) {
+    if (action.is_func_ptr && action.ptr.p_func != NULL)
+    {
         // Call function in function pointer
         action.ptr.p_func();
-    } else if (action.ptr.p_menu != NULL) {
+    }
+    else if (action.ptr.p_menu != NULL)
+    {
         // Change current menu to the pointer in the performed action if it is not NULL
-        p_current_menu = action.ptr.p_menu; 
+        p_current_menu = action.ptr.p_menu;
     }
 }
 
@@ -115,8 +120,6 @@ void oled_menu_perform_action(oled_menu_action_t action)
 //     element.select_action = get_empty_menu_action();
 // }
 
-
-
 void oled_menu_init(uint8_t *buffer)
 {
     // Make main menu elements
@@ -127,9 +130,8 @@ void oled_menu_init(uint8_t *buffer)
     test_element.select_action.is_func_ptr = true;
 
     // test_element.prev_menu = NULL;
-    
 
-    oled_menu_t mm; // Main menu
+    oled_menu_t mm;        // Main menu
     oled_menu_t song_menu; // Menu showing available songs for buzzer
 
     char *header = "Header";
@@ -157,7 +159,7 @@ void oled_menu_init(uint8_t *buffer)
     main_el_3.element_text = "Songs";
     main_el_3.select_action = oled_menu_create_menu_ptr_action(&song_menu);
 
-    oled_menu_el_t main_menu_elements[3] = { main_el_1, main_el_2, main_el_3 };
+    oled_menu_el_t main_menu_elements[3] = {main_el_1, main_el_2, main_el_3};
     mm.elements = main_menu_elements;
 
     // Make sub-menu elements
@@ -173,52 +175,59 @@ void oled_menu_init(uint8_t *buffer)
     song_el_2.select_action = oled_menu_get_empty_action();
     song_el_2.select_action.is_func_ptr = true;
 
-    oled_menu_el_t song_menu_elements[2] = { song_el_1, song_el_2 };
-    
+    oled_menu_el_t song_menu_elements[2] = {song_el_1, song_el_2};
 
     song_menu.elements = song_menu_elements;
     song_menu.num_elements = 2;
     song_menu.back_action = oled_menu_create_menu_ptr_action(&mm);
 
+    prev_dir = NEUTRAL; // Previous direction
 
-    joy_btn_dir_t prev_dir = NEUTRAL; // Previous direction
+    // Draw the screen once
+    draw_oled_menu(p_current_menu, buffer);
+    oled_draw_screen(buffer);
+}
 
-    while (1)
+void oled_menu_check_if_needs_update(void)
+{
+    joy_btn_dir_t dir = joystick_get_direction();
+
+    if (dir != prev_dir)
     {
-        joy_btn_dir_t dir = joystick_get_direction();
+        g_oled_should_update = true;
 
-        if (dir != prev_dir)
+        switch (dir)
         {
-            switch (dir)
+        case RIGHT:
+            oled_menu_perform_action(
+                p_current_menu->elements[p_current_menu->selected_idx].select_action);
+            break;
+        case LEFT:
+            oled_menu_perform_action(p_current_menu->back_action);
+            break;
+        case UP:
+            if (p_current_menu->selected_idx >= 0)
             {
-            case RIGHT:
-                oled_menu_perform_action(
-                    p_current_menu->elements[p_current_menu->selected_idx].select_action
-                );
-                break;
-            case LEFT:
-                oled_menu_perform_action(p_current_menu->back_action);
-                break;
-            case UP:
-                if (p_current_menu->selected_idx >= 0)
-                {
-                    --p_current_menu->selected_idx;
-                }
-                break;
-            case DOWN:
-                if (p_current_menu->selected_idx < p_current_menu->num_elements)
-                {
-                    ++p_current_menu->selected_idx;
-                }
-                break;
+                --p_current_menu->selected_idx;
             }
-
-            prev_dir = dir;
-
-            _delay_ms(16); // Should give about 60 fps
+            break;
+        case DOWN:
+            if (p_current_menu->selected_idx < p_current_menu->num_elements)
+            {
+                ++p_current_menu->selected_idx;
+            }
+            break;
         }
 
-        draw_oled_menu(p_current_menu, buffer);
-        oled_draw_screen(buffer);
+        prev_dir = dir;
+    }
+}
+
+void oled_menu_update_if_needed(void) {
+    if (g_oled_should_update) {
+        g_oled_should_update = false;
+
+        draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
+        oled_draw_screen(OLED_BUFFER_BASE);
     }
 }
