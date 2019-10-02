@@ -173,6 +173,7 @@ void oled_menu_init(uint8_t *buffer)
     oled_menu_el_t song_menu_elements[2] = {song_el_1, song_el_2};
 
     song_menu.elements = song_menu_elements;
+    song_menu.header_string = "Songs";
     song_menu.num_elements = 2;
     song_menu.back_action = oled_menu_create_menu_ptr_action(&mm);
     song_menu.selected_idx = 0;
@@ -187,8 +188,6 @@ void oled_menu_init(uint8_t *buffer)
     while (1)
     {
         joy_btn_dir_t dir = joystick_get_direction();
-
-        printf("Dir: %d", dir);
 
         if (dir != prev_dir)
         {
@@ -206,12 +205,16 @@ void oled_menu_init(uint8_t *buffer)
                 if (p_current_menu->selected_idx > 0)
                 {
                     --p_current_menu->selected_idx;
+                } else {
+                    p_current_menu->selected_idx = p_current_menu->num_elements - 1;
                 }
                 break;
             case DOWN:
                 if (p_current_menu->selected_idx < p_current_menu->num_elements - 1)
                 {
                     ++p_current_menu->selected_idx;
+                } else {
+                    p_current_menu->selected_idx = 0;
                 }
                 break;
             }
