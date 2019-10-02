@@ -73,11 +73,20 @@ oled_menu_action_t oled_menu_get_empty_action(void) {
     return action;
 }
 
-oled_menu_action_t oled_menu_create_menu_ptr(oled_menu_t * p_menu) {
+oled_menu_action_t oled_menu_create_menu_ptr_action(oled_menu_t * p_menu) {
     oled_menu_action_t action;
 
     action.is_func_ptr = false;
     action.ptr.p_menu = p_menu;
+
+    return action;
+}
+
+oled_menu_action_t oled_menu_create_func_ptr_action(void * p_func) {
+    oled_menu_action_t action;
+
+    action.is_func_ptr = true;
+    action.ptr.p_menu = p_func;
 
     return action;
 }
@@ -119,11 +128,12 @@ void oled_menu_init(uint8_t *buffer)
     // test_element.prev_menu = NULL;
     
 
-    oled_menu_t mm; // main menu
+    oled_menu_t mm; // Main menu
+    oled_menu_t song_menu; // Menu showing available songs for buzzer
 
     char *header = "Header";
     mm.elements = &test_element;
-    mm.num_elements = 1;
+    mm.num_elements = 3;
     mm.header_string = header;
     mm.selected_idx = 0;
     mm.back_action = oled_menu_get_empty_action();
@@ -141,7 +151,12 @@ void oled_menu_init(uint8_t *buffer)
     main_el_2.select_action.ptr.p_func = &toggle_led;
     main_el_2.select_action.is_func_ptr = true;
 
-    oled_menu_el_t main_menu_elements[2] = { main_el_1, main_el_2 };
+    oled_menu_el_t main_el_3;
+
+    main_el_3.element_text = "Songs";
+    main_el_3.select_action = oled_menu_create_menu_ptr_action(&song_menu);
+
+    oled_menu_el_t main_menu_elements[3] = { main_el_1, main_el_2, main_el_3 };
     mm.elements = main_menu_elements;
 
     // Make sub-menu elements
@@ -158,11 +173,11 @@ void oled_menu_init(uint8_t *buffer)
     song_el_2.select_action.is_func_ptr = true;
 
     oled_menu_el_t song_menu_elements[2] = { song_el_1, song_el_2 };
+    
 
-    oled_menu_t song_menu;
     song_menu.elements = song_menu_elements;
     song_menu.num_elements = 2;
-    song_menu.back_action = 
+    song_menu.back_action = oled_menu_create_menu_ptr_action(&mm);
 
 
     joy_btn_dir_t prev_dir = NEUTRAL; // Previous direction
