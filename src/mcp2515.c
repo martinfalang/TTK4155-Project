@@ -33,29 +33,6 @@ void mcp2515_test_write(void) {
     }
 }
 
-void mcp2515_one_byte_write_test() {
-    unsigned char data = 0x7F;
-    unsigned char address = 0x29;
-
-    spi_select();
-
-    spi_write_byte(MCP2515_WRITE);
-    spi_write_byte(address);
-    spi_write_byte(data);
-
-    spi_deselect();
-
-    spi_select();
-    spi_write_byte(MCP2515_READ);
-    spi_write_byte(address);
-
-    unsigned char out_data = spi_read_byte();
-
-    spi_deselect();
-
-    printf("Read byte:\t%x\n", out_data);
-}
-
 void mcp2515_read(unsigned char start_address, unsigned char *out_data, unsigned char out_data_length) {
     
     spi_select();
@@ -66,15 +43,10 @@ void mcp2515_read(unsigned char start_address, unsigned char *out_data, unsigned
     // Send address to start reading from
     spi_write_byte(start_address);
 
-    printf("mcp_read(): out_data[0]:\t%x\n", out_data[0]);
-
     // Read into buffer
     for (unsigned char i = 0; i < out_data_length; i++) {
         out_data[i] = spi_read_byte();
     }
-
-    printf("mcp_read(): out_data[0]:\t%x\n", out_data[0]);
-
 
     spi_deselect();
 }
@@ -97,3 +69,55 @@ void mcp2515_write(unsigned char start_address, unsigned char *data, unsigned ch
     spi_deselect();
 }
 
+void mcp2515_request_to_send(unsigned char command) {
+
+    spi_select();
+
+    // Send RTS command byte
+    spi_write_byte(command);
+
+    spi_deselect();
+}
+
+unsigned char mcp2515_read_status(void) {
+
+    spi_select();
+
+    // Send command
+    spi_write_byte(MCP2515_READ_STATUS);
+
+    // Receive status
+    unsigned char status = spi_read_byte();
+
+    spi_deselect();
+
+    return status;
+}
+
+void mcp2515_bit_modify(unsigned char address, unsigned char mask_byte, unsigned char data) {
+
+    spi_select();
+
+    // Command
+    spi_write_byte(MCP2515_BIT_MODIFY);
+
+    // Send address
+    spi_write_byte(address);
+
+    // Send the mask byte
+    spi_write_byte(mask_byte);
+
+    // Change the chosen bits to data
+    spi_write_byte(data);
+
+    spi_deselect();
+}
+
+void mcp2515_reset() {
+
+    spi_select();
+
+    spi_write_byte(MCP2515_RESET);
+
+    spi_deselect();
+}
