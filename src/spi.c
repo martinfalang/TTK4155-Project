@@ -16,17 +16,17 @@ void spi_init(void) {
     SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);
 
     // Set SS pin high
-    spi_deselect();
+    spi_slave_deselect();
 }
 
-void spi_select(void) {
+void spi_slave_select(void) {
     // Set SS low
     SPI_PORT &= ~(1 << DD_SS);
 }
 
-void spi_deselect(void) {
+void spi_slave_deselect(void) {
     // Set SS high
-    SPI_PORT &= ~(1 << DD_SS);
+    SPI_PORT |= (1 << DD_SS);
 }
 
 void spi_write_byte(unsigned char data) {
