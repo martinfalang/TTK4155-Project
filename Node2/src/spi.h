@@ -1,10 +1,10 @@
 #ifndef SPI_H
 #define SPI_H
 
-#define DD_SS       DDB4
-#define DD_MOSI     DDB5
-#define DD_MISO     DDB6
-#define DD_SCK      DDB7
+#define DD_SS       DDB7
+#define DD_MOSI     DDB2
+#define DD_MISO     DDB3
+#define DD_SCK      DDB1
 
 #define DDR_SPI     DDRB
 #define SPI_PORT    PORTB 
