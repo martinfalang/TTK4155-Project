@@ -8,7 +8,7 @@
 #include "oled-menu.h"
 #include "timer.h"
 
-void timer_init(void) {
+/* void timer_init(void) {
     // Initializes a timer that raises an interrupt calling a function
     // reading the joystick and setting a flag telling if the screen should be updated
 
@@ -32,12 +32,12 @@ void timer_init(void) {
     // Set output compare register to 80, which should amount to 
     // interrupts about 60 times per second
     OCR2 = 80;
-}
+} */
 
-ISR(TIMER2_COMP_vect) {
+/* ISR(TIMER2_COMP_vect) {
     // Interrupt service routine for checking joystick if new input has occured
     // s.t. the screen should be updated
     
     // oled_menu_check_if_needs_update();
     printf("Timer2 interrupt!");
-}
+} */
