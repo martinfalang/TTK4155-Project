@@ -11,14 +11,22 @@
 #include "oled-buffer.h"
 #include "oled.h"
 
+#define NUM_MAIN_MENU_ELEMENTS 3
+#define NUM_SONG_MENU_ELEMENTS 2
+
 // Global variables
 // Allows to change menus by calling functions
 static oled_menu_t *p_current_menu;
-static oled_menu_t *p_main_menu;
+static oled_menu_t main_menu;
+static oled_menu_t song_menu;
+static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
+static oled_menu_el_t song_menu_elements[NUM_SONG_MENU_ELEMENTS];
+
 static joy_btn_dir_t prev_dir; // Previous direction
 static bool menu_needs_update;
 
-bool oled_menu_should_update() {
+bool oled_menu_should_update()
+{
     // Because menu_needs_update is not available from other files, i.e. main.c
     return menu_needs_update;
 }
@@ -120,43 +128,40 @@ oled_menu_el_t oled_menu_create_element(char *text, oled_menu_action_t action)
     return element;
 }
 
-oled_menu_t *oled_menu_get_main(void)
+void oled_menu_init_menus(void)
 {
     // Allocates memory and gives a pointer to a main menu
-    oled_menu_t *mm = malloc(sizeof(oled_menu_t));        // Main menu
-    oled_menu_t *song_menu = malloc(sizeof(oled_menu_t)); // Menu showing available songs for buzzer
+    // oled_menu_t *mm = malloc(sizeof(oled_menu_t));        // Main menu
+    // oled_menu_t *song_menu = malloc(sizeof(oled_menu_t)); // Menu showing available songs for buzzer
 
-    mm->num_elements = 3;
-    mm->header_string = "Main Menu";
-    mm->selected_idx = 0;
-    mm->back_action = oled_menu_get_empty_action();
+    main_menu.num_elements = 3;
+    main_menu.header_string = "Main Menu";
+    main_menu.selected_idx = 0;
+    main_menu.back_action = oled_menu_get_empty_action();
 
-    oled_menu_el_t *main_menu_elements = malloc(mm->num_elements * sizeof(oled_menu_el_t));
+    // oled_menu_el_t *main_menu_elements = malloc(mm->num_elements * sizeof(oled_menu_el_t));
     main_menu_elements[0] = oled_menu_create_element("Toggle LED", oled_menu_create_func_ptr_action(&toggle_led));
     main_menu_elements[1] = oled_menu_create_element("Toggle LED!!!", oled_menu_create_func_ptr_action(&toggle_led));
-    main_menu_elements[2] = oled_menu_create_element("Songs", oled_menu_create_menu_ptr_action(song_menu));
-    mm->elements = main_menu_elements;
+    main_menu_elements[2] = oled_menu_create_element("Songs", oled_menu_create_menu_ptr_action(&song_menu));
+    main_menu.elements = main_menu_elements;
 
-    song_menu->header_string = "Songs";
-    song_menu->num_elements = 2;
-    song_menu->back_action = oled_menu_create_menu_ptr_action(mm);
-    song_menu->selected_idx = 0;
+    song_menu.header_string = "Songs";
+    song_menu.num_elements = 2;
+    song_menu.back_action = oled_menu_create_menu_ptr_action(&main_menu);
+    song_menu.selected_idx = 0;
 
-    oled_menu_el_t *song_menu_elements = malloc(song_menu->num_elements * sizeof(oled_menu_el_t));
+    // oled_menu_el_t *song_menu_elements = malloc(song_menu->num_elements * sizeof(oled_menu_el_t));
 
     song_menu_elements[0] = oled_menu_create_element("Song 1 goes here", oled_menu_create_func_ptr_action(&toggle_led));
     song_menu_elements[1] = oled_menu_create_element("Song 2 goes here", oled_menu_get_empty_action());
-
-    song_menu->elements = song_menu_elements;
-
-    return mm;
+    song_menu.elements = song_menu_elements;
 }
 
 void oled_menu_init(uint8_t *buffer)
 {
     // Create the dynamically allocated main menu
-    p_main_menu = oled_menu_get_main();
-    p_current_menu = p_main_menu;
+    oled_menu_init_menus();
+    p_current_menu = &main_menu;
 
     prev_dir = NEUTRAL; // Previous direction
     menu_needs_update = false;
@@ -179,7 +184,7 @@ void oled_menu_check_if_needs_update(void)
 
 void oled_menu_update(uint8_t *buffer)
 {
-    // Updates the menu based on the input of prev_dir. 
+    // Updates the menu based on the input of prev_dir.
     // Should be called when menu_needs_update is true
     switch (prev_dir)
     {

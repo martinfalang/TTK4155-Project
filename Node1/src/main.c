@@ -46,6 +46,8 @@ int main(void)
     adc_init();
     joystick_init();
     touch_init();
+    oled_init();
+    oled_buffer_clear_screen(OLED_BUFFER_BASE);
 
     // SRAM_test();
 
@@ -57,6 +59,7 @@ int main(void)
 
     // mcp2515_test_write();
     // mcp2515_test_read();
+    printf("Before oled init\n");
 
     oled_menu_init(OLED_BUFFER_BASE);
     timer_init(); // Interrupt timer
