@@ -17,7 +17,7 @@ TARGET_CPU := atmega162
 TARGET_DEVICE := m162
 
 CC := avr-gcc
-CFLAGS := -O -std=c11 -mmcu=$(TARGET_CPU)
+CFLAGS := -O -std=c11 -mmcu=$(TARGET_CPU) -fdiagnostics-color
 
 OBJECT_FILES = $(SOURCE_FILES:%.c=$(BUILD_DIR)/%.o)
 SRC := $(SOURCE_FILES:%.c=$(SRC_DIR)/%.c)
