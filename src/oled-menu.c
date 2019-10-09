@@ -34,15 +34,8 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
     char *row_string[32]; // TODO: Find optimal size
     strcpy((char *)row_string, "");
 
-
-    // for (int i = 0; i < 20; ++i) {
-    //     row_string[i] = '';
-    // }
-
-    // row_string[19] = '\0'; // Initialize row_string so it's empty
-
-    char *selected_marker = "> ";
-    char *not_selected_marker = "  ";
+    const char *selected_marker = "> ";
+    const char *not_selected_marker = "  ";
 
     for (uint8_t i = 0; i < menu->num_elements; ++i)
     {
@@ -67,12 +60,6 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
     }
 }
 
-// Pointers to menus
-// Allows to change menus by calling functions
-static oled_menu_t *p_current_menu;
-
-// static oled_menu_t *p_main_menu; // TODO remove
-// static oled_menu_t *p_sub_menu;
 
 oled_menu_action_t oled_menu_get_empty_action(void)
 {
@@ -118,67 +105,82 @@ void oled_menu_perform_action(oled_menu_action_t action)
     }
 }
 
-// oled_menu_el_t get_play_ping_pong_element() {
-//     oled_menu_el_t element;
-//     element.element_text = "Play Ping Pong (placeholder)";
-//     element.select_action = oled_menu_get_empty_action();
-// }
+oled_menu_el_t oled_menu_create_element(char * text, oled_menu_action_t action) {
+    oled_menu_el_t element;
 
-// oled_menu_el_t get_songs_element() {
-//     oled_menu_el_t element;
-//     element.element_text = "Songs";
-//     element.select_action = get_empty_menu_action();
-// }
+    element.element_text = text;
+    element.select_action = action;
+    
+    return element;
+}
+
+oled_menu_t * oled_menu_get_main(void) {
+    // Allocates memory and gives a pointer to a main menu
+    oled_menu_t * mm = malloc(sizeof(oled_menu_t));  // Main menu
+    oled_menu_t * song_menu = malloc(sizeof(oled_menu_t)); // Menu showing available songs for buzzer
+
+    mm->num_elements = 3;
+    mm->header_string = "Main Menu";
+    mm->selected_idx = 0;
+    mm->back_action = oled_menu_get_empty_action();
+
+    // Make sub menu elements
+    // oled_menu_el_t * main_el_1 = malloc(sizeof(oled_menu_el_t));
+
+    // main_el_1->element_text = "Toggle LED";
+    // main_el_1->select_action = oled_menu_create_func_ptr_action(&toggle_led);
+
+    // oled_menu_el_t * main_el_2 = malloc(sizeof(oled_menu_el_t));
+
+    // main_el_2->element_text = "Toggle LED, but another element";
+    // main_el_2->select_action = oled_menu_create_func_ptr_action(&toggle_led);
+
+    // oled_menu_el_t * main_el_3 = malloc(sizeof(oled_menu_el_t));
+
+    // main_el_3->element_text = "Songs";
+    // main_el_3->select_action = oled_menu_create_menu_ptr_action(&song_menu);
+
+    oled_menu_el_t * main_menu_elements = malloc(mm->num_elements * sizeof(oled_menu_el_t));
+    main_menu_elements[0] = oled_menu_create_element("Toggle LED", oled_menu_create_func_ptr_action(&toggle_led));
+    main_menu_elements[1] = oled_menu_create_element("Toggle LED, but another element", oled_menu_create_func_ptr_action(&toggle_led));
+    main_menu_elements[2] = oled_menu_create_element("Songs", oled_menu_create_menu_ptr_action(&song_menu));
+    mm->elements = main_menu_elements;
+
+    // Make sub-menu elements
+    // oled_menu_el_t * song_el_1 = malloc(sizeof(oled_menu_el_t));
+    // oled_menu_el_t * song_el_2 = malloc(sizeof(oled_menu_el_t));
+
+    // song_el_1->element_text = "Song 1 goes here";
+    // song_el_1->select_action = oled_menu_create_func_ptr_action(&toggle_led);
+
+    // song_el_2->element_text = "Song 2 goes here";
+    // song_el_2->select_action = oled_menu_get_empty_action();
+
+    song_menu->header_string = "Songs";
+    song_menu->num_elements = 2;
+    song_menu->back_action = oled_menu_create_menu_ptr_action(&mm);
+    song_menu->selected_idx = 0;
+
+    oled_menu_el_t * song_menu_elements = malloc(song_menu->num_elements * sizeof(oled_menu_el_t));
+
+    song_menu_elements[0] = oled_menu_create_element("Song 1 goes here", oled_menu_create_func_ptr_action(&toggle_led));
+    song_menu_elements[1] = oled_menu_create_element("Song 2 goes here", oled_menu_get_empty_action());
+
+    song_menu->elements = song_menu_elements;
+
+    return mm;
+}
+
+// Pointers to menus
+// Allows to change menus by calling functions
+static oled_menu_t *p_current_menu;
+static oled_menu_t *p_main_menu;
+
 
 void oled_menu_init(uint8_t *buffer)
 {
-    oled_menu_t mm;        // Main menu
-    oled_menu_t song_menu; // Menu showing available songs for buzzer
-
-    mm.num_elements = 3;
-    mm.header_string = "Main Menu";
-    mm.selected_idx = 0;
-    mm.back_action = oled_menu_get_empty_action();
-
-    // Make sub menu elements
-    oled_menu_el_t main_el_1;
-
-    main_el_1.element_text = "Toggle LED";
-    main_el_1.select_action = oled_menu_create_func_ptr_action(&toggle_led);
-
-    oled_menu_el_t main_el_2;
-
-    main_el_2.element_text = "Toggle LED, but another element";
-    main_el_2.select_action = oled_menu_create_func_ptr_action(&toggle_led);
-
-    oled_menu_el_t main_el_3;
-
-    main_el_3.element_text = "Songs";
-    main_el_3.select_action = oled_menu_create_menu_ptr_action(&song_menu);
-
-    oled_menu_el_t main_menu_elements[3] = {main_el_1, main_el_2, main_el_3};
-    mm.elements = main_menu_elements;
-
-    // Make sub-menu elements
-    oled_menu_el_t song_el_1;
-
-    song_el_1.element_text = "Song 1 goes here";
-    song_el_1.select_action = oled_menu_create_func_ptr_action(&toggle_led);
-
-    oled_menu_el_t song_el_2;
-
-    song_el_2.element_text = "Song 2 goes here";
-    song_el_2.select_action = oled_menu_get_empty_action();
-
-    oled_menu_el_t song_menu_elements[2] = {song_el_1, song_el_2};
-
-    song_menu.elements = song_menu_elements;
-    song_menu.header_string = "Songs";
-    song_menu.num_elements = 2;
-    song_menu.back_action = oled_menu_create_menu_ptr_action(&mm);
-    song_menu.selected_idx = 0;
-
-    p_current_menu = &mm;
+    p_main_menu = oled_menu_get_main();
+    p_current_menu = p_main_menu;
 
     joy_btn_dir_t prev_dir = NEUTRAL; // Previous direction
 

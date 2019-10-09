@@ -35,20 +35,10 @@ typedef struct oled_menu {
     uint8_t selected_idx; // Index of selected menu element in elements-array
 } oled_menu_t;
 
-
-void oled_menu_navigate_up();
-void oled_menu_navigate_down();
-void oled_menu_navigate_left();
-void oled_menu_navigate_right();
-
-// Selection functions for menu elements
-// Prefer to use these over manually calling the functions manually, as these check if the elements are not NULL
-void oled_menu_select(oled_menu_el_t element);
-void oled_menu_back(oled_menu_el_t element);
+void oled_menu_perform_action(oled_menu_action_t action);
 
 // Draws the menu to the buffer
 void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer);
-
 
 // Project specific
 void oled_menu_init(uint8_t * buffer);
