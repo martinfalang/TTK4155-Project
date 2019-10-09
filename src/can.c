@@ -4,8 +4,6 @@
 #include <string.h>     // for memset
 
 
-void _print_bytes(unsigned char* p, size_t size);
-
 void can_test() {
 
     can_msg_t sendmsg = {
@@ -68,15 +66,5 @@ void can_print_msg(const can_msg_t* msg) {
         printf("Data%X: 0x%.2X\n", i, d);
     }
     printf("MSG END\n");
-}
-
-
-
-
-
-void _print_bytes(unsigned char* p, size_t size) {
-    for (size_t i = 0; i < size; ++i) {
-        printf("Byte%d: 0x%.2X\n", i, p[i]);
-    }
 }
 
