@@ -37,42 +37,6 @@ void mcp_set_ops_mode(unsigned char state) {
     mcp2515_bit_modify(MCP_CANCTRL, MODE_MASK, state);
 }
 
-// TODO: Delete this function
-void mcp2515_test_can() {
-
-    unsigned char *send_data;
-
-    unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
-    unsigned char mode = (val & MODE_MASK);
-
-    printf("Mode: %x\n", mode);
-
-    // set arbitration field
-    mcp2515_write(0b00110001, 0, 1);
-    mcp2515_write(0b00110010, 0, 1);
-    
-    // set dlc
-    *send_data = 1;
-    mcp2515_write(0b00110101, send_data, 1);
-
-    // send data
-    *send_data = 0xAA;
-    mcp2515_write(0b00110110, send_data, 1);
-
-    // request to send
-    mcp2515_request_to_send(MCP_RTS_TX0);
-
-    
-
-    // read result 
-    unsigned char *data;
-    mcp2515_read(0b01100110, data, 1);
-
-    printf("Got: %x\n", data);
-
-    
-}
-
 unsigned char mcp2515_read_byte(unsigned char address) {
     unsigned char res;
 

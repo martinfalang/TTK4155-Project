@@ -5,7 +5,7 @@
 #include "can_msg.h"
 
 
-void can_test();
+// void can_test();
 
 void can_init(unsigned char state);
 

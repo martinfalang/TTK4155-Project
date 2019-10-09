@@ -22,11 +22,11 @@
 // #include "spi.h"
 // #include "mcp2515.h"
 // #include "can.h"
-#include "oled.h"
-#include "oled-buffer.h"
-#include "oled-menu.h"
-#include "sram-test.h"
-#include "timer.h"
+// #include "oled.h"
+// #include "oled-buffer.h"
+// #include "oled-menu.h"
+// #include "sram-test.h"
+// #include "timer.h"
 
 void heartbeat_init()
 {
@@ -45,9 +45,9 @@ int main(void)
     xmem_init();
     adc_init();
     joystick_init();
-    touch_init();
-    oled_init();
-    oled_buffer_clear_screen(OLED_BUFFER_BASE);
+    // touch_init();
+    // oled_init();
+    // oled_buffer_clear_screen(OLED_BUFFER_BASE);
 
     // SRAM_test();
 
@@ -61,19 +61,19 @@ int main(void)
     // mcp2515_test_read();
     printf("---------------------\n");
 
-    oled_menu_init(OLED_BUFFER_BASE);
-    timer_init(); // Interrupt timer
+    // oled_menu_init(OLED_BUFFER_BASE);
+    // timer_init(); // Interrupt timer
     printf("All inits ran successfully!\n");
 
     while (1)
     {
-        // heartbeat();
-        if (oled_menu_should_update())
-        {
-            printf("Oled menu should update\n");
-            oled_menu_update(OLED_BUFFER_BASE);
-        }
-        // _delay_ms(500);
+        heartbeat();
+        // if (oled_menu_should_update())
+        // {
+        //     printf("Oled menu should update\n");
+        //     oled_menu_update(OLED_BUFFER_BASE);
+        // }
+        _delay_ms(500);
     }
 
     // mcp2515_one_byte_write_test();

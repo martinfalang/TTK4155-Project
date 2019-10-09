@@ -16,9 +16,7 @@ typedef struct mcp2515_can_msg {
 } mcp2515_can_msg_t;
 
 
-void mcp2515_test_read(void);
-void mcp2515_test_write(void);
-void mcp2515_test_can(void);
+
 void mcp_set_ops_mode(unsigned char state);
 
 int mcp2515_init(unsigned char mode);
