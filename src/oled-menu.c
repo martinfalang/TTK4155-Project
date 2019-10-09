@@ -133,7 +133,7 @@ oled_menu_t *oled_menu_get_main(void)
 
     oled_menu_el_t *main_menu_elements = malloc(mm->num_elements * sizeof(oled_menu_el_t));
     main_menu_elements[0] = oled_menu_create_element("Toggle LED", oled_menu_create_func_ptr_action(&toggle_led));
-    main_menu_elements[1] = oled_menu_create_element("Toggle LED, but another element", oled_menu_create_func_ptr_action(&toggle_led));
+    main_menu_elements[1] = oled_menu_create_element("Toggle LED!!!", oled_menu_create_func_ptr_action(&toggle_led));
     main_menu_elements[2] = oled_menu_create_element("Songs", oled_menu_create_menu_ptr_action(song_menu));
     mm->elements = main_menu_elements;
 
