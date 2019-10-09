@@ -110,7 +110,7 @@ void mcp2515_write_byte(unsigned char address, unsigned char data) {
     spi_slave_deselect();
 }
 
-void mcp2515_write(unsigned char start_address, unsigned char *data, unsigned char data_length) {
+void mcp2515_write(unsigned char start_address, unsigned char *data, size_t data_length) {
 
     spi_slave_select();
 
