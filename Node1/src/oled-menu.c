@@ -45,32 +45,32 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
     oled_buffer_print_string(menu->header_string, LARGE, 0, buffer);
 
     // Draw the elements
-    char *row_string[32]; // TODO: Find optimal size
-    strcpy((char *)row_string, "");
+    char row_string[32] = ""; // TODO: Find optimal size
+    // strcpy((char *)row_string, "");
 
     const char *selected_marker = "> ";
     const char *not_selected_marker = "  ";
 
     for (uint8_t i = 0; i < menu->num_elements; ++i)
     {
-        strcpy((char *)row_string, "");
+        strcpy(row_string, "");
 
         bool is_selected = menu->selected_idx == i;
         if (is_selected)
         {
             // Add "> " before the string
-            strcat((char *)row_string, selected_marker);
+            strcat(row_string, selected_marker);
         }
         else
         {
             // Add "  " before the string
-            strcat((char *)row_string, not_selected_marker);
+            strcat(row_string, not_selected_marker);
         }
 
-        strcat((char *)row_string, menu->elements[i].element_text);
+        strcat(row_string, menu->elements[i].element_text);
 
         // Print the string to the buffer
-        oled_buffer_print_string((char *)row_string, MEDIUM, i + 1, buffer);
+        oled_buffer_print_string(row_string, MEDIUM, i + 1, buffer);
     }
 }
 
@@ -122,7 +122,7 @@ oled_menu_el_t oled_menu_create_element(char *text, oled_menu_action_t action)
 {
     oled_menu_el_t element;
 
-    element.element_text = text;
+    strcpy(element.element_text, text);
     element.select_action = action;
 
     return element;
@@ -131,21 +131,19 @@ oled_menu_el_t oled_menu_create_element(char *text, oled_menu_action_t action)
 void oled_menu_init_menus(void)
 {
     // Allocates memory and gives a pointer to a main menu
-    // oled_menu_t *mm = malloc(sizeof(oled_menu_t));        // Main menu
-    // oled_menu_t *song_menu = malloc(sizeof(oled_menu_t)); // Menu showing available songs for buzzer
-
     main_menu.num_elements = 3;
-    main_menu.header_string = "Main Menu";
+    // main_menu.header_string = "Main Menu";
+    strcpy(main_menu.header_string, "Main Menu");
     main_menu.selected_idx = 0;
     main_menu.back_action = oled_menu_get_empty_action();
 
-    // oled_menu_el_t *main_menu_elements = malloc(mm->num_elements * sizeof(oled_menu_el_t));
     main_menu_elements[0] = oled_menu_create_element("Toggle LED", oled_menu_create_func_ptr_action(&toggle_led));
     main_menu_elements[1] = oled_menu_create_element("Toggle LED!!!", oled_menu_create_func_ptr_action(&toggle_led));
     main_menu_elements[2] = oled_menu_create_element("Songs", oled_menu_create_menu_ptr_action(&song_menu));
     main_menu.elements = main_menu_elements;
 
-    song_menu.header_string = "Songs";
+    // song_menu.header_string = "Songs";
+    strcpy(song_menu.header_string, "Songs");
     song_menu.num_elements = 2;
     song_menu.back_action = oled_menu_create_menu_ptr_action(&main_menu);
     song_menu.selected_idx = 0;

@@ -59,7 +59,7 @@ int main(void)
 
     // mcp2515_test_write();
     // mcp2515_test_read();
-    printf("Before oled init\n");
+    printf("---------------------\n");
 
     oled_menu_init(OLED_BUFFER_BASE);
     timer_init(); // Interrupt timer
@@ -67,11 +67,13 @@ int main(void)
 
     while (1)
     {
+        // heartbeat();
         if (oled_menu_should_update())
         {
-            printf("Oled menu should update");
+            printf("Oled menu should update\n");
             oled_menu_update(OLED_BUFFER_BASE);
         }
+        // _delay_ms(500);
     }
 
     // mcp2515_one_byte_write_test();

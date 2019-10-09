@@ -23,12 +23,12 @@ typedef struct menu_el_action {
 } oled_menu_action_t;
 
 typedef struct oled_menu_el {
-    char *element_text;
+    char element_text[20];
     oled_menu_action_t select_action; // When pushing joystick to right
 } oled_menu_el_t;
 
 typedef struct oled_menu {
-    char *header_string; // Unselectable header shown on first row/page
+    char header_string[20]; // Unselectable header shown on first row/page
     oled_menu_el_t *elements;
     oled_menu_action_t back_action; // When pushing joystick to left. Same for all elements in menu
     uint8_t num_elements;
