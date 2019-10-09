@@ -22,6 +22,7 @@ int main(void) {
 
     while (1) {
         heartbeat();
-        _delay_ms(100);
+	printf("Hello world!\n");
+        _delay_ms(1000);
     }
 }
