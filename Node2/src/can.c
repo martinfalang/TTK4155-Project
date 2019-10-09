@@ -52,7 +52,7 @@ void can_send(const can_msg_t* p_msg) {
 
 void can_recieve(can_msg_t* outmsg) {
     mcp2515_can_msg_t recvmsg;
-    mcp2515_read(MCP_TXB0SIDH, (unsigned char*)&recvmsg, sizeof(recvmsg));
+    mcp2515_read(MCP_RXB0SIDH, (unsigned char*)&recvmsg, sizeof(recvmsg));
     mcp2515_can_convert_receive(outmsg, &recvmsg);
 }
 
