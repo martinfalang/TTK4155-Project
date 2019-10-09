@@ -11,8 +11,8 @@
 
 void spi_init(void);
 
-void spi_select(void);
-void spi_deselect(void);
+void spi_slave_select(void);
+void spi_slave_deselect(void);
 
 void spi_write_byte(unsigned char data);
 unsigned char spi_read_byte(void);

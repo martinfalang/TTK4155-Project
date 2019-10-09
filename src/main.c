@@ -21,6 +21,7 @@
 #include "touch.h"
 #include "spi.h"
 #include "mcp2515.h"
+#include "can.h"
 
 void heartbeat_init() {
     DDRB |= 1 << DDB0;
@@ -40,13 +41,24 @@ int main(void)
     joystick_init();
     touch_init();
 
+
     spi_init();
+    _delay_ms(10);
+    //mcp2515_init(MODE_LOOPBACK);
+
+    can_init(MODE_LOOPBACK);
 
     printf("All inits ran successfully!\n");
 
+    // mcp2515_test_write();
+    // mcp2515_test_read();
+
+    // mcp2515_one_byte_write_test();
+
     while(1) {
         heartbeat();
-       
-        _delay_ms(100);
-  }
+        //mcp2515_test_can();
+        can_test();
+        _delay_ms(1000);
+    } 
 }
