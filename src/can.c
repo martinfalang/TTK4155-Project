@@ -14,7 +14,8 @@ typedef struct can_msg_spi{
 } can_msg_spi_t;
 
 // Private function declaration
-void _can_convert(can_msg_t* msg, can_msg_spi_t* canspi, bool receive);
+void _can_convert_receive(can_msg_t* msg, const can_msg_spi_t* canspi);
+void _can_convert_send(const can_msg_t* msg, can_msg_spi_t* canspi);
 void _print_bytes(unsigned char* p, size_t size);
 
 void can_test() {
@@ -55,9 +56,9 @@ void can_init(unsigned char state) {
 }
 
 
-void can_send(can_msg_t* p_msg) {
+void can_send(const can_msg_t* p_msg) {
     can_msg_spi_t sendmsg;
-    _can_convert(p_msg, &sendmsg, false);
+    _can_convert_send(p_msg, &sendmsg);
     mcp2515_write(MCP_TXB0SIDH, (unsigned char *)&sendmsg, sizeof(sendmsg));
     mcp2515_request_to_send(MCP_RTS_TX0);
 }
@@ -66,7 +67,7 @@ void can_send(can_msg_t* p_msg) {
 void can_recieve(can_msg_t* outmsg) {
     can_msg_spi_t recvmsg;
     mcp2515_read(MCP_TXB0SIDH, (unsigned char*)&recvmsg, sizeof(recvmsg));
-    _can_convert(outmsg, &recvmsg, true);
+    _can_convert_receive(outmsg, &recvmsg);
 }
 
 
@@ -82,27 +83,26 @@ void can_print_msg(const can_msg_t* msg) {
 }
 
 
-void _can_convert(can_msg_t* msg, can_msg_spi_t* canspi, bool receive) {
-    if (receive) {
-        // when receiving
-        // from can_msg_spi to can_msg
-        msg->sid = (canspi->sidh << 8) | canspi->sidl;
-        msg->length = canspi->dlc & 0xF;  // anding with 0xF because it's only the lower nibble that contains the length
-        for (int i = 0; i < msg->length; ++i) {
-            msg->data[i] = canspi->data[i];
-        }
+void _can_convert_receive(can_msg_t* msg, const can_msg_spi_t* canspi) {
+    // when receiving
+    // from can_msg_spi to can_msg
+    msg->sid = (canspi->sidh << 8) | canspi->sidl;
+    msg->length = canspi->dlc & 0xF;  // anding with 0xF because it's only the lower nibble that contains the length
+    for (int i = 0; i < msg->length; ++i) {
+        msg->data[i] = canspi->data[i];
     }
-    else {
-        // when sending
-        // from can_msg to can_msg_spi
-        canspi->sidh = msg->sid >> 8;
-        canspi->sidl = msg->sid & 0xFF;
-        canspi->eid8 = 0;
-        canspi->eid0 = 0;
-        canspi->dlc  = msg->length & 0xF;
-        for (int i = 0; i < msg->length; ++i) {
-            canspi->data[i] = msg->data[i];
-        }
+}
+
+void _can_convert_send(const can_msg_t* msg, can_msg_spi_t* canspi) {
+    // when sending
+    // from can_msg to can_msg_spi
+    canspi->sidh = msg->sid >> 8;
+    canspi->sidl = msg->sid & 0xFF;
+    canspi->eid8 = 0;
+    canspi->eid0 = 0;
+    canspi->dlc  = msg->length & 0xF;
+    for (int i = 0; i < msg->length; ++i) {
+        canspi->data[i] = msg->data[i];
     }
 }
 

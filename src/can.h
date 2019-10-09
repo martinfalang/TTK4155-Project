@@ -15,7 +15,7 @@ void can_test();
 
 void can_init(unsigned char state);
 
-void can_send(can_msg_t* p_msg);
+void can_send(const can_msg_t* p_msg);
 
 void can_recieve(can_msg_t* outmsg);
 
