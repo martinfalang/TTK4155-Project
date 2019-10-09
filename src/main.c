@@ -74,7 +74,6 @@ int main(void)
             oled_menu_update(OLED_BUFFER_BASE);
         }
     }
-    // oled_test_screen_2();
 
     // while (1)
     // {

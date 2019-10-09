@@ -1,11 +1,9 @@
 #include "defines.h"
 
 #include <avr/io.h> // For led toggle
-#include <util/delay.h>
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "oled-menu.h"
@@ -21,7 +19,7 @@ static joy_btn_dir_t prev_dir; // Previous direction
 static bool menu_needs_update;
 
 bool oled_menu_should_update() {
-    // Because menu_needs_update is not available from other files, i.e. main
+    // Because menu_needs_update is not available from other files, i.e. main.c
     return menu_needs_update;
 }
 
@@ -70,7 +68,7 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
 
 oled_menu_action_t oled_menu_get_empty_action(void)
 {
-    // Returns an empty action, e.g. for use with menu elements that do not have
+    // Returns an empty action
     oled_menu_action_t action;
     action.ptr.p_menu = NULL;
     action.is_func_ptr = false;
@@ -156,6 +154,7 @@ oled_menu_t *oled_menu_get_main(void)
 
 void oled_menu_init(uint8_t *buffer)
 {
+    // Create the dynamically allocated main menu
     p_main_menu = oled_menu_get_main();
     p_current_menu = p_main_menu;
 
@@ -164,55 +163,11 @@ void oled_menu_init(uint8_t *buffer)
 
     draw_oled_menu(p_current_menu, buffer);
     oled_draw_screen(buffer);
-
-    while (1)
-    {
-        joy_btn_dir_t dir = joystick_get_direction();
-
-        if (dir != prev_dir)
-        {
-            switch (dir)
-            {
-            case RIGHT:
-                oled_menu_perform_action(
-                    p_current_menu->elements[p_current_menu->selected_idx].select_action);
-                break;
-            case LEFT:
-                oled_menu_perform_action(p_current_menu->back_action);
-                break;
-            case UP:
-                if (p_current_menu->selected_idx > 0)
-                {
-                    --p_current_menu->selected_idx;
-                }
-                else
-                {
-                    p_current_menu->selected_idx = p_current_menu->num_elements - 1;
-                }
-                break;
-            case DOWN:
-                if (p_current_menu->selected_idx < p_current_menu->num_elements - 1)
-                {
-                    ++p_current_menu->selected_idx;
-                }
-                else
-                {
-                    p_current_menu->selected_idx = 0;
-                }
-                break;
-            }
-
-            prev_dir = dir;
-
-            draw_oled_menu(p_current_menu, buffer);
-            oled_draw_screen(buffer);
-        }
-        _delay_ms(16); // Should give about 60 fps
-    }
 }
 
 void oled_menu_check_if_needs_update(void)
 {
+    // Check if the joystick direction has changed since last change
     joy_btn_dir_t dir = joystick_get_direction();
 
     if (dir != prev_dir)

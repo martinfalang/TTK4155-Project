@@ -1,8 +1,5 @@
-#include <stdio.h>
-
 #include "defines.h"
 
-#include <avr/io.h>
 #include <avr/interrupt.h>
 
 #include "oled-menu.h"
@@ -23,7 +20,7 @@ void timer_init(void) {
     TCCR2 |= (1 << COM21);
     TCCR2 &= ~(1 << COM20);
 
-    // Set CLT_T2_S/1024
+    // Set clock prescaler to CLT_T2_S/1024
     TCCR2 |= (1 << CS20) | (1 << CS21) | (1 << CS22);
 
     // Set the timer counter register to 0
