@@ -2,14 +2,8 @@
 #define CAN_H
 
 #include "mcp2515.h"
-#include <stdint.h>
+#include "can_msg.h"
 
-
-typedef struct can_msg {
-    uint16_t sid;
-    uint8_t length;
-    uint8_t data[8];
-} can_msg_t;
 
 void can_test();
 

@@ -182,3 +182,28 @@ void mcp2515_reset() {
 
     _delay_ms(1);
 }
+
+
+
+void mcp2515_can_convert_receive(can_msg_t* msg, const mcp2515_can_msg_t* canspi) {
+    // when receiving
+    // from can_msg_spi to can_msg
+    msg->sid = (canspi->sidh << 8) | canspi->sidl;
+    msg->length = canspi->dlc & 0xF;  // anding with 0xF because it's only the lower nibble that contains the length
+    for (int i = 0; i < msg->length; ++i) {
+        msg->data[i] = canspi->data[i];
+    }
+}
+
+void mcp2515_can_convert_send(const can_msg_t* msg, mcp2515_can_msg_t* canspi) {
+    // when sending
+    // from can_msg to can_msg_spi
+    canspi->sidh = msg->sid >> 8;
+    canspi->sidl = msg->sid & 0xFF;
+    canspi->eid8 = 0;
+    canspi->eid0 = 0;
+    canspi->dlc  = msg->length & 0xF;
+    for (int i = 0; i < msg->length; ++i) {
+        canspi->data[i] = msg->data[i];
+    }
+}
