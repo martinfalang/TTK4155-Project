@@ -22,7 +22,7 @@
 #include "oled-buffer.h"
 #include "oled.h"
 #include "oled-menu.h"
-// #include "timer.h"
+#include "timer.h"
 
 void heartbeat_init()
 {
@@ -65,14 +65,15 @@ int main(void)
 
     printf("Print test\n");
 
-    // oled_test_screen_2();
-    // oled_menu_init(OLED_BUFFER_BASE);
-    timer_init();
+    oled_menu_init(OLED_BUFFER_BASE);
+    timer_init(); // Interrupt timer
     printf("All inits ran successfully!\n");
-
-
     
-    while(1){}
+    while(1){
+        if (oled_menu_should_update()) {
+            oled_menu_update(OLED_BUFFER_BASE);
+        }
+    }
     // oled_test_screen_2();
 
     // while (1)

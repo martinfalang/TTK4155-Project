@@ -33,9 +33,8 @@ void timer_init(void) {
     // interrupts about 60 times per second
     OCR2 = 80;
 
-    // TODO:
+    // Activate Timer2 Output Compare in interrupt mask
     TIMSK |= (1 << OCIE2);
-    // 
 
     // Enable interrupts globally
     SREG |= (1 << SREG_I);
@@ -44,6 +43,5 @@ void timer_init(void) {
 ISR(TIMER2_COMP_vect) {
     // Interrupt service routine for checking joystick if new input has occured
     // s.t. the screen should be updated
-    
     oled_menu_check_if_needs_update();
 }
