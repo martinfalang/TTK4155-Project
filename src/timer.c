@@ -6,6 +6,7 @@
 #include <avr/interrupt.h>
 
 #include "oled-menu.h"
+#include "timer.h"
 
 void timer_init(void) {
     // Initializes a timer that raises an interrupt calling a function
