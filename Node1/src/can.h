@@ -6,6 +6,7 @@
 
 
 void can_test();
+void can_test_node_transmission(void);
 
 void can_init(unsigned char state);
 

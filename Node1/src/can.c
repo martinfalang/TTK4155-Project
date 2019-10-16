@@ -45,7 +45,7 @@ void can_test() {
 
 void can_test_node_transmission(void) {
     can_msg_t sendmsg = {
-        .sid = 0x567,
+        .sid = 0,
         .length = 8,
         .data[0] = 3,
         .data[1] = 6,
@@ -56,6 +56,10 @@ void can_test_node_transmission(void) {
         .data[6] = 1,
         .data[7] = 0
     };
+    unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
+    unsigned char cur_mode = (val & MODE_MASK);
+
+    printf("Current mode: 0x%.2x\n", cur_mode);
 
     printf("Send msg:\n");
     can_print_msg(&sendmsg);

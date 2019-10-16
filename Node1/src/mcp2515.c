@@ -10,8 +10,7 @@
 int mcp2515_init(unsigned char mode) {
 
     spi_init();
-
-
+    _delay_ms(10);
     mcp2515_reset();
 
     unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
@@ -20,7 +19,7 @@ int mcp2515_init(unsigned char mode) {
     // printf("Val: 0x%.2x cur_mode: 0x%.2x\n", val, cur_mode);
     if (cur_mode != MODE_CONFIG) {
         // TODO: Find out why it does not go into config mode after reset
-        // printf("mcp_init(): Mode not config after reset, mode was: 0x%.2x\n", cur_mode);
+        printf("mcp_init(): Mode not config after reset, mode was: 0x%.2x\n", cur_mode);
         //return 0;
     }
 

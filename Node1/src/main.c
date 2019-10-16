@@ -43,7 +43,7 @@ int main(void)
 
 
     
-    can_init(MODE_LOOPBACK);
+    can_init(MODE_NORMAL);
     
 
     printf("All inits ran successfully!\n");
@@ -55,6 +55,8 @@ int main(void)
 
     while(1) {
         heartbeat();
+        can_test_node_transmission();
+        // can_test();
         _delay_ms(1000);
     } 
 }
