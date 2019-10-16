@@ -8,10 +8,10 @@
 void can_test() {
 
     can_msg_t sendmsg = {
-        .sid = 0x123,
+        .sid = 0x124,
         .length = 8,
         .data[0] = 9,
-        .data[1] = 9,
+        .data[1] = 8,
         .data[2] = 5,
         .data[3] = 4,
         .data[4] = 3,
@@ -48,16 +48,26 @@ void can_test_node_reception(void) {
     can_msg_t recvmsg;
     memset(&recvmsg, 0, sizeof(recvmsg));
     can_recieve(&recvmsg);
-    printf("RX status: 0x%.2x\n", mcp2515_read_rx_status());
+    unsigned char rxstatus = mcp2515_read_rx_status();
+    printf("0x%.2x\n", rxstatus);
 
-    printf("Received msg:\n");
-    can_print_msg(&recvmsg);
+    if (rxstatus != 0) {
+        printf("Received msg:\n");
+        can_print_msg(&recvmsg);
+    }
 }
+
+
+
+
+
+
+
 
 
 void can_init(unsigned char state) {
     mcp2515_init(state);
-
+    
     // Turn off filters
     mcp2515_bit_modify(MCP_RXB0CTRL, 0x60, 0x60);
     mcp2515_bit_modify(MCP_RXB1CTRL, 0x60, 0x60);
@@ -75,6 +85,15 @@ void can_send(const can_msg_t* p_msg) {
 void can_recieve(can_msg_t* outmsg) {
     mcp2515_can_msg_t recvmsg;
     mcp2515_read(MCP_RXB0SIDH, (unsigned char*)&recvmsg, sizeof(recvmsg));
+    // recvmsg.sidh = mcp2515_read_byte(MCP_RXB0SIDH);
+    // recvmsg.sidl = mcp2515_read_byte(MCP_RXB0SIDH + 1);
+    // recvmsg.eid8 = mcp2515_read_byte(MCP_RXB0SIDH + 2);
+    // recvmsg.eid0 = mcp2515_read_byte(MCP_RXB0SIDH + 3);
+    // recvmsg.dlc  = mcp2515_read_byte(MCP_RXB0SIDH + 4);
+    // for (int i = 0; i < 8; ++i) {
+    //     recvmsg.data[i] = mcp2515_read_byte(MCP_RXB0SIDH + 5 + i);
+
+    // }
     mcp2515_can_convert_receive(outmsg, &recvmsg);
 
     // // printf("mcp2515_can_msg_t raw\n");

@@ -52,6 +52,7 @@ unsigned char mcp2515_read_byte(unsigned char address) {
     spi_write_byte(address);
     res = spi_read_byte();
     spi_slave_deselect();
+    
     return res;    
 }
 
