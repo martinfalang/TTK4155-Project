@@ -19,10 +19,8 @@ int main(void) {
     printf("All inits ran successfully!\n");
 
     while (1) {
-	    printf("Hello world!\n");
-        
-        can_test();
-
+        heartbeat();
+        printf("Hello world!\n");
         _delay_ms(1000);
     }
 }
