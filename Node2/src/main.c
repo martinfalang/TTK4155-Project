@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <avr/io.h>
+#include "heartbeat.h"
 #include "uart.h"
 
 #include "defines.h"
@@ -11,10 +12,10 @@
 
 
 int main(void) {
+    heartbeat_init();
     uart_init();
 
-    //spi_init();
-    //can_init(MODE_LOOPBACK);
+    can_init(MODE_LOOPBACK);
 
     printf("All inits ran successfully!\n");
 

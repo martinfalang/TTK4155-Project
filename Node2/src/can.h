@@ -15,5 +15,7 @@ void can_recieve(can_msg_t* outmsg);
 
 void can_print_msg(const can_msg_t* msg);
 
+void can_test_node_reception(void);
+
 
 #endif // CAN_H

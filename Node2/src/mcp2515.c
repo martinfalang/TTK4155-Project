@@ -8,14 +8,17 @@
 #include <stdio.h>
 
 int mcp2515_init(unsigned char mode) {
+    spi_init();
     mcp2515_reset();
 
     unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
     unsigned char cur_mode = (val & MODE_MASK);
 
+    // printf("Val: 0x%.2x cur_mode: 0x%.2x\n", val, cur_mode);
     if (cur_mode != MODE_CONFIG) {
-        printf("mcp_init(): Mode not config after reset, mode was: %x\n", mode);
-        return 0;
+        // TODO: Find out why it does not go into config mode after reset
+        printf("mcp_init(): Mode not config after reset, mode was: 0x%.2x\n", cur_mode);
+        //return 0;
     }
 
     // Set mode
@@ -23,11 +26,15 @@ int mcp2515_init(unsigned char mode) {
 
     val = mcp2515_read_byte(MCP_CANSTAT);
     cur_mode = (val & MODE_MASK);
-
+    // printf("Current mode: %.2x\n", cur_mode);
     if (cur_mode != mode) {
-        printf("mcp_init(): Mode was not set to selected mode %x. Mode was: %x", mode, cur_mode);
-        return 0;
+        printf("mcp_init(): Mode was not set to selected mode 0x%x. Mode was: 0x%x\n", mode, cur_mode);
+        //return 0;
     }
+
+    unsigned char rxb0ctrl = mcp2515_read_byte(MCP_RXB0CTRL);
+    unsigned char rxb1ctrl = mcp2515_read_byte(MCP_RXB1CTRL);
+    printf("rxb0ctrl: 0x%.2X\trxb1ctrl: 0x%.2X\n", rxb0ctrl, rxb1ctrl);
 
     return 1;
 
@@ -35,42 +42,6 @@ int mcp2515_init(unsigned char mode) {
 
 void mcp_set_ops_mode(unsigned char state) {
     mcp2515_bit_modify(MCP_CANCTRL, MODE_MASK, state);
-}
-
-// TODO: Delete this function
-void mcp2515_test_can() {
-
-    unsigned char *send_data;
-
-    unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
-    unsigned char mode = (val & MODE_MASK);
-
-    printf("Mode: %x\n", mode);
-
-    // set arbitration field
-    mcp2515_write(0b00110001, 0, 1);
-    mcp2515_write(0b00110010, 0, 1);
-    
-    // set dlc
-    *send_data = 1;
-    mcp2515_write(0b00110101, send_data, 1);
-
-    // send data
-    *send_data = 0xAA;
-    mcp2515_write(0b00110110, send_data, 1);
-
-    // request to send
-    mcp2515_request_to_send(MCP_RTS_TX0);
-
-    
-
-    // read result 
-    unsigned char *data;
-    mcp2515_read(0b01100110, data, 1);
-
-    printf("Got: %x\n", data);
-
-    
 }
 
 unsigned char mcp2515_read_byte(unsigned char address) {
@@ -153,6 +124,19 @@ unsigned char mcp2515_read_status(void) {
     return status;
 }
 
+unsigned char mcp2515_read_rx_status(void) {
+
+    spi_slave_select();
+
+    spi_write_byte(MCP_RX_STATUS);
+
+    unsigned char status = spi_read_byte();
+
+    spi_slave_deselect();
+
+    return status;
+}
+
 void mcp2515_bit_modify(unsigned char address, unsigned char mask_byte, unsigned char data) {
 
     spi_slave_select();
@@ -180,7 +164,7 @@ void mcp2515_reset() {
 
     spi_slave_deselect();
 
-    _delay_ms(1);
+    //_delay_ms(1);
 }
 
 
@@ -188,7 +172,7 @@ void mcp2515_reset() {
 void mcp2515_can_convert_receive(can_msg_t* msg, const mcp2515_can_msg_t* canspi) {
     // when receiving
     // from can_msg_spi to can_msg
-    msg->sid = (canspi->sidh << 8) | canspi->sidl;
+    msg->sid = (canspi->sidh << 3) | canspi->sidl >> 5;
     msg->length = canspi->dlc & 0xF;  // anding with 0xF because it's only the lower nibble that contains the length
     for (int i = 0; i < msg->length; ++i) {
         msg->data[i] = canspi->data[i];
@@ -198,8 +182,8 @@ void mcp2515_can_convert_receive(can_msg_t* msg, const mcp2515_can_msg_t* canspi
 void mcp2515_can_convert_send(const can_msg_t* msg, mcp2515_can_msg_t* canspi) {
     // when sending
     // from can_msg to can_msg_spi
-    canspi->sidh = msg->sid >> 8;
-    canspi->sidl = msg->sid & 0xFF;
+    canspi->sidh = msg->sid >> 3;
+    canspi->sidl = msg->sid << 5;
     canspi->eid8 = 0;
     canspi->eid0 = 0;
     canspi->dlc  = msg->length & 0xF;
