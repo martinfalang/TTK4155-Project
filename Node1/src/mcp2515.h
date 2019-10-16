@@ -31,6 +31,7 @@ void mcp2515_request_to_send(unsigned char command);
 unsigned char mcp2515_read_status(void);
 void mcp2515_bit_modify(unsigned char address, unsigned char mask_byte, unsigned char data);
 void mcp2515_reset();
+unsigned char mcp2515_read_rx_status(void);
 
 
 void mcp2515_can_convert_receive(can_msg_t* msg, const mcp2515_can_msg_t* canspi);

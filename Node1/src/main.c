@@ -42,11 +42,9 @@ int main(void)
     touch_init();
 
 
-    spi_init();
-    _delay_ms(10);
-    //mcp2515_init(MODE_LOOPBACK);
-
+    
     can_init(MODE_LOOPBACK);
+    
 
     printf("All inits ran successfully!\n");
 
@@ -57,8 +55,6 @@ int main(void)
 
     while(1) {
         heartbeat();
-        //mcp2515_test_can();
-        can_test();
         _delay_ms(1000);
     } 
 }
