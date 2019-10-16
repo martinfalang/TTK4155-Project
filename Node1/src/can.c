@@ -43,6 +43,26 @@ void can_test() {
     printf("\n\n");    
 }
 
+void can_test_node_transmission(void) {
+    can_msg_t sendmsg = {
+        .sid = 0x567,
+        .length = 8,
+        .data[0] = 3,
+        .data[1] = 6,
+        .data[2] = 3,
+        .data[3] = 4,
+        .data[4] = 3,
+        .data[5] = 2,
+        .data[6] = 1,
+        .data[7] = 0
+    };
+
+    printf("Send msg:\n");
+    can_print_msg(&sendmsg);
+    printf("\n\n");
+    can_send(&sendmsg);
+}
+
 
 void can_init(unsigned char state) {
     mcp2515_init(state);
