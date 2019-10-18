@@ -31,7 +31,7 @@ The server will feed the client with one note and corresponding duration in
 
 ### Requesting the next note
 
-The client requests the next note by sending a `n` to the server. 
+The client requests the next note by sending a `n\n` to the server. 
 
 
 ### Note and duration format
