@@ -2,7 +2,7 @@
 
 The computer runs the buzzer song server that feeds the microcontroller
 with a new note after the previous one was finished playing. All communication
-goes through the serial port. 
+goes through the serial port. All lines are terminated by newline (`\n`). 
 
 
 ## Terminology
@@ -21,7 +21,7 @@ correspond with the filename (excluding the .py) found in the song directory.
 
 ### Song request format
 
-    song <song name>
+    song <song name>\n
 
 
 ## Playing the song
@@ -38,7 +38,7 @@ The client requests the next note by sending a `n` to the server.
 
 The format of note and duration is the following: 
 
-    note,duration
+    note,duration\n
 
 Both `note` and `duration` will be integers. Note range is [0, 5000] and the 
 duration range is [0, 10 000]. That means the maximum duration is 10 seconds. 
@@ -46,4 +46,4 @@ duration range is [0, 10 000]. That means the maximum duration is 10 seconds.
 
 ## End of song
 
-The end of the song is reached when the next note and duration is `0,0`. 
+The end of the song is reached when the next note and duration is `0,0\n`. 
