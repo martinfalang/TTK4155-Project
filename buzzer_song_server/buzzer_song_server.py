@@ -1,15 +1,21 @@
 import serial
 
 import notes
-
-# GLOBAL CONSTANTS
-BAUDRATE = 9600
-PORT = r"COM8"
-
-print(notes.C4)
-exit()
+from songs import starwars
 
 
+# initialize serial object
 ser = serial.Serial()
-ser.baudrate = BAUDRATE
-ser.port = PORT
+ser.baudrate = 9600
+ser.port = r"COM8"
+ser.bytesize = serial.EIGHTBITS
+ser.parity = serial.PARITY_NONE
+ser.stopbits = serial.STOPBITS_TWO
+
+try:
+    ser.open()
+except Exception as e:
+    print(e)
+    raise Exception(e)
+
+print("done")
