@@ -4,5 +4,6 @@ void setup() {
 
 
 void loop() {
-
+    Serial.println("song starwars");
+    delay(100);
 }
