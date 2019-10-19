@@ -18,10 +18,16 @@ The client sends a song request to the server by sending the string `song`
 followed by the song name as a string to the server. A list of possible songs 
 are found in the songs directory. The song name sent from the client must 
 correspond with the filename (excluding the .py) found in the song directory. 
+The server responds with sending an `ok\n` if the song exists, `no\n` otherwise.
 
 ### Song request format
 
     song <song name>\n
+
+### Response
+
+    ok\n    -   if song exists
+    no\n    -   if song doesn't exist
 
 
 ## Playing the song
