@@ -52,7 +52,7 @@ int main(void)
     // mcp2515_one_byte_write_test();
 
     while(1) {
-        _delay_ms(1000);
+        _delay_ms(10);
         heartbeat();
         //can_test_node_transmission();
         can_test();

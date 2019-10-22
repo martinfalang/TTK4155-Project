@@ -24,8 +24,8 @@ int mcp2515_init(unsigned char mode) {
     }
 
     // Enable interrupts on RX0 buffer
-    // mcp2515_bit_modify(MCP_CANINTE, MCP_RX0IF, MCP_RX0IF);
-    _delay_us(100);
+    mcp2515_bit_modify(MCP_CANINTE, MCP_RX0IF, MCP_RX0IF);
+    // _delay_us(100);
     // Set mode
     mcp_set_ops_mode(mode);
 

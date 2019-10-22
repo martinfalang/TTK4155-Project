@@ -40,9 +40,9 @@ void can_test() {
 
     // uint8_t canif = mcp2515_read_byte(MCP_CANINTF);
     // printf("CanIF: %x\n", canif & 0x01);
-    _delay_ms(10);
-    // while (!new_msg);
-    while (!(mcp2515_read_byte(MCP_CANINTF) & 0x01));
+    // _delay_ms(10);
+    while (!new_msg);
+    //while (!(mcp2515_read_byte(MCP_CANINTF) & 0x01));
 
     can_receive();
     const can_msg_t *recvmsg = can_get_recv_msg();
@@ -111,17 +111,17 @@ void can_init(unsigned char state) {
     // Turn off filters
     mcp2515_bit_modify(MCP_RXB0CTRL, 0x60, 0x60); 
 
-    // // set INT1 pin to input
-    // DDRD &= ~(1 << PD3);
+    // set INT1 pin to input
+    DDRD &= ~(1 << PD3);
 
-    // // enable interrupt on INT1
-    // GICR |= (1 << INT1);
+    // enable interrupt on INT1
+    GICR |= (1 << INT1);
 
-    // // Set interrupt type to falling edge
-    // MCUCR |= (1 << ISC11);
+    // Set interrupt type to falling edge
+    MCUCR |= (1 << ISC11);
 
-    // // Enable global interrupts on atmega162
-    // sei();
+    // Enable global interrupts on atmega162
+    sei();
 }
 
 
@@ -179,12 +179,12 @@ void can_print_msg(const can_msg_t* msg) {
 }
 
 
-// // ISR for received can message
-// ISR(INT1_vect) {
-//     cli();
-//     new_msg = true;
-//     printf("INTERRUPT\n");
-//     // Clear int1 flag
-//     // maybe
-//     sei();
-// }
+// ISR for received can message
+ISR(INT1_vect) {
+    cli();
+    new_msg = true;
+    // printf("INTERRUPT\n");
+    // Clear int1 flag
+    // maybe
+    sei();
+}
