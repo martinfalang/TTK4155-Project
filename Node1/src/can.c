@@ -33,22 +33,22 @@ void can_test() {
         sendmsg.data[i] = rand() % 256;
     }
 
-    printf("\n\nSend: \n");
-    can_print_msg(&sendmsg);
+    // printf("\n\nSend: \n");
+    // can_print_msg(&sendmsg);
 
     can_send(&sendmsg);
 
-    uint8_t canif = mcp2515_read_byte(MCP_CANINTF);
-    printf("CanIF: %x\n", canif & 0x01);
-
+    // uint8_t canif = mcp2515_read_byte(MCP_CANINTF);
+    // printf("CanIF: %x\n", canif & 0x01);
+    _delay_ms(10);
     // while (!new_msg);
     while (!(mcp2515_read_byte(MCP_CANINTF) & 0x01));
 
     can_receive();
     const can_msg_t *recvmsg = can_get_recv_msg();
 
-    printf("\nRec: \n");
-    can_print_msg(recvmsg);
+    // printf("\nRec: \n");
+    // can_print_msg(recvmsg);
     
     if (sendmsg.sid != recvmsg->sid) {
         printf("CAN loopback test failed\n");
