@@ -4,6 +4,8 @@
 #include "mcp2515_defines.h"
 #include <stddef.h>     // for size_t
 #include <stdint.h>
+#include <stdbool.h>    // for bool
+
 
 void mcp2515_test_read(void);
 void mcp2515_test_write(void);
@@ -21,5 +23,6 @@ unsigned char mcp2515_read_status(void);
 void mcp2515_bit_modify(unsigned char address, unsigned char mask_byte, unsigned char data);
 void mcp2515_reset();
 unsigned char mcp2515_read_rx_status(void);
+void mcp2515_read_rx_buffer_data(unsigned char *data, unsigned char data_length);
 
 #endif // MCP2515_H

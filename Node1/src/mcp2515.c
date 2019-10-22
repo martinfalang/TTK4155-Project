@@ -10,7 +10,7 @@
 int mcp2515_init(unsigned char mode) {
 
     spi_init();
-    _delay_ms(10);
+    
     mcp2515_reset();
 
     unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
@@ -23,6 +23,9 @@ int mcp2515_init(unsigned char mode) {
         //return 0;
     }
 
+    // Enable interrupts on RX0 buffer
+    // mcp2515_bit_modify(MCP_CANINTE, MCP_RX0IF, MCP_RX0IF);
+    _delay_us(100);
     // Set mode
     mcp_set_ops_mode(mode);
 
@@ -165,5 +168,18 @@ void mcp2515_reset() {
 
     spi_slave_deselect();
 
-    //_delay_ms(1);
+    _delay_us(100);
 }
+
+void mcp2515_read_rx_buffer_data(unsigned char *data, unsigned char data_length) {
+
+    spi_slave_select();
+
+    spi_write_byte(MCP_READ_RX0_D0);
+
+    for (unsigned char i = 0; i < data_length; ++i) {
+        data[i] = spi_read_byte();
+    }
+
+    spi_slave_deselect();
+} 

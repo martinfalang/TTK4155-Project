@@ -19,9 +19,11 @@ void can_init(unsigned char state);
 
 void can_send(const can_msg_t* p_msg);
 
-void can_receive(can_msg_t* outmsg);
+void can_receive(void);
 
 void can_print_msg(const can_msg_t* msg);
 
+const can_msg_t *can_get_recv_msg(void);
+bool can_new_msg(void);
 
 #endif // CAN_H

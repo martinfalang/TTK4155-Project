@@ -108,6 +108,7 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_RTS_ALL		0x87
 
 #define MCP_READ_RX0	0x90
+#define MCP_READ_RX0_D0 0x92
 #define MCP_READ_RX1	0x94
 
 #define MCP_READ_STATUS	0xA0
@@ -169,7 +170,6 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_ERRIF		0x20
 #define MCP_WAKIF		0x40
 #define MCP_MERRF		0x80
-
 
 
 #endif
