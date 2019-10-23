@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <avr/io.h>
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 
 #define ADC_MAX_VALUE 255;
 

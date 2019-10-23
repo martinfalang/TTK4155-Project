@@ -1,5 +1,5 @@
 # List all source files to be compiled; separate with space
-SOURCE_FILES := main.c sram-test.c xmem.c adc.c joystick.c touch.c uart.c spi.c can.c mcp2515.c
+SOURCE_FILES := main.c uart.c spi.c can.c mcp2515.c
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes
 
@@ -12,8 +12,8 @@ endif
 BUILD_DIR := build
 SRC_DIR := src
 
-TARGET_CPU := atmega162
-TARGET_DEVICE := m162
+TARGET_CPU := atmega2560
+TARGET_DEVICE := m2560
 
 CC := avr-gcc
 CFLAGS := -O -std=c11 -mmcu=$(TARGET_CPU)

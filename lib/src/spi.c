@@ -1,5 +1,5 @@
 
-#include "spi.h"
+#include "../inc/spi.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>

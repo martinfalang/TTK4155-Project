@@ -57,12 +57,27 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_CANINTE		0x2B
 #define MCP_CANINTF		0x2C
 #define MCP_EFLG		0x2D
+
+// TXB0 registers
 #define MCP_TXB0CTRL	0x30
 #define MCP_TXB0SIDH    0x31
-#define MCP_TXB1CTRL	0x40
-#define MCP_TXB2CTRL	0x50
+#define MCP_TXB0SIDL    0x32
+#define MCP_TXB0EID8    0x33
+#define MCP_TXB0EID0    0x34
+#define MCP_TXB0DLC     0x35
+#define MCP_TXB0D0      0x36
+
+// RXB0 registers
 #define MCP_RXB0CTRL	0x60
 #define MCP_RXB0SIDH	0x61
+#define MCP_RXB0SIDL    0x62
+#define MCP_RXB0EID8    0x63
+#define MCP_RXB0EID0    0x64
+#define MCP_RXB0DLC     0x65
+#define MCP_RXB0D0      0x66
+
+#define MCP_TXB1CTRL	0x40
+#define MCP_TXB2CTRL	0x50
 #define MCP_RXB1CTRL	0x70
 #define MCP_RXB1SIDH	0x71
 
@@ -93,6 +108,7 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_RTS_ALL		0x87
 
 #define MCP_READ_RX0	0x90
+#define MCP_READ_RX0_D0 0x92
 #define MCP_READ_RX1	0x94
 
 #define MCP_READ_STATUS	0xA0
@@ -154,7 +170,6 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_ERRIF		0x20
 #define MCP_WAKIF		0x40
 #define MCP_MERRF		0x80
-
 
 
 #endif
