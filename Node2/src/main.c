@@ -25,15 +25,18 @@ int main(void) {
 
     int16_t degs = -40;
 
+    int16_t delta_degs = 1;
+
     while(1) {
         heartbeat();
-        _delay_ms(200);
+        _delay_ms(20);
 
         printf("%d", degs);
         pwm_set_duty_cycle(degs);
-        degs += 10;
+        degs += delta_degs;
 
-        if (degs > 250) {degs = -40;}
+        if (degs > 250) { delta_degs = -1;}
+        if (degs < -40 ) { delta_degs = 1; }
     }
 
     // while (1) {

@@ -31,8 +31,8 @@
 //     SREG |= (1 << SREG_I);
 // }
 
-static uint8_t dx;
-static int16_t degrees = 0;
+// static uint8_t dx;
+// static int16_t degrees = 0;
 
 // ISR(TIMER1_OVF_vect)
 // {
@@ -53,7 +53,6 @@ static int16_t degrees = 0;
 // Initialize pwm in fast_pwm-mode
 void pwm_init(void)
 {
-
     // Set prescaler to clk_io/256 - CS1 2:0 = 4
     TCCR1B |= _BV(CS12) | _BV(WGM12) | _BV(WGM13);
     TCCR1B &= ~_BV(CS11) & ~_BV(CS10);
@@ -66,9 +65,6 @@ void pwm_init(void)
     ICR1 = 1250;
 
     pwm_set_duty_cycle(90);
-
-    // dx = 1;
-    // pwm_init_interrupt();
 
     // Set PWM pin as output. Use OC1A - PB5
     // This also activates the signal
