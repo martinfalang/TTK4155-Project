@@ -5,7 +5,7 @@
  * Author : eirik
  */
 
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 
 #include <stdio.h>
 
@@ -14,22 +14,21 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 
-#include "uart.h"
+#include "../../lib/inc/uart.h"
 #include "xmem.h"
 #include "adc.h"
 #include "joystick.h"
 #include "touch.h"
-#include "spi.h"
-#include "mcp2515.h"
-#include "can.h"
+#include "../../lib/inc/mcp2515_defines.h"
+#include "../../lib/inc/can.h"
 
 void heartbeat_init() {
-    DDRB |= 1 << DDB0;
+    DDRE |= 1 << DDE0;
 }
 
 void heartbeat()
 {
-    PORTB ^= 1 << PB0;
+    PORTE ^= 1 << PE0;
 }
 
 int main(void)
@@ -41,12 +40,8 @@ int main(void)
     joystick_init();
     touch_init();
 
-
-    spi_init();
-    _delay_ms(10);
-    //mcp2515_init(MODE_LOOPBACK);
-
-    can_init(MODE_LOOPBACK);
+    can_init(MODE_NORMAL);
+    
 
     printf("All inits ran successfully!\n");
 
@@ -56,9 +51,18 @@ int main(void)
     // mcp2515_one_byte_write_test();
 
     while(1) {
-        heartbeat();
-        //mcp2515_test_can();
-        can_test();
         _delay_ms(1000);
+        heartbeat();
+#if DEBUG
+        // can_loopback_test();
+        const can_msg_t *recv;
+        if (can_new_msg()) {
+            recv = can_get_recv_msg();
+            printf("\n\nRecv:\n");
+            can_print_msg(recv);
+            printf("\n");
+        }
+        can_test_node_transmission();
+#endif // DEBUG
     } 
 }

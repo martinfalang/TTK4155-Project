@@ -2,14 +2,23 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-// Global
-#define F_CPU 4915200 // Frequency of CPU.
+// Debug - set this to 1 to allow test functions
+#define DEBUG 1
+
+// Global CPU frequency
+#if defined (__AVR_ATmega162__)
+    #define F_CPU 4915200
+#elif defined (__AVR_ATmega2560__)
+    #define F_CPU 16000000
+#else
+    #define F_CPU 0
+#endif
 
 // UART
 
-#define FOSC 4915200 // Clock Speed
+//#define FOSC 4915200 // Clock Speed
 #define BAUD 9600
-#define MYUBRR (FOSC / 16 / BAUD - 1) // Baud rate register
+#define MYUBRR (F_CPU / 16 / BAUD - 1) // Baud rate register
 
 // SRAM and memory mapping:
 /*
