@@ -23,7 +23,6 @@ void pwm_set_duty_cycle(uint8_t ms_tenths) {
 // Initialize pwm in fast_pwm-mode
 void pwm_init(void) {
     // Set PWM pin as output. Use OC1A - PB5
-    DDRB |= _BV(PWM_PIN);
 
     // What to set in ctrl registers
     // TCCR1A - COM, WGM
@@ -34,15 +33,16 @@ void pwm_init(void) {
     TCCR1B |= _BV(CS12) | _BV(WGM12) | _BV(WGM13);
     TCCR1B &= ~_BV(CS11) & ~_BV(CS10);
 
-    // Set TIMER1 to fast pwm mode (partly), set to non-inverting mode
+    // Set TIMER1 to fast pwm mode, set to non-inverting mode
     TCCR1A |= _BV(COM1A1) | _BV(WGM11);
     TCCR1A &= ~_BV(COM1A0) & ~_BV(WGM10);
 
-    // TCCR1C
+    // Set ICR1 (which defines TOP) to 1250
+    ICR1 = 125;
 
+    OCR1A = 40;
 
-    // Set OC0B to non-inverting mode (see Table 16-6 p. 126)
-    
+    DDRB |= _BV(PWM_PIN);
     // TCCR0B |= (1 << COM0A1);
     // TCCR0B &= ~(1 << COM0A0); 
 
