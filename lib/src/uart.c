@@ -6,6 +6,12 @@
 
 FILE *uart;
 
+#if defined (__AVR_ATmega162__)
+    #define FRAME_FORMAT    (1 << URSEL0) | (1 << USBS0) | (3 << UCSZ00)
+#elif defined (__AVR_ATmega2560__)
+    #define FRAME_FORMAT    (1 << USBS0) | (3 << UCSZ00)
+#endif
+
 void uart_init() // ubrr = uart baud rate register
 {
     /** Initialize the uart unit */
@@ -15,7 +21,7 @@ void uart_init() // ubrr = uart baud rate register
     /* Enable receiver and transmitter */
     UCSR0B = (1 << RXEN0) | (1 << TXEN0);
     /* Set frame format: 8data, 2stop bit */
-    UCSR0C = (1 << URSEL0) | (1 << USBS0) | (3 << UCSZ00);
+    UCSR0C = FRAME_FORMAT;
 
     uart = fdevopen(&uart_transmit, &uart_recieve);
 }

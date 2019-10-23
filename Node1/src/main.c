@@ -40,7 +40,7 @@ int main(void)
     joystick_init();
     touch_init();
 
-    can_init(MODE_LOOPBACK);
+    can_init(MODE_NORMAL);
     
 
     printf("All inits ran successfully!\n");
@@ -55,6 +55,13 @@ int main(void)
         heartbeat();
 #if DEBUG
         // can_loopback_test();
+        const can_msg_t *recv;
+        if (can_new_msg()) {
+            recv = can_get_recv_msg();
+            printf("\n\nRecv:\n");
+            can_print_msg(recv);
+            printf("\n");
+        }
         can_test_node_transmission();
 #endif // DEBUG
     } 

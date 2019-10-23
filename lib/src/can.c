@@ -24,6 +24,8 @@ void can_init(unsigned char state) {
     // Turn off filters
     mcp2515_bit_modify(MCP_RXB0CTRL, 0x60, 0x60); 
 
+#if defined (__AVR_ATmega162__)
+#define CAN_INTERRUPT_VEC INT1_vect
     // set INT1 pin to input
     DDRD &= ~(1 << PD3);
 
@@ -32,7 +34,14 @@ void can_init(unsigned char state) {
 
     // Set interrupt type to falling edge
     MCUCR |= (1 << ISC11);
+#elif defined (__AVR_ATmega2560__)
+#define CAN_INTERRUPT_VEC INT2_vect
+    DDRD &= ~(1 << PD2);
 
+    EIMSK |= (1 << INT2);
+
+    EICRA |= (1 << ISC21);
+#endif
     // Enable global interrupts on atmega162
     sei();
 }
@@ -78,7 +87,7 @@ void can_receive(void) {
 }
 
 // ISR for received can message
-ISR(INT1_vect) {
+ISR(CAN_INTERRUPT_VEC) {
     new_msg = true;
 }
 
