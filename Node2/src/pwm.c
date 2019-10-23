@@ -8,7 +8,7 @@
 
 // Definitions
 // See docs/schematics/arduino-mega2560_r3-sch.pdf for schematics
-#define PWM_PIN PG5 // OC0B
+#define PWM_PIN PB5 // OC1A
 
 // General idea: Set one OCR such that we can reset the timer from the interrupt, set the
 // other to generate the PWM signal.
@@ -22,17 +22,29 @@ void pwm_set_duty_cycle(uint8_t ms_tenths) {
 
 // Initialize pwm in fast_pwm-mode
 void pwm_init(void) {
-    // Set PWM pin as output
-    DDRG |= (1 << PWM_PIN);
+    // Set PWM pin as output. Use OC1A - PB5
+    DDRB |= _BV(PWM_PIN);
 
-    // Set TIMER0 to fast pwm mode (mode 7)
-    TCCR0A |= (1 << WGM00) | (1 << WGM01);
-    TCCR0B |= (1 << WGM02); // For some reason in the other register
+    // What to set in ctrl registers
+    // TCCR1A - COM, WGM
+    // TCCR1B - WGM, CS
+    // TCCR1C - Nothing
+ 
+    // Set prescaler to clk_io/256 - CS1 2:0 = 4
+    TCCR1B |= _BV(CS12) | _BV(WGM12) | _BV(WGM13);
+    TCCR1B &= ~_BV(CS11) & ~_BV(CS10);
+
+    // Set TIMER1 to fast pwm mode (partly), set to non-inverting mode
+    TCCR1A |= _BV(COM1A1) | _BV(WGM11);
+    TCCR1A &= ~_BV(COM1A0) & ~_BV(WGM10);
+
+    // TCCR1C
+
 
     // Set OC0B to non-inverting mode (see Table 16-6 p. 126)
     
-    TCCR0B |= (1 << COM0A1);
-    TCCR0B &= ~(1 << COM0A0); 
+    // TCCR0B |= (1 << COM0A1);
+    // TCCR0B &= ~(1 << COM0A0); 
 
     // TODO:
     // Set the timer to the greatest
