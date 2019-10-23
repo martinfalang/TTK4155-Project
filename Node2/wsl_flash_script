@@ -1,0 +1,6 @@
+# install Arduino IDE to get avrdude
+# copy the path to avrdude.exe into Windows PATH
+# make note of where avrdude.conf is located 
+# run the following command in windows CMD
+
+avrdude -p m2560 -c atmelice -U flash:w:build/main.hex:i -C <path to avrdude.conf>
