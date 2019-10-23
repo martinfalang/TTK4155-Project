@@ -24,12 +24,12 @@
 #include "can.h"
 
 void heartbeat_init() {
-    DDRB |= 1 << DDB0;
+    DDRE |= 1 << DDE0;
 }
 
 void heartbeat()
 {
-    PORTB ^= 1 << PB0;
+    PORTE ^= 1 << PE0;
 }
 
 int main(void)
@@ -55,6 +55,8 @@ int main(void)
         _delay_ms(10);
         heartbeat();
         //can_test_node_transmission();
-        can_test();
+#if DEBUG
+        can_loopback_test();
+#endif // DEBUG
     } 
 }

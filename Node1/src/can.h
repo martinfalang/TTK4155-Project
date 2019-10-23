@@ -1,9 +1,10 @@
 #ifndef CAN_H
 #define CAN_H
 
-#include "mcp2515.h"
+#include "defines.h"    // for DEBUG
 
-#include <stdint.h>
+#include <stdint.h>     // for uint
+#include <stdbool.h>    // for bool
 
 typedef struct can_msg {
     uint16_t sid;
@@ -11,19 +12,21 @@ typedef struct can_msg {
     uint8_t data[8];
 } can_msg_t;
 
-
-void can_test();
-void can_test_node_transmission(void);
-
+// General functions
 void can_init(unsigned char state);
 
+// Get functions
+bool can_new_msg(void);
+const can_msg_t *can_get_recv_msg(void);
+
+// Send function
 void can_send(const can_msg_t* p_msg);
 
-void can_receive(void);
-
+// Test functions
+#if DEBUG
+void can_loopback_test();
+void can_test_node_transmission(void);
 void can_print_msg(const can_msg_t* msg);
-
-const can_msg_t *can_get_recv_msg(void);
-bool can_new_msg(void);
+#endif // DEBUG
 
 #endif // CAN_H
