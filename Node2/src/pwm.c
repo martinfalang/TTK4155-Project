@@ -22,12 +22,6 @@ void pwm_set_duty_cycle(uint8_t ms_tenths) {
 
 // Initialize pwm in fast_pwm-mode
 void pwm_init(void) {
-    // Set PWM pin as output. Use OC1A - PB5
-
-    // What to set in ctrl registers
-    // TCCR1A - COM, WGM
-    // TCCR1B - WGM, CS
-    // TCCR1C - Nothing
  
     // Set prescaler to clk_io/256 - CS1 2:0 = 4
     TCCR1B |= _BV(CS12) | _BV(WGM12) | _BV(WGM13);
@@ -38,15 +32,37 @@ void pwm_init(void) {
     TCCR1A &= ~_BV(COM1A0) & ~_BV(WGM10);
 
     // Set ICR1 (which defines TOP) to 1250
-    ICR1 = 125;
+    ICR1 = 1250;
 
-    OCR1A = 40;
+    pwm_set_duty_cycle(90);
 
+    // Set PWM pin as output. Use OC1A - PB5
+    // This also activates the signal
     DDRB |= _BV(PWM_PIN);
-    // TCCR0B |= (1 << COM0A1);
-    // TCCR0B &= ~(1 << COM0A0); 
+}
 
-    // TODO:
-    // Set the timer to the greatest
 
+#define PWM_LOWER_OCR_LIM 55  // Lower limit: 55, gives 0.9 ms
+#define PWM_UPPER_OCR_LIM 128 // Upper limit: 128 gives 2.1 ms
+
+// Degrees comple
+#define RIGHT_SERVO_DEGS_LIM 0 // TODO - update based on actual values
+#define LEFT_SERVO_DEGS_LIM 180
+
+void pwm_set_duty_cycle(uint8_t degrees) {
+    // Sets the duty cycle of the pwm signal corresponding to degrees.
+    // This should be tuned s.t. 0 degrees equals 3-O'clock, as in polar coordinates
+    // and 180 degrees to 9-O'clock, the same as pi in polar coordinates
+    // and 90 degrees should be straight up
+
+    // Convert degrees to number of counter ticks
+    uint8_t ticks = PWM_LOWER_OCR_LIM 
+                    + degrees * (PWM_UPPER_OCR_LIM - PWM_LOWER_OCR_LIM) 
+                    / (LEFT_SERVO_DEGS_LIM - RIGHT_SERVO_DEGS_LIM);
+
+    // Saturate the output if it is outside limits
+    if (ticks > PWM_UPPER_OCR_LIM) ticks = PWM_UPPER_OCR_LIM;
+    if (ticks < PWM_LOWER_OCR_LIM) ticks = PWM_LOWER_OCR_LIM;
+
+    OCR1A = ticks;
 }
