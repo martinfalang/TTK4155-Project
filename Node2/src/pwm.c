@@ -22,40 +22,34 @@
 // General idea: Set one OCR such that we can reset the timer from the interrupt, set the
 // other to generate the PWM signal.
 
-void pwm_init_interrupt(void)
-{
-    // Enable interrupts when timer reaches TOP (defined bu ICR1)
-    TIMSK1 |= (1 << TOV1);
+// void pwm_init_interrupt(void)
+// {
+//     // Enable interrupts when timer reaches TOP (defined bu ICR1)
+//     TIMSK1 |= (1 << TOV1);
 
-    // Enable interrupts globally
-    SREG |= (1 << SREG_I);
-}
+//     // Enable interrupts globally
+//     SREG |= (1 << SREG_I);
+// }
 
 static uint8_t dx;
-static uint8_t degrees = 0;
-static uint8_t cycles = 0;
-#define CYCLES_AT_SAME_DUTY_CYCLE 4
+static int16_t degrees = 0;
 
-ISR(TIMER1_OVF_vect)
-{
-    if (dx == 1 && degrees > LEFT_SERVO_DEGS_LIM)
-    {
-        dx = -1;
-    }
-    else if (degrees < RIGHT_SERVO_DEGS_LIM)
-    {
-        dx = 1;
-    }
+// ISR(TIMER1_OVF_vect)
+// {
+//     if (dx == 1 && degrees > LEFT_SERVO_DEGS_LIM)
+//     {
+//         dx = -1;
+//     }
+//     else if (degrees < RIGHT_SERVO_DEGS_LIM)
+//     {
+//         dx = 1;
+//     }
     
-    cycles += 1;
-    if (cycles >= CYCLES_AT_SAME_DUTY_CYCLE)
-    {
-        cycles = 0; 
-        degrees += dx;
-    }
+//     degrees += dx;
 
-    pwm_set_duty_cycle(degrees);
-}
+//     pwm_set_duty_cycle(degrees);
+// }
+
 // Initialize pwm in fast_pwm-mode
 void pwm_init(void)
 {
@@ -73,15 +67,15 @@ void pwm_init(void)
 
     pwm_set_duty_cycle(90);
 
-    dx = 1;
-    pwm_init_interrupt();
+    // dx = 1;
+    // pwm_init_interrupt();
 
     // Set PWM pin as output. Use OC1A - PB5
     // This also activates the signal
     DDRB |= _BV(PWM_PIN);
 }
 
-void pwm_set_duty_cycle(uint8_t degrees)
+void pwm_set_duty_cycle(int16_t degrees)
 {
     // Sets the duty cycle of the pwm signal corresponding to degrees.
     // This should be tuned s.t. 0 degrees equals 3-O'clock, as in polar coordinates

@@ -23,9 +23,22 @@ int main(void) {
 
     pwm_init();
 
-    while (1) {
+    int16_t degs = -40;
+
+    while(1) {
         heartbeat();
-	    printf("Hello world!!!\n");
-        _delay_ms(1000);
+        _delay_ms(200);
+
+        printf("%d", degs);
+        pwm_set_duty_cycle(degs);
+        degs += 10;
+
+        if (degs > 250) {degs = -40;}
     }
+
+    // while (1) {
+    //     heartbeat();
+	//     printf("Hello world!!!\n");
+    //     _delay_ms(1000);
+    // }
 }

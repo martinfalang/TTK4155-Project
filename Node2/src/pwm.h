@@ -2,6 +2,6 @@
 #define NODE_2_PWM
 
 void pwm_init(void);
-void pwm_set_duty_cycle(uint8_t degrees);
+void pwm_set_duty_cycle(int16_t degrees);
 
 #endif /* NODE_2_PWM */
