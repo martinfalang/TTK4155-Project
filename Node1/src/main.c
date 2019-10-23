@@ -5,7 +5,7 @@
  * Author : eirik
  */
 
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 
 #include <stdio.h>
 
@@ -14,14 +14,13 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 
-#include "uart.h"
+#include "../../lib/inc/uart.h"
 #include "xmem.h"
 #include "adc.h"
 #include "joystick.h"
 #include "touch.h"
-#include "spi.h"
-#include "mcp2515.h"
-#include "can.h"
+#include "../../lib/inc/mcp2515_defines.h"
+#include "../../lib/inc/can.h"
 
 void heartbeat_init() {
     DDRE |= 1 << DDE0;
@@ -52,11 +51,11 @@ int main(void)
     // mcp2515_one_byte_write_test();
 
     while(1) {
-        _delay_ms(10);
+        _delay_ms(1000);
         heartbeat();
-        //can_test_node_transmission();
 #if DEBUG
-        can_loopback_test();
+        // can_loopback_test();
+        can_test_node_transmission();
 #endif // DEBUG
     } 
 }
