@@ -2,6 +2,9 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+// Debug - set this to 1 to allow test functions
+#define DEBUG 1
+
 // Global
 #define F_CPU 4915200 // Frequency of CPU.
 
