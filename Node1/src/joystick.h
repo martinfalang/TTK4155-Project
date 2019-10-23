@@ -32,7 +32,8 @@ pos_t joystick_get_position();
 int joystick_read_btn();
 joy_btn_dir_t joystick_get_direction();
 
+#if DEBUG
 void joystick_test();
-
+#endif // DEBUG
 
 #endif // JOYSTICK_h

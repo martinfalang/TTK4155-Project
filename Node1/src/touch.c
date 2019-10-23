@@ -24,12 +24,15 @@ touch_btn_t touch_read_btns() {
     return btns;
 }
 
+#if DEBUG
+
 void touch_test() {
     touch_btn_t btns = touch_read_btns();
     touch_slider_t slider = touch_read_sliders();
     printf("Left button: %i     Right button: %i    ", btns.left, btns.right);
     printf("Left slider: %i     Right slider: %i\n", slider.left, slider.right);
 }
+#endif // DEBUG
 
 touch_slider_t touch_read_sliders() {
     touch_slider_t sliders = {.left = -1, .right = -1};

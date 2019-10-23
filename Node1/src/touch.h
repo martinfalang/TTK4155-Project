@@ -22,7 +22,9 @@ typedef struct touch_slider {
 
 void touch_init();
 
+#if DEBUG
 void touch_test();
+#endif // DEBUG
 
 touch_btn_t touch_read_btns();
 
