@@ -1,6 +1,5 @@
-# List all source sfiles to be compiled; separate with space
-SOURCE_FILES := main.c uart.c spi.c mcp2515.c can.c 
-
+# List all source files to be compiled; separate with space
+SOURCE_FILES := main.c uart.c spi.c can.c mcp2515.c
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes
 
@@ -20,14 +19,16 @@ CC := avr-gcc
 CFLAGS := -O -std=c11 -mmcu=$(TARGET_CPU)
 
 OBJECT_FILES = $(SOURCE_FILES:%.c=$(BUILD_DIR)/%.o)
-SRC := $(SOURCE_FILES:%.c=$(SRC_DIR)/%.c)
+#SRC := $(SOURCE_FILES:%.c=$(SRC_DIR)/%.c)
+
+VPATH := src ../lib/src
 
 .DEFAULT_GOAL := $(BUILD_DIR)/main.hex
 
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
 
-$(BUILD_DIR)/%.o : $(SRC_DIR)/%.c | $(BUILD_DIR)
+$(BUILD_DIR)/%.o : %.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/main.hex: $(OBJECT_FILES) | $(BUILD_DIR)
