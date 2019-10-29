@@ -5,6 +5,7 @@
 
 
 #ifdef COMPUTER
+void clear_term(void);
 void pong_print_game(void);
 #endif
 

@@ -3,7 +3,7 @@
 
 
 #ifdef COMPUTER
-void _clear_term(void) {
+void clear_term(void) {
     printf("\033[0;0H\033[2J");
 }
 
