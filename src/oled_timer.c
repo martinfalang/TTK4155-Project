@@ -2,7 +2,7 @@
 
 #include "defines.h"
 
-#include "timer.h"
+#include "oled_timer.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
