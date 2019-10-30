@@ -6,8 +6,8 @@
 #include <avr/interrupt.h>
 #include <stdio.h>
 
-#define ADC_THRESHOLD       200
-#define ADC_NUM_SAMPLES     3
+#define ADC_THRESHOLD               200
+#define ADC_CONSECUTIVE_THRESHOLD   3
 
 static volatile bool conversion_complete = false;
 static bool beam_broken = false;
@@ -49,8 +49,8 @@ bool ir_beam_broken(void) {
 
         conversion_complete = false;
 
-        if (ADC <= ADC_THRESHOLD) {
-            if (++num_samples >= ADC_NUM_SAMPLES) {
+        if (ADC <= ADC_THRESHOLD        ) {
+            if (++num_samples >= ADC_CONSECUTIVE_THRESHOLD) {
                 beam_broken = true;
             }
         }
