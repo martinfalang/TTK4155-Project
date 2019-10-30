@@ -12,8 +12,9 @@
 // See docs/schematics/arduino-mega2560_r3-sch.pdf for schematics
 #define PWM_PIN PB5 // OC1A
 
-#define PWM_LOWER_OCR_LIM 55  // Lower limit: 55, gives 0.9 ms
-#define PWM_UPPER_OCR_LIM 128 // Upper limit: 128 gives 2.1 ms
+#define PWM_OFFSET -7                 // To correct for discrepancies
+#define PWM_LOWER_OCR_LIM 55 + PWM_OFFSET  // Lower limit: 55, gives 0.9 ms
+#define PWM_UPPER_OCR_LIM 128 + PWM_OFFSET // Upper limit: 128 gives 2.1 ms
 
 // Degrees comple
 #define RIGHT_SERVO_DEGS_LIM 0 // TODO - update based on actual values
@@ -44,7 +45,7 @@
 //     {
 //         dx = 1;
 //     }
-    
+
 //     degrees += dx;
 
 //     pwm_set_duty_cycle(degrees);
@@ -81,12 +82,21 @@ void pwm_set_duty_cycle(int16_t degrees)
     // Convert degrees to number of counter ticks
     uint8_t ticks = PWM_LOWER_OCR_LIM + degrees * (PWM_UPPER_OCR_LIM - PWM_LOWER_OCR_LIM) / (LEFT_SERVO_DEGS_LIM - RIGHT_SERVO_DEGS_LIM);
 
-    // Saturate the output if it is outside limits
-    if (ticks > PWM_UPPER_OCR_LIM)
-        ticks = PWM_UPPER_OCR_LIM;
+    // // Saturate the output if it is outside limits
+    // if (ticks > PWM_UPPER_OCR_LIM)
+    //     ticks = PWM_UPPER_OCR_LIM;
 
-    if (ticks < PWM_LOWER_OCR_LIM)
-        ticks = PWM_LOWER_OCR_LIM;
+    // if (ticks < PWM_LOWER_OCR_LIM)
+    //     ticks = PWM_LOWER_OCR_LIM;
 
-    OCR1A = ticks;
+    // OCR1A = ticks;
+
+    if (PWM_LOWER_OCR_LIM <= ticks <= PWM_UPPER_OCR_LIM)
+        OCR1A = ticks;
+       
+    // ticks = PWM_UPPER_OCR_LIM;
+
+    // if (ticks < PWM_LOWER_OCR_LIM)
+    //     ticks = PWM_LOWER_OCR_LIM;
+
 }
