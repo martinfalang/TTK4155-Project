@@ -3,7 +3,7 @@
 #define DEFINES_H
 
 // Debug - set this to 1 to allow test functions
-#define DEBUG 0
+#define DEBUG 1
 
 // Global CPU frequency
 #if defined (__AVR_ATmega162__)

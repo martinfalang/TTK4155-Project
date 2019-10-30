@@ -3,6 +3,7 @@
 
 #include "adc.h"
 #include <avr/io.h>
+#include <stdint.h>
 
 #define JOY_X_CH ADC_CH1
 #define JOY_Y_CH ADC_CH2
@@ -14,8 +15,8 @@
 #define THRESHOLD_RIGHT 90
 
 typedef struct pos {
-    int x;
-    int y;
+    uint8_t x;
+    uint8_t y;
 } pos_t;
 
 typedef enum joy_btn_dir {

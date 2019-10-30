@@ -16,21 +16,20 @@
 int main(void) {
     uart_init();
 
-    // //spi_init();
-    // can_init(MODE_NORMAL);
-    ir_init();
+    can_init(MODE_NORMAL);
     printf("All inits ran successfully!\n");
+    // ir_init();
 
     while (1) {
-        ir_test();
-        // const can_msg_t *recv_msg;
+        // ir_test();
+        const can_msg_t *joy_recv_msg;
 
-        // if (can_new_msg()) {
-        //     recv_msg = can_get_recv_msg();
-        //     printf("\n\nRecv:\n");
-        //     can_print_msg(recv_msg);
-        //     can_send(recv_msg);
-        // }
+        if (can_new_msg()) {
+            joy_recv_msg = can_get_recv_msg();
+            printf("\n\nRecv:\n");
+            printf("Joystick dir: %i\n", joy_recv_msg->data[1]);
+            printf("Joystick X pos: %i\tJoystick Y pos: %i\n", joy_recv_msg->data[1], joy_recv_msg->data[2]);
+        }
         _delay_ms(10);
         
     }
