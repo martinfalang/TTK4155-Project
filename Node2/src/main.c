@@ -10,24 +10,28 @@
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/mcp2515_defines.h"
 
+#include "ir.h"
+
 
 int main(void) {
     uart_init();
 
-    //spi_init();
-    can_init(MODE_NORMAL);
-
+    // //spi_init();
+    // can_init(MODE_NORMAL);
+    ir_init();
     printf("All inits ran successfully!\n");
 
     while (1) {
-        const can_msg_t *recv_msg;
+        ir_test();
+        // const can_msg_t *recv_msg;
 
-        if (can_new_msg()) {
-            recv_msg = can_get_recv_msg();
-            printf("\n\nRecv:\n");
-            can_print_msg(recv_msg);
-            can_send(recv_msg);
-        }
-        // _delay_ms(1);
+        // if (can_new_msg()) {
+        //     recv_msg = can_get_recv_msg();
+        //     printf("\n\nRecv:\n");
+        //     can_print_msg(recv_msg);
+        //     can_send(recv_msg);
+        // }
+        _delay_ms(10);
+        
     }
 }
