@@ -4,10 +4,11 @@
 #include <stdbool.h>
 
 
-#ifdef COMPUTER
-void clear_term(void);
-void pong_print_game(void);
-#endif
+#define PONG_BOARD_WIDTH  128
+#define PONG_BOARD_HEIGHT 64
+
+#define PONG_PADDLE_WIDTH 2
+#define PONG_PADDLE_EDGE_PADDING 1
 
 
 typedef struct pong_object {
@@ -19,25 +20,16 @@ typedef struct pong_object {
     int diry;  // direction of travel in y direction
 } pong_object_t;
 
-typedef pong_object_t pong_ball_t;
-typedef pong_object_t pong_paddle_t;
 
-/**
- * @brief Check collision (i.e. overlap) between two pong objects
- * 
- * @param obj1 Object 1
- * @param obj2 Object 2
- * @return true If they overlap/have collidied
- * @return false If they don't overlap/haven't collided
- */
-bool pong_check_collision(pong_object_t obj1, pong_object_t obj2);
+void pong_init(int ball_width, int ball_height, int paddle_height);
+void pong_play_game(void);
 
-/**
- * @brief Update all game objects' position
- * 
- * @param objarr 
- */
-void pong_update_objects_position(pong_object_t[] objarr);
+void pong_print_obj_to_board(const pong_object_t *obj);
+void pong_print_objects_to_board(const pong_object_t ** objarr);
+void pong_print_game(void);
+
+bool pong_check_collision(const pong_object_t *obj1, const pong_object_t *obj2);
+void pong_update_objects_position(pong_object_t ** objarr);
 
 
 #endif  // PONG_H
