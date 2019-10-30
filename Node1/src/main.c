@@ -54,15 +54,17 @@ int main(void)
         _delay_ms(1000);
         heartbeat();
 #if DEBUG
-        // can_loopback_test();
-        const can_msg_t *recv;
-        if (can_new_msg()) {
-            recv = can_get_recv_msg();
-            printf("\n\nRecv:\n");
-            can_print_msg(recv);
-            printf("\n");
-        }
-        can_test_node_transmission();
+        // // can_loopback_test();
+        // const can_msg_t *recv;
+        // if (can_new_msg()) {
+        //     recv = can_get_recv_msg();
+        //     printf("\n\nRecv:\n");
+        //     can_print_msg(recv);
+        //     printf("\n");
+        // }
+        // can_test_node_transmission();
+        joystick_test();
+        touch_test();
 #endif // DEBUG
     } 
 }
