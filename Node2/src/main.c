@@ -22,15 +22,18 @@ int main(void) {
 
     while (1) {
         // ir_test();
-        const can_msg_t *joy_recv_msg;
+        // const can_msg_t *joy_recv_msg;
 
-        if (can_new_msg()) {
-            joy_recv_msg = can_get_recv_msg();
-            printf("\n\nRecv:\n");
-            printf("Joystick dir: %i\n", joy_recv_msg->data[1]);
-            printf("Joystick X pos: %i\tJoystick Y pos: %i\n", joy_recv_msg->data[1], joy_recv_msg->data[2]);
-        }
-        _delay_ms(10);
+        // if (can_new_msg()) {
+        //     joy_recv_msg = can_get_recv_msg();
+        //     printf("\n\nRecv:\n");
+        //     printf("Joystick dir: %i\n", joy_recv_msg->data[1]);
+        //     printf("Joystick X pos: %i\tJoystick Y pos: %i\n", joy_recv_msg->data[1], joy_recv_msg->data[2]);
+        // }
+
+        printf("Loop\n");
+
+        _delay_ms(100);
         
     }
 }

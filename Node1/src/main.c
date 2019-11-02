@@ -49,19 +49,19 @@ int main(void)
     pos_t joystick_pos;
 
     while(1) {
-        _delay_ms(10);
+        _delay_ms(200); // _delay_ms(10);
         heartbeat();
         joystick_dir = joystick_get_direction();
         joystick_pos = joystick_get_position();
 
-        can_msg_t joy_packet = {
-            .sid = 0,
-            .length = 3,
-            .data[0] = joystick_dir,
-            .data[1] = joystick_pos.x,
-            .data[2] = joystick_pos.y,
-        };
-        can_send(&joy_packet);
+        // can_msg_t joy_packet = {
+        //     .sid = 0,
+        //     .length = 3,
+        //     .data[0] = joystick_dir,
+        //     .data[1] = joystick_pos.x,
+        //     .data[2] = joystick_pos.y,
+        // };
+        // can_send(&joy_packet);
 #if DEBUG
         // // can_loopback_test();
         // const can_msg_t *recv;
@@ -72,8 +72,9 @@ int main(void)
         //     printf("\n");
         // }
         // can_test_node_transmission();
-        // joystick_test();
+        joystick_test();
         // touch_test();
+        // printf("\n");
 #endif // DEBUG
     } 
 }
