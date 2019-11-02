@@ -16,7 +16,7 @@
 int main(void) {
     uart_init();
 
-    can_init(MODE_NORMAL);
+    // can_init(MODE_NORMAL);
     printf("All inits ran successfully!\n");
     // ir_init();
 
