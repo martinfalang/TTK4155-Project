@@ -27,7 +27,7 @@ int main(void) {
     printf("All inits ran successfully!\n");
 
     _delay_ms(100);
-    solenoid_give_pulse();
+    // solenoid_give_pulse();
 
     while (1) {
         // ir_test();
@@ -40,10 +40,6 @@ int main(void) {
             printf("Joystick X pos: %i\tJoystick Y pos: %i\n", recv_msg->data[1], recv_msg->data[2]);
             printf("Touch btns:\tLeft: %i\tRight: %i\n", recv_msg->data[3], recv_msg->data[4]);
             printf("Touch sliders:\tLeft: %i\tRight: %i\n", recv_msg->data[5], recv_msg->data[6]);
-        }
-
-        // _delay_ms(100);
-        
-        _delay_ms(10);
+        }        
     }
 }

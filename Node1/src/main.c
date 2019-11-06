@@ -35,14 +35,13 @@ void heartbeat()
 
 int main(void)
 {
+    // Init modules
     heartbeat_init();
     uart_init(); // So we can communicate with the terminal connected via JTAG
     xmem_init();
     adc_init();
     joystick_init();
     touch_init();
-
-
 
     can_init(MODE_NORMAL);
     
@@ -82,40 +81,7 @@ int main(void)
         printf("\n\nSent message:\n");
         can_print_msg(&msg);
 
-        // const can_msg_t *recv_msg;
-
-
-        // if (can_new_msg()) {
-        //     recv_msg = can_get_recv_msg();
-        //     printf("\n\nReceived:\n");
-        //     can_print_msg(recv_msg);
-        // }
-        // printf("\n\nSent:\n");
-        // joystick_test();
-        // if (oled_menu_should_update())
-        // {
-        //     printf("Oled menu should update\n");
-        //     oled_menu_update(OLED_BUFFER_BASE);
-        // }
         oled_menu_update(OLED_BUFFER_BASE);
         _delay_ms(50);
-
-        // oled_menu_update_if_needed();
-        
-
-#if DEBUG
-        // // can_loopback_test();
-        // const can_msg_t *recv;
-        // if (can_new_msg()) {
-        //     recv = can_get_recv_msg();
-        //     printf("\n\nRecv:\n");
-        //     can_print_msg(recv);
-        //     printf("\n");
-        // }
-        // can_test_node_transmission();
-        // joystick_test();
-        // touch_test();
-        // printf("\n");
-#endif // DEBUG
     } 
 }

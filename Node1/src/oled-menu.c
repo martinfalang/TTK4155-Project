@@ -200,6 +200,7 @@ void oled_menu_update(uint8_t *buffer)
     // Updates the menu based on the input of prev_dir.
     // Should be called when menu_needs_update is true
     prev_dir = joystick_get_direction();
+    
     switch (prev_dir)
     {
     case RIGHT:
