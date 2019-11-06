@@ -14,6 +14,8 @@ void mcp2515_init(unsigned char mode) {
 
     mcp2515_reset();
 
+    _delay_ms(10);
+    
 #if DEBUG
     unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
     unsigned char cur_mode = (val & MODE_MASK);
