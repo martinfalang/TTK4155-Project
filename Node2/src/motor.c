@@ -36,7 +36,7 @@ void motor_set_speed(int speed) {
         speed *= -1;
     }
     else {
-        motor_set_speed(!neg_dir);
+        motor_set_dir(!neg_dir);
     }
     
     unsigned char level = speed * 2.55f;
