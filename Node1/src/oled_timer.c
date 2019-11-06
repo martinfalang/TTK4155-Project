@@ -3,7 +3,7 @@
 #include <avr/interrupt.h>
 
 #include "oled-menu.h"
-#include "timer.h"
+#include "oled_timer.h"
 
 void timer_init(void) {
     // Initializes a timer that raises an interrupt 

@@ -148,8 +148,6 @@ void oled_menu_init_menus(void)
     song_menu.back_action = oled_menu_create_menu_ptr_action(&main_menu);
     song_menu.selected_idx = 0;
 
-    // oled_menu_el_t *song_menu_elements = malloc(song_menu->num_elements * sizeof(oled_menu_el_t));
-
     song_menu_elements[0] = oled_menu_create_element("Song 1 goes here", oled_menu_create_func_ptr_action(&toggle_led));
     song_menu_elements[1] = oled_menu_create_element("Song 2 goes here", oled_menu_get_empty_action());
     song_menu.elements = song_menu_elements;

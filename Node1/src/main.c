@@ -23,7 +23,7 @@
 #include "../../lib/inc/can.h"
 #include "oled.h"
 #include "oled-menu.h"
-#include "timer.h"
+#include "oled_timer.h"
 #include "oled-buffer.h"
 
 void heartbeat_init() {
