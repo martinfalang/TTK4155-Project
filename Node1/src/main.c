@@ -23,6 +23,7 @@
 #include "../../lib/inc/can.h"
 #include "oled.h"
 #include "oled-menu.h"
+#include "timer.h"
 
 void heartbeat_init() {
     DDRE |= 1 << DDE0;
@@ -42,11 +43,12 @@ int main(void)
     adc_init();
     joystick_init();
     touch_init();
+    timer_init();
 
     can_init(MODE_NORMAL);
     
     oled_init();
-    oled_menu_init(OLED_BUFFER_BASE);
+    oled_menu_init();
 
     printf("All inits ran successfully!\n");
 
@@ -58,30 +60,36 @@ int main(void)
     can_msg_t msg;
 
     while(1) {
-        // _delay_ms(200);
-        heartbeat();
-        joystick_dir = joystick_get_direction();
-        joystick_pos = joystick_get_position();
         
-        touch_btns = touch_read_btns();
-        touch_sliders = touch_read_sliders();
+        if (timer_get_heartbeat_timeout()) {
+            heartbeat();
+        }
 
-        msg.sid = 0;
-        msg.length = 7;
-        msg.data[0] = joystick_dir;
-        msg.data[1] = joystick_pos.x;
-        msg.data[2] = joystick_pos.y;
-        msg.data[3] = touch_btns.left;
-        msg.data[4] = touch_btns.right;
-        msg.data[5] = touch_sliders.left;
-        msg.data[6] = touch_sliders.right;
+        if (timer_get_can_timeout()) {
 
-        can_send(&msg);
+            joystick_dir = joystick_get_direction();
+            joystick_pos = joystick_get_position();
+            
+            touch_btns = touch_read_btns();
+            touch_sliders = touch_read_sliders();
 
-        printf("\n\nSent message:\n");
-        can_print_msg(&msg);
+            msg.sid = 0;
+            msg.length = 7;
+            msg.data[0] = joystick_dir;
+            msg.data[1] = joystick_pos.x;
+            msg.data[2] = joystick_pos.y;
+            msg.data[3] = touch_btns.left;
+            msg.data[4] = touch_btns.right;
+            msg.data[5] = touch_sliders.left;
+            msg.data[6] = touch_sliders.right;
+            can_send(&msg);
+            
+            printf("\n\nSent message:\n");
+            can_print_msg(&msg);
+        }
 
-        oled_menu_update(OLED_BUFFER_BASE);
-        _delay_ms(50);
+        if (timer_get_oled_timeout()) {
+            oled_menu_update();
+        }
     } 
 }

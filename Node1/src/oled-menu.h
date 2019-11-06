@@ -41,9 +41,9 @@ void oled_menu_perform_action(oled_menu_action_t action);
 void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer);
 
 bool oled_menu_should_update();
-void oled_menu_init(uint8_t * buffer);
+void oled_menu_init(void);
 void oled_menu_check_if_needs_update(void);
-void oled_menu_update(uint8_t *buffer);
+void oled_menu_update(void);
 
 
 #endif /* OLED_MENU_H */
