@@ -24,7 +24,7 @@ void oled_buffer_clear_screen(uint8_t *buffer);
 // Text functions
 enum TEXT_SIZE
 {
-    SMALL = 4,
+    // SMALL = 4,
     MEDIUM = 5,
     LARGE = 8
 };

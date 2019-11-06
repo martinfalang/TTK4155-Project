@@ -125,18 +125,14 @@ void oled_buffer_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t c
 
     const unsigned char *chosen_font;
 
-    if (size == SMALL)
+    if (size == MEDIUM)
     {
-        chosen_font = font4;
-    }
-    else if (size == MEDIUM)
-    {
-        chosen_font = font5;
+        chosen_font = (char *) font5;
     }
     else
     {
         // Large, default value
-        chosen_font = font8;
+        chosen_font = (char *) font8;
     }
 
     for (uint8_t i = 0; i < (uint8_t)size; ++i)

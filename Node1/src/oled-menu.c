@@ -33,7 +33,7 @@ bool oled_menu_should_update()
 
 void toggle_led(void)
 {
-    PORTB ^= 1 << PB0;
+    PORTE ^= 1 << PE0;
 }
 
 void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)

@@ -12,6 +12,8 @@
 // We have this meta-programming to avoid problems here.
 #include <avr/pgmspace.h>
 
+#define COMPILE_SMALL 0
+
 // Font 8x8 - Large
 const unsigned char PROGMEM font8[95][8] = {
 	{0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000}, //
@@ -210,6 +212,7 @@ const unsigned char PROGMEM font5[95][5] = {
 	{0b00000010, 0b00000001, 0b00000011, 0b00000010, 0b00000001}, // ~
 };
 
+#if COMPILE_SMALL
 // Font 4x6 - Small
 const unsigned char PROGMEM font4[95][4] = {
 	{0b00000000, 0b00000000, 0b00000000, 0b00000000}, //
@@ -309,6 +312,7 @@ const unsigned char PROGMEM font4[95][4] = {
 	{0b00001000, 0b00000100, 0b00001000, 0b00000100}, // ~
 };
 
+#endif // COMPILE_SMALL
 #else // COMPILE_FOR_TESTS defined, compiling for automated testing
 
 const unsigned char font8[95][8] = {

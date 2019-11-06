@@ -46,7 +46,6 @@ int main(void)
 
 
     oled_init();
-    oled_buffer_clear_screen(OLED_BUFFER_BASE);
 
     can_init(MODE_NORMAL);
     
@@ -84,8 +83,6 @@ int main(void)
         can_send(&msg);
         // printf("\n\nSent:\n");
         // can_print_msg(&msg);
-        
-        heartbeat();
         // joystick_test();
         if (oled_menu_should_update())
         {

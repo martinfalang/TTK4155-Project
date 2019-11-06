@@ -3,7 +3,11 @@
 #define DEFINES_H
 
 // Debug - set this to 1 to allow test functions
-#define DEBUG 0
+#define DEBUG                   1
+#define COMPILE_SRAM_TEST       0
+#define COMPILE_TOUCH_TEST      0
+#define COMPILE_JOYSTICK_TEST   0
+#define COMPILE_CAN_TEST        0
 
 // Global CPU frequency
 #if defined (__AVR_ATmega162__)
@@ -39,7 +43,7 @@
 #define ADC_BASE    (uint8_t*)0x1400
 #define ADC_SIZE    1024
 #define SRAM_BASE   (uint8_t*)0x1800
-#define OLED_BUFFER_BASE (SRAM_BASE + 1024)
+#define OLED_BUFFER_BASE (SRAM_BASE)
 #define SRAM_SIZE   2048
 
 // OLED

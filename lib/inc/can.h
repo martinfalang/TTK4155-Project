@@ -23,10 +23,10 @@ const can_msg_t *can_get_recv_msg(void);
 void can_send(const can_msg_t* p_msg);
 
 // Test functions
-#if DEBUG
+#if COMPILE_CAN_TEST
 void can_loopback_test();
 void can_test_node_transmission(void);
 void can_print_msg(const can_msg_t* msg);
-#endif // DEBUG
+#endif // COMPILE_CAN_TEST
 
 #endif // CAN_H

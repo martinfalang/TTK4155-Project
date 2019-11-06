@@ -92,14 +92,14 @@ ISR(CAN_INTERRUPT_VEC) {
 }
 
 // These functions are used for testing
-#if DEBUG
+#if COMPILE_CAN_TEST
 
 void can_print_msg(const can_msg_t* msg) {
     printf("ID: 0x%.4X\n", msg->sid);
     printf("Len: %d\n", msg->length);
     for (int i = 0; i < msg->length; ++i) {
         uint8_t d = msg->data[i];
-        printf("Data%X: 0x%.2X\n", i, d);
+        printf("D%X: 0x%.2X\n", i, d);
     }
 }
 
@@ -182,4 +182,4 @@ void can_test_node_transmission(void) {
     can_send(&sendmsg);
 }
 
-#endif // DEBUG
+#endif // COMPILE_CAN_TEST
