@@ -35,14 +35,7 @@ typedef struct oled_menu {
     uint8_t selected_idx; // Index of selected menu element in elements-array
 } oled_menu_t;
 
-void oled_menu_perform_action(oled_menu_action_t action);
-
-// Draws the menu to the buffer
-void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer);
-
-bool oled_menu_should_update();
 void oled_menu_init(void);
-void oled_menu_check_if_needs_update(void);
 void oled_menu_update(void);
 
 

@@ -3,6 +3,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <stdio.h>
 
 static bool timeout = false;
 static unsigned char heartbeat_counter = 0;
@@ -44,11 +45,12 @@ ISR(TIMER2_COMP_vect) {
     // Interrupt service routine for checking joystick if new input has occured
     // s.t. the screen should be updated
     timeout = true;
-    ++can_counter;
-    ++heartbeat_counter;
+    can_counter++;
+    heartbeat_counter++;
 }
 
 bool timer_get_oled_timeout(void) {
+    printf("can_counter: %i hbeat_coutner: %i\n", can_counter, heartbeat_counter);
     return timeout;
 }
 
@@ -60,6 +62,7 @@ bool timer_get_heartbeat_timeout(void) {
     return false;
 }
 bool timer_get_can_timeout(void) {
+
     if (can_counter >= CAN_FREQ) {
         can_counter = 0;
         return true;

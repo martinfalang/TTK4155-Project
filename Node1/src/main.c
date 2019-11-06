@@ -85,7 +85,7 @@ int main(void)
             can_send(&msg);
             
             printf("\n\nSent message:\n");
-            can_print_msg(&msg);
+            // can_print_msg(&msg);
         }
 
         if (timer_get_oled_timeout()) {
