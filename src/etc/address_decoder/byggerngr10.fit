@@ -1,5 +1,0 @@
-$DEVICE         P16V8AS    fit byggerngr10.tt3
-$PINS    7  oled_dc:16   oled_cs:17   adc_cs:18   ram_cs:19   a9:3   a10:2   a11:1   
-
---------------------------------------------------------------
-
