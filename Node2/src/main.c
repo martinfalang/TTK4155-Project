@@ -6,28 +6,17 @@
 #include "../../lib/inc/defines.h"
 #include <util/delay.h>
 
-#include "../../lib/inc/spi.h"
-#include "../../lib/inc/can.h"
-#include "../../lib/inc/mcp2515_defines.h"
+#include "../inc/pid.h"
 
 
 int main(void) {
     uart_init();
-
-    //spi_init();
-    can_init(MODE_NORMAL);
+    
+    pid_t motor_pid;
+    pid_init(&motor_pid, 0, 0, 0, 250);
 
     printf("All inits ran successfully!\n");
 
     while (1) {
-        const can_msg_t *recv_msg;
-
-        if (can_new_msg()) {
-            recv_msg = can_get_recv_msg();
-            printf("\n\nRecv:\n");
-            can_print_msg(recv_msg);
-            can_send(recv_msg);
-        }
-        // _delay_ms(1);
     }
 }
