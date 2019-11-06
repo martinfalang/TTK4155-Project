@@ -11,10 +11,12 @@
 void motor_init(void);
 void motor_enable(int en);
 void motor_set_dir(int dir);
+
 /**
- * @brief Sets speed of motor by setting the duty cycle of the PWM signal
+ * @brief Sets speed of motor. A speed of @c +100 is full speed in one 
+ *        direction, @c -100 is full speed the other direction. 
  * 
- * @param speed Duty cycle from 0 to 100
+ * @param speed Speed from @c -100 to @c 100
  */
 void motor_set_speed(int speed);
 

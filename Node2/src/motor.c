@@ -30,6 +30,15 @@ void motor_set_dir(int dir) {
 
 
 void motor_set_speed(int speed) {
+    static const int neg_dir = 1;  // the direction of travel when speed is negative
+    if (speed < 0) {
+        motor_set_dir(neg_dir);
+        speed *= -1;
+    }
+    else {
+        motor_set_speed(!neg_dir);
+    }
+    
     unsigned char level = speed * 2.55f;
     dac_write(level, 0);
 }
