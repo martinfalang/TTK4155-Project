@@ -1,4 +1,4 @@
-#include "../inc/pid.h"
+#include "pid.h"
 #include <avr/interrupt.h>
 #include "../../lib/inc/defines.h"
 
