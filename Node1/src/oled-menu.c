@@ -26,7 +26,7 @@ static oled_menu_el_t song_menu_elements[NUM_SONG_MENU_ELEMENTS];
 static joy_btn_dir_t prev_dir; // Previous direction
 static bool menu_needs_update;
 
-void oled_timer_init(void);
+void _timer_init(void);
 
 bool oled_menu_should_update()
 {
@@ -234,7 +234,7 @@ void oled_menu_update(uint8_t *buffer)
     oled_draw_screen(buffer);
 }
 
-void oled_timer_init(void) {
+void _timer_init(void) {
     // Initializes a timer that raises an interrupt 
     // setting a flag telling if the screen should be updated
 
