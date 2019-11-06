@@ -13,6 +13,8 @@ void mcp2515_init(unsigned char mode) {
     spi_init();
 
     mcp2515_reset();
+
+    _delay_ms(10);
     
 #if DEBUG
     unsigned char val = mcp2515_read_byte(MCP_CANSTAT);

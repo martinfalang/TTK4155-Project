@@ -79,6 +79,9 @@ int main(void)
 
         can_send(&msg);
 
+        printf("\n\nSent message:\n");
+        can_print_msg(&msg);
+
         // const can_msg_t *recv_msg;
 
 
@@ -94,7 +97,7 @@ int main(void)
         //     printf("Oled menu should update\n");
         //     oled_menu_update(OLED_BUFFER_BASE);
         // }
-        _delay_ms(100);
+        _delay_ms(50);
 
         // oled_menu_update_if_needed();
         
