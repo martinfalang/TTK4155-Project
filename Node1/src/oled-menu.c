@@ -178,7 +178,7 @@ void oled_menu_init(uint8_t *buffer)
     draw_oled_menu(p_current_menu, buffer);
     oled_draw_screen(buffer);
     
-    oled_timer_init();
+    _timer_init();
 }
 
 void oled_menu_check_if_needs_update(void)

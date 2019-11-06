@@ -33,6 +33,9 @@ int main(void) {
             printf("Touch btns:\tLeft: %i\tRight: %i\n", recv_msg->data[3], recv_msg->data[4]);
             printf("Touch sliders:\tLeft: %i\tRight: %i\n", recv_msg->data[5], recv_msg->data[6]);
         }
+        else {
+            printf("Didn't get anything\n");
+        }
 
         _delay_ms(100);
         

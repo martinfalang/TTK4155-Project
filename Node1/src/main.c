@@ -23,7 +23,6 @@
 #include "../../lib/inc/can.h"
 #include "oled.h"
 #include "oled-menu.h"
-#include "oled_timer.h"
 
 void heartbeat_init() {
     DDRE |= 1 << DDE0;
@@ -44,12 +43,11 @@ int main(void)
     touch_init();
 
 
-    oled_init();
 
     can_init(MODE_NORMAL);
     
-    oled_menu_init(OLED_BUFFER_BASE);
-    oled_timer_init();
+    // oled_init();
+    // oled_menu_init(OLED_BUFFER_BASE);
 
     printf("All inits ran successfully!\n");
 
@@ -80,14 +78,22 @@ int main(void)
         msg.data[6] = touch_sliders.right;
 
         can_send(&msg);
+
+        // const can_msg_t *recv_msg;
+
+
+        // if (can_new_msg()) {
+        //     recv_msg = can_get_recv_msg();
+        //     printf("\n\nReceived:\n");
+        //     can_print_msg(recv_msg);
+        // }
         // printf("\n\nSent:\n");
-        // can_print_msg(&msg);
         // joystick_test();
-        if (oled_menu_should_update())
-        {
-            printf("Oled menu should update\n");
-            oled_menu_update(OLED_BUFFER_BASE);
-        }
+        // if (oled_menu_should_update())
+        // {
+        //     printf("Oled menu should update\n");
+        //     oled_menu_update(OLED_BUFFER_BASE);
+        // }
         _delay_ms(100);
 
         // oled_menu_update_if_needed();

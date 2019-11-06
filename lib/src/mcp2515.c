@@ -13,7 +13,7 @@ void mcp2515_init(unsigned char mode) {
     spi_init();
 
     mcp2515_reset();
-
+    
 #if DEBUG
     unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
     unsigned char cur_mode = (val & MODE_MASK);
