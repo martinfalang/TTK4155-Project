@@ -8,6 +8,10 @@ void spi_init(void) {
     
     // Set MOSI, SCK and SS as output 
     DDR_SPI |= (1 << DD_MOSI) | (1 << DD_SCK) | (1 << DD_SS);
+
+#if defined(__AVR_ATmega2560__)
+    DDR_SPI |= (1 << PB0);
+#endif
     
     // This must be done on the arduino because of the routing (maybe)
     // of wires through the I/O shield
