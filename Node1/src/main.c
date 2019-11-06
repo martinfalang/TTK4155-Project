@@ -21,6 +21,8 @@
 #include "touch.h"
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
+#include "oled.h"
+#include "oled-menu.h"
 
 void heartbeat_init() {
     DDRE |= 1 << DDE0;
@@ -42,9 +44,8 @@ int main(void)
 
     oled_init();
     oled_menu_init(OLED_BUFFER_BASE);
-    
 
-    can_init(MODE_NORMAL);
+    // can_init(MODE_NORMAL);
     
 
     printf("All inits ran successfully!\n");
@@ -55,30 +56,32 @@ int main(void)
     touch_slider_t touch_sliders;
 
     while(1) {
-        _delay_ms(200);
+        // _delay_ms(200);
         heartbeat();
-        joystick_dir = joystick_get_direction();
-        joystick_pos = joystick_get_position();
+        // joystick_dir = joystick_get_direction();
+        // joystick_pos = joystick_get_position();
         
-        touch_btns = touch_read_btns();
-        touch_sliders = touch_read_sliders();
+        // touch_btns = touch_read_btns();
+        // touch_sliders = touch_read_sliders();
 
-        can_msg_t msg = {
-            .sid = 0,
-            .length = 7,
-            .data[0] = joystick_dir,
-            .data[1] = joystick_pos.x,
-            .data[2] = joystick_pos.y,
-            .data[3] = touch_btns.left,
-            .data[4] = touch_btns.right,
-            .data[5] = touch_sliders.left,
-            .data[6] = touch_sliders.right
-        };
+        // can_msg_t msg = {
+        //     .sid = 0,
+        //     .length = 7,
+        //     .data[0] = joystick_dir,
+        //     .data[1] = joystick_pos.x,
+        //     .data[2] = joystick_pos.y,
+        //     .data[3] = touch_btns.left,
+        //     .data[4] = touch_btns.right,
+        //     .data[5] = touch_sliders.left,
+        //     .data[6] = touch_sliders.right
+        // };
 
-        can_send(&msg);
-        printf("\n\nSent:\n");
-        can_print_msg(&msg);
+        // can_send(&msg);
+        // printf("\n\nSent:\n");
+        // can_print_msg(&msg);
 
+        oled_menu_update_if_needed();
+        
 
 #if DEBUG
         // // can_loopback_test();

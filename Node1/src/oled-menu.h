@@ -53,4 +53,6 @@ void oled_menu_check_if_needs_update(void);
 // Project specific
 void oled_menu_init(uint8_t * buffer);
 
+void oled_menu_update_if_needed(void);
+
 #endif /* OLED_MENU_H */
