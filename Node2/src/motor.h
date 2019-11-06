@@ -4,22 +4,8 @@
 #include <avr/io.h>
 
 // MJ1
-#define OE_ PH5  // active low indicated with suffix _
-#define SEL PH3
 #define DIR PH1
-#define RST PH6
 #define EN  PH4
-
-// MJ2
-#define DO0 PK0
-#define DO1 PK1
-#define DO2 PK2
-#define DO3 PK3
-#define DO4 PK4
-#define DO5 PK5
-#define DO6 PK6
-#define DO7 PK7
-
 
 
 void motor_init(void);

@@ -3,8 +3,10 @@
 
 
 void motor_init(void) {
-    DDRH |= (1 << OE_) | (1 << SEL) | (1 << DIR) | (1 << RST) | (1 << EN);
     dac_init();
+
+    // control pins
+    DDRH |= (1 << DIR) | (1 << EN);
 
     motor_enable(1);
     motor_set_speed(0);
