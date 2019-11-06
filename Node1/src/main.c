@@ -46,8 +46,8 @@ int main(void)
 
     can_init(MODE_NORMAL);
     
-    // oled_init();
-    // oled_menu_init(OLED_BUFFER_BASE);
+    oled_init();
+    oled_menu_init(OLED_BUFFER_BASE);
 
     printf("All inits ran successfully!\n");
 
@@ -97,6 +97,7 @@ int main(void)
         //     printf("Oled menu should update\n");
         //     oled_menu_update(OLED_BUFFER_BASE);
         // }
+        oled_menu_update(OLED_BUFFER_BASE);
         _delay_ms(50);
 
         // oled_menu_update_if_needed();

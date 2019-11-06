@@ -178,7 +178,9 @@ void oled_menu_init(uint8_t *buffer)
     draw_oled_menu(p_current_menu, buffer);
     oled_draw_screen(buffer);
     
-    _timer_init();
+    // The timer prevented can from working. Stopped 
+    // the entire program
+    // _timer_init();
 }
 
 void oled_menu_check_if_needs_update(void)
@@ -197,6 +199,7 @@ void oled_menu_update(uint8_t *buffer)
 {
     // Updates the menu based on the input of prev_dir.
     // Should be called when menu_needs_update is true
+    prev_dir = joystick_get_direction();
     switch (prev_dir)
     {
     case RIGHT:
@@ -234,7 +237,7 @@ void oled_menu_update(uint8_t *buffer)
     oled_draw_screen(buffer);
 }
 
-void _timer_init(void) {
+/* void _timer_init(void) {
     // Initializes a timer that raises an interrupt 
     // setting a flag telling if the screen should be updated
 
@@ -264,10 +267,10 @@ void _timer_init(void) {
 
     // Enable interrupts globally
     SREG |= (1 << SREG_I);
-}
-
+} */
+/* 
 ISR(TIMER2_COMP_vect) {
     // Interrupt service routine for checking joystick if new input has occured
     // s.t. the screen should be updated
     menu_needs_update = true;
-}
+} */
