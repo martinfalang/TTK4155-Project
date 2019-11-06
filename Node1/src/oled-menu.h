@@ -46,6 +46,4 @@ void oled_menu_check_if_needs_update(void);
 void oled_menu_update(uint8_t *buffer);
 
 
-void oled_menu_update_if_needed(void);
-
 #endif /* OLED_MENU_H */
