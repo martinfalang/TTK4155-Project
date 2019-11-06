@@ -9,6 +9,12 @@ void spi_init(void) {
     // Set MOSI, SCK and SS as output 
     DDR_SPI |= (1 << DD_MOSI) | (1 << DD_SCK) | (1 << DD_SS);
     
+    // This must be done on the arduino because of the routing (maybe)
+    // of wires through the I/O shield
+#if defined (__AVR_ATmega2560__)
+    DDR_SPI |= (1 << PB0);
+#endif
+
     // Set MISO (used SS as input earlier)
     DDR_SPI &= ~(1 << DD_MISO);// | (1 << DD_SS));
 
@@ -36,6 +42,7 @@ void spi_write_byte(unsigned char data) {
 
     // Wait for transmission to complete
     while(!(SPSR & (1 << SPIF)));
+
 }
 
 unsigned char spi_read_byte(void) {

@@ -10,9 +10,8 @@
 #endif // DEBUG
 
 void mcp2515_init(unsigned char mode) {
-
     spi_init();
-    
+
     mcp2515_reset();
 
 #if DEBUG
@@ -23,7 +22,6 @@ void mcp2515_init(unsigned char mode) {
         printf("mcp_init(): Mode not config after reset, mode was: 0x%.2x\n", cur_mode);
     }
 #endif // DEBUG
-
     // Enable interrupts on RX0 buffer
     mcp2515_bit_modify(MCP_CANINTE, MCP_RX0IF, MCP_RX0IF);
 
@@ -53,7 +51,6 @@ void mcp2515_reset() {
 
 unsigned char mcp2515_read_byte(unsigned char address) {
     unsigned char res;
-
     spi_slave_select();
     spi_write_byte(MCP_READ);
     spi_write_byte(address);

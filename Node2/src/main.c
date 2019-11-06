@@ -12,26 +12,27 @@
 
 #include "ir.h"
 
+#include <avr/interrupt.h>
 
 int main(void) {
     uart_init();
 
-    // can_init(MODE_NORMAL);
+    can_init(MODE_NORMAL);
     printf("All inits ran successfully!\n");
     // ir_init();
 
     while (1) {
         // ir_test();
-        // const can_msg_t *joy_recv_msg;
+        const can_msg_t *recv_msg;
 
-        // if (can_new_msg()) {
-        //     joy_recv_msg = can_get_recv_msg();
-        //     printf("\n\nRecv:\n");
-        //     printf("Joystick dir: %i\n", joy_recv_msg->data[1]);
-        //     printf("Joystick X pos: %i\tJoystick Y pos: %i\n", joy_recv_msg->data[1], joy_recv_msg->data[2]);
-        // }
-
-        printf("Loop\n");
+        if (can_new_msg()) {
+            recv_msg = can_get_recv_msg();
+            printf("\n\nRecv:\n");
+            printf("Joystick dir: %i\n", recv_msg->data[0]);
+            printf("Joystick X pos: %i\tJoystick Y pos: %i\n", recv_msg->data[1], recv_msg->data[2]);
+            printf("Touch btns:\tLeft: %i\tRight: %i\n", recv_msg->data[3], recv_msg->data[4]);
+            printf("Touch sliders:\tLeft: %i\tRight: %i\n", recv_msg->data[5], recv_msg->data[6]);
+        }
 
         _delay_ms(100);
         

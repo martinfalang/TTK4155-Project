@@ -47,21 +47,35 @@ int main(void)
 
     joy_btn_dir_t joystick_dir;
     pos_t joystick_pos;
+    touch_btn_t touch_btns;
+    touch_slider_t touch_sliders;
 
     while(1) {
-        _delay_ms(200); // _delay_ms(10);
+        _delay_ms(200);
         heartbeat();
         joystick_dir = joystick_get_direction();
         joystick_pos = joystick_get_position();
+        
+        touch_btns = touch_read_btns();
+        touch_sliders = touch_read_sliders();
 
-        // can_msg_t joy_packet = {
-        //     .sid = 0,
-        //     .length = 3,
-        //     .data[0] = joystick_dir,
-        //     .data[1] = joystick_pos.x,
-        //     .data[2] = joystick_pos.y,
-        // };
-        // can_send(&joy_packet);
+        can_msg_t msg = {
+            .sid = 0,
+            .length = 7,
+            .data[0] = joystick_dir,
+            .data[1] = joystick_pos.x,
+            .data[2] = joystick_pos.y,
+            .data[3] = touch_btns.left,
+            .data[4] = touch_btns.right,
+            .data[5] = touch_sliders.left,
+            .data[6] = touch_sliders.right
+        };
+
+        can_send(&msg);
+        printf("\n\nSent:\n");
+        can_print_msg(&msg);
+
+
 #if DEBUG
         // // can_loopback_test();
         // const can_msg_t *recv;
@@ -72,7 +86,7 @@ int main(void)
         //     printf("\n");
         // }
         // can_test_node_transmission();
-        joystick_test();
+        // joystick_test();
         // touch_test();
         // printf("\n");
 #endif // DEBUG
