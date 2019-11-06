@@ -24,7 +24,6 @@
 #include "oled.h"
 #include "oled-menu.h"
 #include "oled_timer.h"
-#include "oled-buffer.h"
 
 void heartbeat_init() {
     DDRE |= 1 << DDE0;
@@ -50,7 +49,7 @@ int main(void)
     can_init(MODE_NORMAL);
     
     oled_menu_init(OLED_BUFFER_BASE);
-    timer_init();
+    oled_timer_init();
 
     printf("All inits ran successfully!\n");
 
@@ -58,6 +57,8 @@ int main(void)
     pos_t joystick_pos;
     touch_btn_t touch_btns;
     touch_slider_t touch_sliders;
+
+    can_msg_t msg;
 
     while(1) {
         // _delay_ms(200);
@@ -68,17 +69,15 @@ int main(void)
         touch_btns = touch_read_btns();
         touch_sliders = touch_read_sliders();
 
-        can_msg_t msg = {
-            .sid = 0,
-            .length = 7,
-            .data[0] = joystick_dir,
-            .data[1] = joystick_pos.x,
-            .data[2] = joystick_pos.y,
-            .data[3] = touch_btns.left,
-            .data[4] = touch_btns.right,
-            .data[5] = touch_sliders.left,
-            .data[6] = touch_sliders.right
-        };
+        msg.sid = 0;
+        msg.length = 7;
+        msg.data[0] = joystick_dir;
+        msg.data[1] = joystick_pos.x;
+        msg.data[2] = joystick_pos.y;
+        msg.data[3] = touch_btns.left;
+        msg.data[4] = touch_btns.right;
+        msg.data[5] = touch_sliders.left;
+        msg.data[6] = touch_sliders.right;
 
         can_send(&msg);
         // printf("\n\nSent:\n");
@@ -109,23 +108,4 @@ int main(void)
         // printf("\n");
 #endif // DEBUG
     } 
-    // SRAM_test();
-
-    // spi_init();
-    // _delay_ms(10);
-    //mcp2515_init(MODE_LOOPBACK);
-
-    // can_init(MODE_LOOPBACK);
-
-    // mcp2515_test_write();
-    // mcp2515_test_read();
-    // mcp2515_one_byte_write_test();
-
-    // while (1)
-    // {
-    //     heartbeat();
-    //     //mcp2515_test_can();
-    //     // can_test();
-    //     _delay_ms(1000);
-    // }
 }

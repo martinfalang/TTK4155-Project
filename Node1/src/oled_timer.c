@@ -5,7 +5,7 @@
 #include "oled-menu.h"
 #include "oled_timer.h"
 
-void timer_init(void) {
+/* void oled_timer_init(void) {
     // Initializes a timer that raises an interrupt 
     // setting a flag telling if the screen should be updated
 
@@ -41,4 +41,4 @@ ISR(TIMER2_COMP_vect) {
     // Interrupt service routine for checking joystick if new input has occured
     // s.t. the screen should be updated
     oled_menu_check_if_needs_update();
-}
+} */
