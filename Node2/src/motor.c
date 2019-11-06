@@ -7,6 +7,7 @@ void motor_init(void) {
     dac_init();
 
     motor_enable(1);
+    motor_set_speed(0);
 }
 
 

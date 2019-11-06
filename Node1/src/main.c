@@ -62,6 +62,7 @@ int main(void)
             .data[2] = joystick_pos.y,
         };
         can_send(&joy_packet);
+        can_print_msg(&joy_packet);
 #if DEBUG
         // // can_loopback_test();
         // const can_msg_t *recv;

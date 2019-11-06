@@ -21,16 +21,12 @@ int main(void) {
     can_init(MODE_NORMAL);
     printf("All inits ran successfully!\n");
 
-    motor_set_speed(50);
-
     while (1) {
         const can_msg_t *joy_recv_msg;
 
         if (can_new_msg()) {
             joy_recv_msg = can_get_recv_msg();
             can_print_msg(joy_recv_msg);
-
-
 
             motor_set_speed(joy_recv_msg->data[1]);
         }
