@@ -7,7 +7,7 @@
 
 
 #include "oled-buffer.h"
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 #include "fonts.h"
 
 /*

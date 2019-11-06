@@ -40,6 +40,10 @@ int main(void)
     joystick_init();
     touch_init();
 
+    oled_init();
+    oled_menu_init(OLED_BUFFER_BASE);
+    
+
     can_init(MODE_NORMAL);
     
 

@@ -1,7 +1,7 @@
 #ifndef CAN_H
 #define CAN_H
 
-#include "defines.h"    // for DEBUG
+#include "../../lib/inc/defines.h" // for DEBUG
 
 #include <stdint.h>     // for uint
 #include <stdbool.h>    // for bool

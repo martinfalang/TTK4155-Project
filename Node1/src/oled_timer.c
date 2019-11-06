@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 
-#include "timer.h"
+#include "oled_timer.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>

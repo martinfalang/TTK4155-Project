@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 #include "oled-buffer.h"
 
 #define OLED_PAGE0 0b0
@@ -14,11 +14,22 @@
 volatile char *const oled_cmd_ptr = (char *)0x1000;
 volatile char *const oled_data_ptr = (char *)0x1200;
 
+
+/**
+ * @brief Writes a command to the OLED controller
+ * 
+ * @param cmd Command to send
+ */
 void oled_write_c(uint8_t cmd)
 {
     *oled_cmd_ptr = cmd;
 }
 
+/**
+ * @brief Sends data to the OLED controller to print at the location of the cursor
+ * 
+ * @param data 
+ */
 void oled_write_d(uint8_t data)
 {
     *oled_data_ptr = data;

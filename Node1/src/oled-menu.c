@@ -1,4 +1,4 @@
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 
 #include <avr/io.h> // For led toggle
 #include <util/delay.h>
@@ -11,6 +11,7 @@
 #include "joystick.h"
 #include "oled-buffer.h"
 #include "oled.h"
+#include "oled_timer.h"
 
 void oled_menu_navigate_up();
 void oled_menu_navigate_down();
@@ -186,6 +187,10 @@ void oled_menu_init(uint8_t *buffer)
     // Draw the screen once
     draw_oled_menu(p_current_menu, buffer);
     oled_draw_screen(buffer);
+
+    // Start the interrupt-driven timer, which updates the screen regularly
+    oled_timer_init();
+
 }
 
 void oled_menu_check_if_needs_update(void)
