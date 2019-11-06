@@ -10,12 +10,12 @@ void joystick_init() {
     PORTB |= (1 << JOY_BTN);
 }
 
-#if DEBUG
+#if COMPILE_JOYSTICK_TEST
 void joystick_test() {
     pos_t pos = joystick_get_position();
     printf("X: %i   Y: %i   Dir: %i   Joystick btn: %i\n", pos.x, pos.y, joystick_get_direction(), joystick_read_btn());
 }
-#endif // DEBUG
+#endif // COMPILE_JOYSTICK_TEST
 
 pos_t joystick_read_x_and_y_raw() {
     pos_t pos;

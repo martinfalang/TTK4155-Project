@@ -1,6 +1,6 @@
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef OLED_TIMER_H
+#define OLED_TIMER_H
 
 void timer_init(void);
 
-#endif /* TIMER_H */
+#endif /* OLED_TIMER_H */

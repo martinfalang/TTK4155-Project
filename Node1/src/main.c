@@ -42,11 +42,13 @@ int main(void)
     xmem_init();
     adc_init();
     joystick_init();
-    // touch_init();
+    touch_init();
+
+
     oled_init();
     oled_buffer_clear_screen(OLED_BUFFER_BASE);
 
-    // can_init(MODE_NORMAL);
+    can_init(MODE_NORMAL);
     
     oled_menu_init(OLED_BUFFER_BASE);
     timer_init();
@@ -61,25 +63,25 @@ int main(void)
     while(1) {
         // _delay_ms(200);
         heartbeat();
-        // joystick_dir = joystick_get_direction();
-        // joystick_pos = joystick_get_position();
+        joystick_dir = joystick_get_direction();
+        joystick_pos = joystick_get_position();
         
-        // touch_btns = touch_read_btns();
-        // touch_sliders = touch_read_sliders();
+        touch_btns = touch_read_btns();
+        touch_sliders = touch_read_sliders();
 
-        // can_msg_t msg = {
-        //     .sid = 0,
-        //     .length = 7,
-        //     .data[0] = joystick_dir,
-        //     .data[1] = joystick_pos.x,
-        //     .data[2] = joystick_pos.y,
-        //     .data[3] = touch_btns.left,
-        //     .data[4] = touch_btns.right,
-        //     .data[5] = touch_sliders.left,
-        //     .data[6] = touch_sliders.right
-        // };
+        can_msg_t msg = {
+            .sid = 0,
+            .length = 7,
+            .data[0] = joystick_dir,
+            .data[1] = joystick_pos.x,
+            .data[2] = joystick_pos.y,
+            .data[3] = touch_btns.left,
+            .data[4] = touch_btns.right,
+            .data[5] = touch_sliders.left,
+            .data[6] = touch_sliders.right
+        };
 
-        // can_send(&msg);
+        can_send(&msg);
         // printf("\n\nSent:\n");
         // can_print_msg(&msg);
         
@@ -90,7 +92,7 @@ int main(void)
             printf("Oled menu should update\n");
             oled_menu_update(OLED_BUFFER_BASE);
         }
-        _delay_ms(16);
+        _delay_ms(100);
 
         // oled_menu_update_if_needed();
         

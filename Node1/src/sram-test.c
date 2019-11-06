@@ -1,4 +1,4 @@
-#if DEBUG
+#if COMPILE_SRAM_TEST
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -66,4 +66,4 @@ void SRAM_test(void)
     printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
 }
 
-#endif // DEBUG
+#endif // COMPILE_SRAM_TEST

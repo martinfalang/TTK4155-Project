@@ -1,8 +1,8 @@
 #ifndef SRAM_TEST_H
 #define SRAM_TEST_H
 
-#if DEBUG
+#if COMPILE_SRAM_TEST
 void SRAM_test(void);
-#endif // DEBUG
+#endif // COMPILE_SRAM_TEST
 
 #endif /* SRAM_TEST */
