@@ -23,6 +23,8 @@
 #include "../../lib/inc/can.h"
 #include "oled.h"
 #include "oled-menu.h"
+#include "timer.h"
+#include "oled-buffer.h"
 
 void heartbeat_init() {
     DDRE |= 1 << DDE0;
@@ -40,13 +42,14 @@ int main(void)
     xmem_init();
     adc_init();
     joystick_init();
-    touch_init();
-
+    // touch_init();
     oled_init();
-    oled_menu_init(OLED_BUFFER_BASE);
+    oled_buffer_clear_screen(OLED_BUFFER_BASE);
 
     // can_init(MODE_NORMAL);
     
+    oled_menu_init(OLED_BUFFER_BASE);
+    timer_init();
 
     printf("All inits ran successfully!\n");
 
@@ -79,8 +82,17 @@ int main(void)
         // can_send(&msg);
         // printf("\n\nSent:\n");
         // can_print_msg(&msg);
+        
+        heartbeat();
+        // joystick_test();
+        if (oled_menu_should_update())
+        {
+            printf("Oled menu should update\n");
+            oled_menu_update(OLED_BUFFER_BASE);
+        }
+        _delay_ms(16);
 
-        oled_menu_update_if_needed();
+        // oled_menu_update_if_needed();
         
 
 #if DEBUG
@@ -98,4 +110,23 @@ int main(void)
         // printf("\n");
 #endif // DEBUG
     } 
+    // SRAM_test();
+
+    // spi_init();
+    // _delay_ms(10);
+    //mcp2515_init(MODE_LOOPBACK);
+
+    // can_init(MODE_LOOPBACK);
+
+    // mcp2515_test_write();
+    // mcp2515_test_read();
+    // mcp2515_one_byte_write_test();
+
+    // while (1)
+    // {
+    //     heartbeat();
+    //     //mcp2515_test_can();
+    //     // can_test();
+    //     _delay_ms(1000);
+    // }
 }

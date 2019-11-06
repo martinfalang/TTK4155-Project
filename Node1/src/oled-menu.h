@@ -23,35 +23,28 @@ typedef struct menu_el_action {
 } oled_menu_action_t;
 
 typedef struct oled_menu_el {
-    char *element_text;
+    char element_text[20];
     oled_menu_action_t select_action; // When pushing joystick to right
 } oled_menu_el_t;
 
 typedef struct oled_menu {
-    char *header_string; // Unselectable header shown on first row/page
+    char header_string[20]; // Unselectable header shown on first row/page
     oled_menu_el_t *elements;
     oled_menu_action_t back_action; // When pushing joystick to left. Same for all elements in menu
     uint8_t num_elements;
     uint8_t selected_idx; // Index of selected menu element in elements-array
 } oled_menu_t;
 
-
-void oled_menu_navigate_up();
-void oled_menu_navigate_down();
-void oled_menu_navigate_left();
-void oled_menu_navigate_right();
-
-// Selection functions for menu elements
-// Prefer to use these over manually calling the functions manually, as these check if the elements are not NULL
-void oled_menu_select(oled_menu_el_t element);
-void oled_menu_back(oled_menu_el_t element);
+void oled_menu_perform_action(oled_menu_action_t action);
 
 // Draws the menu to the buffer
 void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer);
-void oled_menu_check_if_needs_update(void);
 
-// Project specific
+bool oled_menu_should_update();
 void oled_menu_init(uint8_t * buffer);
+void oled_menu_check_if_needs_update(void);
+void oled_menu_update(uint8_t *buffer);
+
 
 void oled_menu_update_if_needed(void);
 

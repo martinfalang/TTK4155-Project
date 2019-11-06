@@ -11,7 +11,7 @@
 #include "joystick.h"
 #include "oled-buffer.h"
 #include "oled.h"
-#include "oled_timer.h"
+// #include "timer.h"
 
 void oled_menu_navigate_up();
 void oled_menu_navigate_down();
@@ -126,7 +126,9 @@ void oled_menu_init(uint8_t *buffer)
     // Make main menu elements
     oled_menu_el_t test_element;
 
-    test_element.element_text = "Example element";
+    // test_element.element_text = "Example element";
+    strcpy(test_element.element_text, "Example element");
+
     test_element.select_action.ptr.p_func = &toggle_led;
     test_element.select_action.is_func_ptr = true;
 
@@ -138,26 +140,35 @@ void oled_menu_init(uint8_t *buffer)
     char *header = "Header";
     mm.elements = &test_element;
     mm.num_elements = 3;
-    mm.header_string = header;
+
+    // mm.header_string = header;
+    strcpy(mm.header_string, header);
+    
     mm.selected_idx = 0;
     mm.back_action = oled_menu_get_empty_action();
 
     // Make sub menu elements
     oled_menu_el_t main_el_1;
 
-    main_el_1.element_text = "Toggle LED";
+    // main_el_1.element_text = "Toggle LED";
+    strcpy(main_el_1.element_text, "Toogle LED");
+
     main_el_1.select_action.ptr.p_func = &toggle_led;
     main_el_1.select_action.is_func_ptr = true;
 
     oled_menu_el_t main_el_2;
 
-    main_el_2.element_text = "Toggle LED, but another element";
+    // main_el_2.element_text = "Toggle LED, but another element";
+    strcpy(main_el_2.element_text, "Toggle LED!!!");
+
     main_el_2.select_action.ptr.p_func = &toggle_led;
     main_el_2.select_action.is_func_ptr = true;
 
     oled_menu_el_t main_el_3;
 
-    main_el_3.element_text = "Songs";
+    // main_el_3.element_text = "Songs";
+    strcpy(main_el_3.element_text, "Songs");
+
     main_el_3.select_action = oled_menu_create_menu_ptr_action(&song_menu);
 
     oled_menu_el_t main_menu_elements[3] = {main_el_1, main_el_2, main_el_3};
@@ -166,13 +177,18 @@ void oled_menu_init(uint8_t *buffer)
     // Make sub-menu elements
     oled_menu_el_t song_el_1;
 
-    song_el_1.element_text = "Song 1 goes here";
+    // song_el_1.element_text = "Song 1 goes here";
+    strcpy(song_el_1.element_text, "Song 1 goes here");
+
     song_el_1.select_action.ptr.p_func = &toggle_led;
     song_el_1.select_action.is_func_ptr = true;
 
     oled_menu_el_t song_el_2;
 
-    song_el_2.element_text = "Song 2 goes here";
+    // song_el_2.element_text = "Song 2 goes here";
+    strcpy(song_el_2.element_text, "Song 2 goes here");
+
+
     song_el_2.select_action = oled_menu_get_empty_action();
     song_el_2.select_action.is_func_ptr = true;
 
@@ -185,11 +201,11 @@ void oled_menu_init(uint8_t *buffer)
     prev_dir = NEUTRAL; // Previous direction
 
     // Draw the screen once
-    draw_oled_menu(p_current_menu, buffer);
+    draw_oled_menu(p_current_menu, buffer); 
     oled_draw_screen(buffer);
 
     // Start the interrupt-driven timer, which updates the screen regularly
-    oled_timer_init();
+    // oled_timer_init();
 
 }
 

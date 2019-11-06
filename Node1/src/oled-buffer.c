@@ -5,7 +5,6 @@
 
 #include <avr/pgmspace.h>
 
-
 #include "oled-buffer.h"
 #include "../../lib/inc/defines.h"
 #include "fonts.h"
