@@ -50,6 +50,8 @@ void oled_init(void)
     oled_write_c(0xa4); //out follows RAM content
     oled_write_c(0xa6); //set normal display
     oled_write_c(0xaf); // display on
+
+    // oled_write_c(0xa5); //entire display on
 }
 
 void oled_set_page(uint8_t page)
