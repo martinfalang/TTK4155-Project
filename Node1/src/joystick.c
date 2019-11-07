@@ -1,6 +1,14 @@
 
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include "joystick.h"
 #include <stdio.h>
+
+////////////////////////////////////////////////////////////////////////////////
+// Public functions
+////////////////////////////////////////////////////////////////////////////////
 
 void joystick_init() {
     // Set PB3 to input
@@ -9,13 +17,6 @@ void joystick_init() {
     // Enable internal pull-up on PB3
     PORTB |= (1 << JOY_BTN);
 }
-
-#if COMPILE_JOYSTICK_TEST
-void joystick_test() {
-    pos_t pos = joystick_get_position();
-    printf("X: %i   Y: %i   Dir: %i   Joystick btn: %i\n", pos.x, pos.y, joystick_get_direction(), joystick_read_btn());
-}
-#endif // COMPILE_JOYSTICK_TEST
 
 pos_t joystick_read_x_and_y_raw() {
     pos_t pos;
@@ -38,7 +39,7 @@ pos_t joystick_get_position() {
     return pos;
 }
 
-int joystick_read_btn() {
+uint8_t joystick_read_btn() {
     
     if (!(PINB & (1 << JOY_BTN))) {
         return 1;
@@ -67,3 +68,10 @@ joy_btn_dir_t joystick_get_direction() {
         return NEUTRAL;
     }
 }
+
+#if COMPILE_JOYSTICK_TEST
+void joystick_test() {
+    pos_t pos = joystick_get_position();
+    printf("X: %i   Y: %i   Dir: %i   Joystick btn: %i\n", pos.x, pos.y, joystick_get_direction(), joystick_read_btn());
+}
+#endif // COMPILE_JOYSTICK_TEST

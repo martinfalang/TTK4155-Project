@@ -1,7 +1,11 @@
+
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-#include <stdio.h> // TODO: REMOVE
 
 #include <avr/pgmspace.h>
 
@@ -25,6 +29,10 @@
         page = y / num_pages  // Implicitly floored
 
 */
+
+////////////////////////////////////////////////////////////////////////////////
+// Public functions
+////////////////////////////////////////////////////////////////////////////////
 
 uint16_t oled_buffer_get_index(uint8_t x, uint8_t y)
 {
@@ -74,7 +82,6 @@ void oled_buffer_clear_screen(uint8_t *buffer)
 void oled_buffer_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_end, uint8_t *buffer)
 {
     // Make sure x_start <= x_end and y_start <= y_end
-    // printf("(%d, %d),  (%d, %d)\n", x_start, y_start, x_end, y_end);
 
     if (x_start > x_end)
     {
@@ -89,17 +96,14 @@ void oled_buffer_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint
 
     if (x_start != x_end) // To avoid dividing by zero
     {
-        // printf("x-iteration\n");
         float y_coefficient = ((float)(y_end - y_start)) / (x_end - x_start);
         for (uint8_t x = x_start; x <= x_end; ++x)
         {
-            // printf("(%d, %d)\n", x, (uint8_t) y_coefficient * x + y_start);
             oled_buffer_set_pixel(x, (uint8_t)(y_coefficient * x + y_start), true, buffer);
         }
     }
     if (y_start != y_end) // To avoid dividing by zero
     {
-        // printf("y-iteration\n");
         float x_coefficient = ((float)(x_end - x_start)) / (y_end - y_start);
         for (uint8_t y = y_start; y <= y_end; ++y)
         {
@@ -107,8 +111,6 @@ void oled_buffer_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint
         }
     }
 }
-
-// void write_to_screen();
 
 uint8_t char_to_index(char c)
 {
@@ -121,7 +123,6 @@ uint8_t char_to_index(char c)
 void oled_buffer_print_char(char c, enum TEXT_SIZE size, uint8_t page, uint8_t column, uint8_t *buffer)
 {
     uint8_t font_index = char_to_index(c);
-    // printf("Char: '%c' chosen index: %d\n", c, font_index);
 
     const unsigned char *chosen_font;
 
@@ -160,7 +161,7 @@ void oled_buffer_print_string(char *s, enum TEXT_SIZE size, uint8_t page, uint8_
     // In case the supplied string is too long, cut it short
     if (length * (size + spacing) + left_margin > OLED_WIDTH)
     {
-        length = (OLED_WIDTH - left_margin) / (size + spacing); // TODO: Verify this math?
+        length = (OLED_WIDTH - left_margin) / (size + spacing);
     }
 
     for (uint8_t i = 0; i < length; ++i)

@@ -58,11 +58,10 @@ void _toggle_led(void);
 
 void oled_menu_init(void)
 {
-    // Create the dynamically allocated main menu
     _menu_init_menus();
     p_current_menu = &main_menu;
 
-    prev_dir = NEUTRAL; // Previous direction
+    prev_dir = NEUTRAL;
 
     draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
     oled_draw_screen(OLED_BUFFER_BASE);
@@ -128,9 +127,8 @@ void _toggle_led(void)
 
 void _menu_init_menus(void)
 {
-    // Allocates memory and gives a pointer to a main menu
+    // Set up main menu
     main_menu.num_elements = 3;
-    // main_menu.header_string = "Main Menu";
     strcpy(main_menu.header_string, "Main Menu");
     main_menu.selected_idx = 0;
     main_menu.back_action = _menu_get_empty_action();
@@ -140,7 +138,7 @@ void _menu_init_menus(void)
     main_menu_elements[2] = _menu_create_element("Songs", _menu_create_menu_ptr_action(&song_menu));
     main_menu.elements = main_menu_elements;
 
-    // song_menu.header_string = "Songs";
+    // Set up submenus
     strcpy(song_menu.header_string, "Songs");
     song_menu.num_elements = 2;
     song_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
@@ -160,8 +158,7 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
     oled_buffer_print_string(menu->header_string, LARGE, 0, buffer);
 
     // Draw the elements
-    char row_string[32] = ""; // TODO: Find optimal size
-    // strcpy((char *)row_string, "");
+    char row_string[32] = "";
 
     const char *selected_marker = "> ";
     const char *not_selected_marker = "  ";

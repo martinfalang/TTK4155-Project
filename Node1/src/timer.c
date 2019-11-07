@@ -1,13 +1,32 @@
 
+/*
+    This module handles the timing of the Atmega162. It makes it possible for 
+    the oled screen to be updated with 60 Hz, a CAN message with joystick and 
+    touch button signals to be sent with 10 Hz, and a heartbeat led to flash 
+    with 1 Hz frequency.
+*/
+
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include "timer.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdio.h>
 
+////////////////////////////////////////////////////////////////////////////////
+// Private variables
+////////////////////////////////////////////////////////////////////////////////
+
 static bool timeout = false;
 static unsigned char heartbeat_counter = 0;
 static unsigned char can_counter = 0;        
+
+////////////////////////////////////////////////////////////////////////////////
+// Public functions
+////////////////////////////////////////////////////////////////////////////////
 
 void timer_init(void) {
     // Initializes a timer that raises an interrupt 
@@ -42,15 +61,12 @@ void timer_init(void) {
 }
 
 ISR(TIMER2_COMP_vect) {
-    // Interrupt service routine for checking joystick if new input has occured
-    // s.t. the screen should be updated
     timeout = true;
     can_counter++;
     heartbeat_counter++;
 }
 
 bool timer_get_oled_timeout(void) {
-    printf("can_counter: %i hbeat_coutner: %i\n", can_counter, heartbeat_counter);
     return timeout;
 }
 

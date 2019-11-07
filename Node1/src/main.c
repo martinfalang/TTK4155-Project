@@ -1,8 +1,10 @@
 /*
- * TestProject.c
+ * Byggern 2019
  *
  * Created: 28.08.2019 12.19.50
- * Author : eirik
+ * Authors :    Kristian Brudeli
+ *              Martin Falang
+ *              Eirik Flemsæter Falck
  */
 
 #include "../../lib/inc/defines.h"
@@ -34,11 +36,39 @@ void heartbeat()
     PORTE ^= 1 << PE0;
 }
 
+void _send_joystick_and_touch_data(void) {
+    joy_btn_dir_t joystick_dir = joystick_get_direction();
+    pos_t joystick_pos = joystick_get_position();
+    
+    touch_btn_t touch_btns = touch_read_btns();
+    touch_slider_t touch_sliders = touch_read_sliders();
+
+    can_msg_t msg = {
+        .sid = 0,
+        .length = 7,
+        .data[0] = joystick_dir,
+        .data[1] = joystick_pos.x,
+        .data[2] = joystick_pos.y,
+        .data[3] = touch_btns.left,
+        .data[4] = touch_btns.right,
+        .data[5] = touch_sliders.left,
+        .data[6] = touch_sliders.right,
+
+    };
+
+    can_send(&msg);
+
+#if DEBUG   
+    printf("\n\nSent message:\n");
+    can_print_msg(&msg);
+#endif // DEBUG
+}
+
 int main(void)
 {
     // Init modules
     heartbeat_init();
-    uart_init(); // So we can communicate with the terminal connected via JTAG
+    uart_init();
     xmem_init();
     adc_init();
     joystick_init();
@@ -50,14 +80,9 @@ int main(void)
     oled_init();
     oled_menu_init();
 
-    printf("All inits ran successfully!\n");
-
-    joy_btn_dir_t joystick_dir;
-    pos_t joystick_pos;
-    touch_btn_t touch_btns;
-    touch_slider_t touch_sliders;
-
-    can_msg_t msg;
+#if DEBUG
+    printf("All inits ran successfully!\n");    
+#endif // DEBUG
 
     while(1) {
         
@@ -66,26 +91,7 @@ int main(void)
         }
 
         if (timer_get_can_timeout()) {
-
-            joystick_dir = joystick_get_direction();
-            joystick_pos = joystick_get_position();
-            
-            touch_btns = touch_read_btns();
-            touch_sliders = touch_read_sliders();
-
-            msg.sid = 0;
-            msg.length = 7;
-            msg.data[0] = joystick_dir;
-            msg.data[1] = joystick_pos.x;
-            msg.data[2] = joystick_pos.y;
-            msg.data[3] = touch_btns.left;
-            msg.data[4] = touch_btns.right;
-            msg.data[5] = touch_sliders.left;
-            msg.data[6] = touch_sliders.right;
-            can_send(&msg);
-            
-            printf("\n\nSent message:\n");
-            // can_print_msg(&msg);
+            _send_joystick_and_touch_data();
         }
 
         if (timer_get_oled_timeout()) {

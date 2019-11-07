@@ -1,12 +1,19 @@
+/*
+    General OLED-buffer (given 8-bit column height)
+*/
 #ifndef OLED_BUFFER_H
 #define OLED_BUFFER_H
+
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
 
 #include <stdbool.h>
 #include <stdint.h>
 
-/*
-    General OLED-buffer (given 8-bit column height)
-*/
+////////////////////////////////////////////////////////////////////////////////
+// Function declarations
+////////////////////////////////////////////////////////////////////////////////
 
 // Low level functions
 void oled_buffer_set_pixel(uint8_t x, uint8_t y, bool val, uint8_t *buffer);
@@ -19,12 +26,11 @@ void oled_buffer_set_page_column(int page, int column, uint8_t data, uint8_t *bu
 void oled_buffer_clear_page(uint8_t page, uint8_t *buffer);
 
 void oled_buffer_clear_screen(uint8_t *buffer);
-// void write_to_screen();
 
 // Text functions
 enum TEXT_SIZE
 {
-    // SMALL = 4,
+    SMALL = 4,
     MEDIUM = 5,
     LARGE = 8
 };
