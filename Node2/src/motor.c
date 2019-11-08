@@ -39,6 +39,8 @@ void motor_set_speed(int speed) {
         motor_set_dir(!neg_dir);
     }
     
-    unsigned char level = speed * 2.55f;
-    dac_write(level, 0);
+    if (speed > MOTOR_MAX_INPUT)
+        speed = MOTOR_MAX_INPUT;
+
+    dac_write(speed, 0);
 }
