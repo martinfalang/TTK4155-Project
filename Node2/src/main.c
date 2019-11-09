@@ -6,9 +6,7 @@
 #include "../../lib/inc/defines.h"
 #include <util/delay.h>
 
-#include "../../lib/inc/spi.h"
-#include "../../lib/inc/can.h"
-#include "../../lib/inc/mcp2515_defines.h"
+#include "../inc/pid.h"
 
 #include "ir.h"
 
@@ -19,6 +17,7 @@
 
 int main(void) {
     uart_init();
+<<<<<<< HEAD
     motor_init();
     encoder_init();    
     can_init(MODE_NORMAL);
@@ -29,5 +28,14 @@ int main(void) {
         printf("Encoder value: %d\n", enc);
 
         _delay_ms(10);
+=======
+    
+    pid_t motor_pid;
+    pid_init(&motor_pid, 0, 0, 0, 250);
+
+    printf("All inits ran successfully!\n");
+
+    while (1) {
+>>>>>>> node2-pi-controller
     }
 }
