@@ -19,7 +19,7 @@
 
 
 pid_t motor_pid;
-float kp = 1;
+float kp = 1.1;
 float ki = 0.01;
 float kd = 0.05;
 float t  = 0.01;  // sample time of pid

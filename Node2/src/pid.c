@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-#define PID_OUTPUT_MAX 70
+#define PID_OUTPUT_MAX 60
 
 void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep) {
     pid->Kp = kp;
