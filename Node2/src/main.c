@@ -24,7 +24,6 @@ float ki = 0;
 float kd = 0.02;
 float t  = 0.01;  // sample time of pid
 
-int16_t pos;
 
 int main(void) {
     uart_init();
@@ -73,8 +72,6 @@ int main(void) {
 
 
 ISR(TIMER5_COMPA_vect) {
-    // int16_t enc = encoder_read();
-    // pos += enc;
     pid_next_output(&motor_pid);
     motor_pid.measurement = encoder_read();
     motor_set_speed(motor_pid.output);
