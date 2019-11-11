@@ -16,7 +16,7 @@
 #include "solenoid.h"
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
-
+#include "pwm.h"
 
 pid_t motor_pid;
 float kp = 1;
@@ -33,6 +33,8 @@ int main(void) {
     encoder_init();
     solenoid_init();
     can_init(MODE_NORMAL);
+    pwm_init();
+
     pid_init(&motor_pid, kp, ki, kd, t);
     motor_pid.setpoint = 0;
 
@@ -63,6 +65,12 @@ int main(void) {
             else if (recvmsg->data[0] != 2) {
                 solenoid_cmd_prev = recvmsg->data[0];
             }
+
+            // Turn the servo using the touch sliders
+            int16_t degrees = 180 - (int16_t)(recvmsg->data[6] * 1.8);
+            printf("deg: %i\n", degrees);
+
+            pwm_set_duty_cycle(degrees);
             // printf("Pos: %i\n", pos);
             // printf("r: %d   u: %d\n", (int)(10 * motor_pid.setpoint), (int)(10 * motor_pid.output));
             // putchar('!');
