@@ -19,9 +19,9 @@
 
 
 pid_t motor_pid;
-float kp = 0.8;
-float ki = 0.01;
-float kd = 0.08;
+float kp = 1;
+float ki = 0;
+float kd = 0.02;
 float t  = 0.01;  // sample time of pid
 
 int16_t pos;
@@ -38,6 +38,7 @@ int main(void) {
     motor_pid.setpoint = 0;
 
     printf("All inits ran successfully!\n");
+    printf("#r,u,v\n");
 
     const can_msg_t *recvmsg;
 
@@ -45,10 +46,25 @@ int main(void) {
         if (can_new_msg()) {
             recvmsg = can_get_recv_msg();
 
+            for (int i = 0; i < recvmsg->length; ++i) {
+                printf("%.2X ", recvmsg->data[i]);
+            }
+            putchar('\n');
+
             int16_t r = recvmsg->data[1] - 51;
             motor_pid.setpoint = r;
-            printf("Pos: %i\n", pos);
+            if (recvmsg->data[0] == 2) {
+                solenoid_give_pulse();
+            }
+            // printf("Pos: %i\n", pos);
             // printf("r: %d   u: %d\n", (int)(10 * motor_pid.setpoint), (int)(10 * motor_pid.output));
+            // putchar('!');
+            // printf("%d", motor_pid.setpoint);
+            // putchar(',');
+            // printf("%d", motor_pid.output);
+            // putchar(',');
+            // printf("%d", motor_pid.measurement);
+            // putchar('\n');
         }
     }
 

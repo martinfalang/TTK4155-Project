@@ -42,12 +42,12 @@ void pid_next_output(pid_t *pid) {
 
     pid->output = pid->Kp * pid->current_error
                 + pid->T * pid->Ki * pid->cumulative_error
-                + pid->Kd / pid->T * (pid->current_error - pid->previous_error);
+                - pid->Kd / pid->T * (pid->current_error - pid->previous_error);
 
-    /* if (pid->output >= PID_OUTPUT_MAX)
+    if (pid->output >= PID_OUTPUT_MAX)
         pid->output = PID_OUTPUT_MAX;
     else if (pid->output <= -PID_OUTPUT_MAX)
-        pid->output = -PID_OUTPUT_MAX; */
+        pid->output = -PID_OUTPUT_MAX;
 }
 
 
