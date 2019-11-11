@@ -12,7 +12,7 @@ void solenoid_init(void) {
 void solenoid_give_pulse(void) {
     // TODO: change this to timer with interrupt, not delay
     PORTE &= ~(1 << SOLENOID_PIN);  // set low
-    _delay_ms(100);  // give the pulse for a small duration
+    _delay_ms(20);  // give the pulse for a small duration
     PORTE |= (1 << SOLENOID_PIN);  // set high
 }
 
