@@ -41,6 +41,8 @@ int main(void) {
 
     const can_msg_t *recvmsg;
 
+    int solenoid_cmd_prev = 0;
+
     while (1) {
         if (can_new_msg()) {
             recvmsg = can_get_recv_msg();
@@ -52,8 +54,12 @@ int main(void) {
 
             int16_t r = recvmsg->data[1] - 51;
             motor_pid.setpoint = r;
-            if (recvmsg->data[0] == 2) {
+            if (recvmsg->data[0] == 2 && solenoid_cmd_prev != recvmsg->data[0]) {
+                solenoid_cmd_prev = recvmsg->data[0];
                 solenoid_give_pulse();
+            }
+            else if (recvmsg->data[0] != 2) {
+                solenoid_cmd_prev = recvmsg->data[0];
             }
             // printf("Pos: %i\n", pos);
             // printf("r: %d   u: %d\n", (int)(10 * motor_pid.setpoint), (int)(10 * motor_pid.output));
