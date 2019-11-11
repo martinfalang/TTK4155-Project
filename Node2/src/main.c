@@ -54,6 +54,8 @@ int main(void) {
 
             int16_t r = recvmsg->data[1] - 51;
             motor_pid.setpoint = r;
+
+            // fire solenoid once when joystick is pointed up
             if (recvmsg->data[0] == 2 && solenoid_cmd_prev != recvmsg->data[0]) {
                 solenoid_cmd_prev = recvmsg->data[0];
                 solenoid_give_pulse();
