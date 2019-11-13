@@ -14,6 +14,7 @@
 
 #include "oled-menu.h"
 #include "joystick.h"
+#include "touch.h"
 #include "oled-buffer.h"
 #include "oled.h"
 #include "../../lib/inc/can.h"
@@ -36,8 +37,8 @@ static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
 static oled_menu_el_t song_menu_elements[NUM_SONG_MENU_ELEMENTS];
 
 static joy_btn_dir_t prev_dir; 
-
-const static can_msg_t start_game_msg = { .sid = START_GAME_SID, .length = 0 };
+static bool _menu_is_locked = false;
+static uint16_t prev_score = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private function declarations
@@ -53,6 +54,9 @@ oled_menu_el_t _menu_create_element(char *text, oled_menu_action_t action);
 void _menu_perform_action(oled_menu_action_t action);
 
 void _toggle_led(void);
+void _start_game(uint8_t * buffer);
+void _stop_game(void);
+void _print_score_to_oled_buffer(uint8_t * buffer);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,47 +76,77 @@ void oled_menu_init(void)
 
 void oled_menu_update(void)
 {
-    joy_btn_dir_t dir = joystick_get_direction();
+    if (!_menu_is_locked) {
+        joy_btn_dir_t dir = joystick_get_direction();
 
-    if (dir == prev_dir) {
-        return;
+        if (dir == prev_dir) {
+            return;
+        }
+
+        switch (dir)
+        {
+        case RIGHT:
+            _menu_perform_action(
+                p_current_menu->elements[p_current_menu->selected_idx].select_action);
+            break;
+        case LEFT:
+            _menu_perform_action(p_current_menu->back_action);
+            break;
+        case UP:
+            if (p_current_menu->selected_idx > 0)
+            {
+                --p_current_menu->selected_idx;
+            }
+            else
+            {
+                p_current_menu->selected_idx = p_current_menu->num_elements - 1;
+            }
+            break;
+        case DOWN:
+            if (p_current_menu->selected_idx < p_current_menu->num_elements - 1)
+            {
+                ++p_current_menu->selected_idx;
+            }
+            else
+            {
+                p_current_menu->selected_idx = 0;
+            }
+            break;
+        }
+
+        prev_dir = dir;
+        draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
+    } else {
+        // Menu is locked e.g. while playing
+        // user can unlock by pressing left touch button
+
+        // Print the score
+        uint16_t new_score = game_get_score();
+
+        if (prev_score != new_score) {
+            // Avoid doing expensive buffer writing if not needed
+            prev_score = new_score;
+            print_score_to_oled_buffer(OLED_BUFFER_BASE);
+        }
+
+        touch_btn_t buttons = touch_read_btns();
+
+        if (buttons.left) {
+            _menu_is_locked = false;
+        }
+
     }
 
-    switch (dir)
-    {
-    case RIGHT:
-        _menu_perform_action(
-            p_current_menu->elements[p_current_menu->selected_idx].select_action);
-        break;
-    case LEFT:
-        _menu_perform_action(p_current_menu->back_action);
-        break;
-    case UP:
-        if (p_current_menu->selected_idx > 0)
-        {
-            --p_current_menu->selected_idx;
-        }
-        else
-        {
-            p_current_menu->selected_idx = p_current_menu->num_elements - 1;
-        }
-        break;
-    case DOWN:
-        if (p_current_menu->selected_idx < p_current_menu->num_elements - 1)
-        {
-            ++p_current_menu->selected_idx;
-        }
-        else
-        {
-            p_current_menu->selected_idx = 0;
-        }
-        break;
-    }
-
-    prev_dir = dir;
-
-    draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
     oled_draw_screen(OLED_BUFFER_BASE);
+}
+
+
+void oled_menu_lock(void) {
+    _menu_is_locked = true;
+}
+
+void oled_menu_unlock(void) {
+    _menu_is_locked = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,8 +160,23 @@ void _toggle_led(void)
     PORTE ^= 1 << PE0;
 }
 
-void send_start_game_msg(void) {
+void _start_game(uint8_t * buffer) {
+    game_start();
+    oled_buffer_clear(OLED_BUFFER_BASE);
+    oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
+    _print_score_to_oled_buffer(buffer);
+}
 
+void _stop_game(void) {
+    game_stop();
+}
+
+void _print_score_to_oled_buffer(uint8_t * buffer) {
+    // Prints the score to the OLED buffer. 
+    // Assumes the header is already printed in _start_game
+    char score_string[20];
+    strcpy(score_string, sprintf("Score: %d", game_get_score()));
+    oled_buffer_print_string(score_string, MEDIUM, 1, buffer);
 }
 
 // Menu functions
@@ -140,7 +189,7 @@ void _menu_init_menus(void)
     main_menu.selected_idx = 0;
     main_menu.back_action = _menu_get_empty_action();
 
-    main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_func_ptr_action(&send_start_game_msg));
+    main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_func_ptr_action(&_send_start_game_msg));
     main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_func_ptr_action(&_toggle_led));
     main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&song_menu));
     main_menu.elements = main_menu_elements;
