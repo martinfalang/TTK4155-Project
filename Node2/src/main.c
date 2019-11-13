@@ -82,6 +82,7 @@ int main(void) {
 ISR(TIMER5_COMPA_vect) {
     motor_pos_pid.measurement_raw += encoder_read_raw();
     motor_pos_pid.measurement = encoder_scale_measurement(motor_pos_pid.measurement_raw, 0, 1000);
+    pid_next_output(&motor_pos_pid);
     motor_set_speed(motor_pos_pid.output);
 }
 
