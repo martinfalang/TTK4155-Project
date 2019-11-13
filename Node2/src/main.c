@@ -24,6 +24,9 @@
 pid_t motor_pos_pid;
 float T  = 0.01;  // sample time of pid
 
+
+extern can_msg_t endofgame_msg;
+
 int main(void) {
     uart_init(); putchar('\n');
     ir_init();
@@ -61,6 +64,7 @@ int main(void) {
                 game_play(recvmsg, &motor_pos_pid);
                 break;
             case 123:
+                endofgame_msg.data[0] = 0;
                 game_over();
                 break;
             default:

@@ -8,7 +8,13 @@
 int solenoid_cmd_prev = 0;
 bool playing = false;
 
-void game_init(game_difficulty_t difficulty, pid_t *motor_pid) {    
+can_msg_t endofgame_msg;
+
+void game_init(game_difficulty_t difficulty, pid_t *motor_pid) {
+    // always one data with event for what triggered game over
+    endofgame_msg.length = 1;
+    endofgame_msg.sid = 123;
+
     float kp;
     float ki;
     float kd;
@@ -71,22 +77,20 @@ void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
 
     // IR beam logic
     if (ir_beam_broken()) {
-        can_msg_t ir_broken;
-        ir_broken.sid = 111;
-        ir_broken.length = 0;
-        can_send(&ir_broken);
+        ir_reset();
+        endofgame_msg.data[0] = 1;  // TODO: change event number for IR broken
         game_over();
     }
 } 
 
 
 void game_over(void) {
+    if (!playing)
+        return;
+
     playing = false;
     printf("Game over!\n");
     pid_stop_timer();
-    can_msg_t end_of_game;
-    end_of_game.sid = 123;
-    end_of_game.length = 0;
-    can_send(&end_of_game);
+    can_send(&endofgame_msg);
     // TODO: do whatever's gonna happen when game ends in this function
 }
