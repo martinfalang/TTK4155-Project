@@ -16,6 +16,7 @@
 #include "joystick.h"
 #include "oled-buffer.h"
 #include "oled.h"
+#include "../../lib/inc/can.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Defines
@@ -35,6 +36,8 @@ static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
 static oled_menu_el_t song_menu_elements[NUM_SONG_MENU_ELEMENTS];
 
 static joy_btn_dir_t prev_dir; 
+
+const static can_msg_t start_game_msg = { .sid = START_GAME_SID, .length = 0 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private function declarations
@@ -123,6 +126,10 @@ void _toggle_led(void)
     PORTE ^= 1 << PE0;
 }
 
+void send_start_game_msg(void) {
+
+}
+
 // Menu functions
 
 void _menu_init_menus(void)
@@ -133,9 +140,9 @@ void _menu_init_menus(void)
     main_menu.selected_idx = 0;
     main_menu.back_action = _menu_get_empty_action();
 
-    main_menu_elements[0] = _menu_create_element("Toggle LED", _menu_create_func_ptr_action(&_toggle_led));
-    main_menu_elements[1] = _menu_create_element("Toggle LED!!!", _menu_create_func_ptr_action(&_toggle_led));
-    main_menu_elements[2] = _menu_create_element("Songs", _menu_create_menu_ptr_action(&song_menu));
+    main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_func_ptr_action(&send_start_game_msg));
+    main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_func_ptr_action(&_toggle_led));
+    main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&song_menu));
     main_menu.elements = main_menu_elements;
 
     // Set up submenus
@@ -144,8 +151,8 @@ void _menu_init_menus(void)
     song_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     song_menu.selected_idx = 0;
 
-    song_menu_elements[0] = _menu_create_element("Song 1 goes here", _menu_create_func_ptr_action(&_toggle_led));
-    song_menu_elements[1] = _menu_create_element("Song 2 goes here", _menu_get_empty_action());
+    song_menu_elements[0] = _menu_create_element("Setting 1", _menu_create_func_ptr_action(&_toggle_led));
+    song_menu_elements[1] = _menu_create_element("Setting 2", _menu_get_empty_action());
     song_menu.elements = song_menu_elements;
 }
 

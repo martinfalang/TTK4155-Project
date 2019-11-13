@@ -13,14 +13,14 @@ typedef struct can_msg {
 } can_msg_t;
 
 typedef enum can_msg_type {
-    CTRL = 345, // Controller / joystick / slider data // TODO: Set actual value
-    START_GAME = 234, // TODO: Set actual value
-    STOP_GAME = 123 // TODO: Set actual value-
+    CTRL_SID = 345, // Controller / joystick / slider data // TODO: Set actual value
+    START_GAME_SID = 234, // TODO: Set actual value
+    STOP_GAME_SID = 123 // TODO: Set actual value-
 } can_msg_type_t;
 
 // Definitions of messages corresponding to different message types 
 typedef enum can_ctrl_msg_idx {
-    JOY_DIR_IDX,
+    JOY_DIR_IDX = 0,
     JOY_POS_X_IDX,
     JOY_POS_Y_IDX,
     BTNS_LEFT_IDX,

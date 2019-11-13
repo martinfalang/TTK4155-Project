@@ -35,11 +35,27 @@ int main(void) {
 
         if (can_new_msg()) {
             recv_msg = can_get_recv_msg();
-            printf("\n\nRecv:\n");
-            printf("Joystick dir: %i\n", recv_msg->data[0]);
-            printf("Joystick X pos: %i\tJoystick Y pos: %i\n", recv_msg->data[1], recv_msg->data[2]);
-            printf("Touch btns:\tLeft: %i\tRight: %i\n", recv_msg->data[3], recv_msg->data[4]);
-            printf("Touch sliders:\tLeft: %i\tRight: %i\n", recv_msg->data[5], recv_msg->data[6]);
+
+            switch (recv_msg->sid)
+            {
+            case CTRL_SID:
+                // User control input
+
+                // printf("\n\nRecv:\n");
+                // printf("Joystick dir: %i\n", recv_msg->data[JOY_DIR_IDX]);
+                printf("JD %i\n", recv_msg->data[JOY_DIR_IDX]);
+                // printf("Joystick X pos: %i\tJoystick Y pos: %i\n", recv_msg->data[1], recv_msg->data[2]);
+                // printf("Touch btns:\tLeft: %i\tRight: %i\n", recv_msg->data[3], recv_msg->data[4]);
+                // printf("Touch sliders:\tLeft: %i\tRight: %i\n", recv_msg->data[5], recv_msg->data[6])
+                break;
+            case START_GAME_SID:
+                printf("Start!");
+                break;
+            case STOP_GAME_SID:
+                printf("Stop!");
+            default:
+                break;
+            }
         }        
     }
 }

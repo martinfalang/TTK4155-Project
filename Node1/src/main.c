@@ -54,14 +54,13 @@ void _send_joystick_and_touch_data(void) {
     can_msg_t msg = {
         .sid = 0,
         .length = 7,
-        .data[0] = joystick_dir,
-        .data[1] = joystick_pos.x,
-        .data[2] = joystick_pos.y,
-        .data[3] = touch_btns.left,
-        .data[4] = touch_btns.right,
-        .data[5] = touch_sliders.left,
-        .data[6] = touch_sliders.right,
-
+        .data[JOY_DIR_IDX] = joystick_dir,
+        .data[JOY_POS_X_IDX] = joystick_pos.x,
+        .data[JOY_POS_X_IDX] = joystick_pos.y,
+        .data[BTNS_LEFT_IDX] = touch_btns.left,
+        .data[BTNS_RIGHT_IDX] = touch_btns.right,
+        .data[SLIDER_LEFT_IDX] = touch_sliders.left,
+        .data[SLIDER_RIGHT_IDX] = touch_sliders.right,
     };
 
     can_send(&msg);
