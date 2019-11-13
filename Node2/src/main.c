@@ -52,10 +52,14 @@ int main(void) {
                 // printf("Touch sliders:\tLeft: %i\tRight: %i\n", recv_msg->data[5], recv_msg->data[6])
                 break;
             case START_GAME_SID:
-                printf("Start!");
+                printf("Start!\n");
                 break;
             case STOP_GAME_SID:
-                printf("Stop!");
+                printf("Stop!\n");
+                break;
+            case CALIBRATE_SID:
+                printf("Calibrate!\n");
+                break;
             default:
                 break;
             }

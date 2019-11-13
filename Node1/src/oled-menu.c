@@ -164,7 +164,7 @@ void _start_game() {
     printf("Locking menu\n");
     game_start();
     oled_buffer_clear_screen(OLED_BUFFER_BASE);
-    oled_buffer_print_string("Playing...", MEDIUM, 0, OLED_BUFFER_BASE);
+    oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
     _print_score_to_oled_buffer();
     // oled_draw_screen(buffer);
 }
@@ -183,7 +183,7 @@ void _print_score_to_oled_buffer() {
     // strcpy(score_string, "asdf");
     printf(score_string);
     printf("\n");
-    oled_buffer_print_string((char * ) score_string, MEDIUM, 1, OLED_BUFFER_BASE);
+    oled_buffer_print_string((char * ) score_string, MEDIUM, 2, OLED_BUFFER_BASE);
 }
 
 void _print_test(void) {

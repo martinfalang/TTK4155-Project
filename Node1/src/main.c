@@ -54,7 +54,7 @@ void _send_joystick_and_touch_data(void) {
     touch_slider_t touch_sliders = touch_read_sliders();
 
     can_msg_t msg = {
-        .sid = 0,
+        .sid = CTRL_SID,
         .length = 7,
         .data[JOY_DIR_IDX] = joystick_dir,
         .data[JOY_POS_X_IDX] = joystick_pos.x,
