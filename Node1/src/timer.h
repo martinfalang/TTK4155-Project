@@ -1,33 +1,29 @@
+#ifndef TIMER_H
+#define TIMER_H
 
 ////////////////////////////////////////////////////////////////////////////////
-// Includes
+// Inclues
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "adc.h"
+#include <stdbool.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-// Global variables
+// Defines
 ////////////////////////////////////////////////////////////////////////////////
 
-volatile uint8_t *adc = (uint8_t *) ADC_BASE;
+// Flash heartbeat with 1 Hz
+#define HEARTBEAT_FREQ      60
+
+// Send joystick with 10 Hz
+#define CAN_FREQ            6
 
 ////////////////////////////////////////////////////////////////////////////////
-// Public functions
+// Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-void adc_init() {
+void timer_init(void);
+bool timer_get_oled_timeout(void);
+bool timer_get_heartbeat_timeout(void);
+bool timer_get_can_timeout(void);
 
-    // Setting Pin D2 (INTR) to input
-    DDRD &= ~(1 << DDD2);
-    // Enable pull up resistor
-    PORTD |= (1 << PD2);
-}
-
-uint8_t adc_read(adc_channel_t channel) {
-   
-    *adc = channel;
-
-    while (PIND & (1<<PD2));
-    
-    return *adc;
-}
+#endif // TIMER_H

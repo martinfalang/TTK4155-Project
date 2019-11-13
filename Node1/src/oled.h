@@ -1,12 +1,14 @@
-#ifndef SRAM_TEST_H
-#define SRAM_TEST_H
+/*
+    Drawing screen buffer towards SSD1780 OLED driver module
+*/
+#ifndef OLED_H
+#define OLED_H
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-#if COMPILE_SRAM_TEST
-void SRAM_test(void);
-#endif // COMPILE_SRAM_TEST
+void oled_init(void);
+void oled_draw_screen(uint8_t *buffer);
 
-#endif /* SRAM_TEST */
+#endif /* OLED_H */
