@@ -9,6 +9,8 @@
 
 #include <avr/interrupt.h>
 
+#include "../../lib/inc/message_defs.h"
+
 #include "ir.h"
 #include "pid.h"
 #include "dac.h"
@@ -55,15 +57,15 @@ int main(void) {
             // TODO: Change cases with defines from file
             switch (recvmsg->sid)
             {
-            case 456: // calibrate
+            case CALIBRATE_SID: // calibrate
                 encoder_calibrate();
                 break;
-            case 234: // start game
+            case START_GAME_SID: // start game
                 game_init(recvmsg->data[0], &motor_pos_pid);
-            case 345: // playing game
+            case CTRL_SID: // playing game
                 game_play(recvmsg, &motor_pos_pid);
                 break;
-            case 123:
+            case STOP_GAME_SID:
                 endofgame_msg.data[0] = 0;
                 game_over();
                 break;
