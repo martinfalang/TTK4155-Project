@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float output_limit) {
+void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float output_maximum, float output_minimum) {
     pid->Kp = kp;
     pid->Ki = ki;
     pid->Kd = kd;
@@ -19,7 +19,8 @@ void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float ou
     pid->cumulative_error = 0;
 
     pid->output = 0;
-    pid->output_limit = output_limit;
+    pid->output_maximum = output_maximum;
+    pid->output_minimum = output_minimum;
 
 
     // Setup timer
@@ -44,12 +45,18 @@ void pid_next_output(pid_t *pid) {
                 + pid->Ki * pid->cumulative_error
                 + pid->Kd / pid->T * (pid->current_error - pid->previous_error);
 
-    if (pid->output_limit >= 0) {
-        if (pid->output >= pid->output_limit)
-            pid->output = pid->output_limit;
-        else if (pid->output <= -pid->output_limit)
-            pid->output = -pid->output_limit;
+    if (pid->output_maximum >= 0) {
+        if (pid->output >= pid->output_maximum)
+            pid->output = pid->output_maximum;
+        else if (pid->output <= -pid->output_maximum)
+            pid->output = -pid->output_maximum;
     }
+    else if (pid->output_minimum >= 0) {
+        if (pid->output <= pid->output_minimum && pid->output >= -pid->output_minimum)
+            pid->output = 0;
+    }
+
+
 }
 
 

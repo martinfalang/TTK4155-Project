@@ -4,15 +4,21 @@
 #include <util/delay.h>
 #include <stdio.h>
 
-// Values of encoder when far left and right
-#define ENCODER_RIGHT       -8500
-#define ENCODER_LEFT        -500
+// these initial values seemed to work fine during testing
+static int16_t encoder_left = -500;
+static int16_t encoder_right = -8500;
+
+#define ENCODER_CALIBRATE_BTN_PIN PK0
 
 void encoder_init(void) {
     DDRH  |= (1 << OE_) | (1 << SEL) | (1 << RST_);
     PORTH |= (1 << RST_);  // reset the encoder to 0 when low, needs to be default high
     PORTH |= (1 << OE_);  // set output enable high to disable
     ENCODER_DATA_PORT = 0;  // set all port pins to input (0)
+
+    // Calibrate button
+    DDRK &= ~(1 << ENCODER_CALIBRATE_BTN_PIN);  // set at input
+    PORTK |= (1 << ENCODER_CALIBRATE_BTN_PIN);  // enable internal pull-up
 }
 
 
@@ -40,13 +46,42 @@ int16_t encoder_read_raw(void) {
 
 float encoder_scale_measurement(float val, int16_t lower, int16_t upper) {
     
-    float res = ((val - ENCODER_LEFT) / (ENCODER_RIGHT - ENCODER_LEFT)) 
+    float res = ((val - encoder_left) / (encoder_right - encoder_left)) 
                 * (upper - lower) + lower;
 
-    if (res >= upper)
-        return upper;
-    else if (res <= lower)
-        return lower;
-    else
-        return res;
+    // if (res >= upper)
+    //     return upper;
+    // else if (res <= lower)
+    //     return lower;
+    // else
+        
+    return res;
 }
+
+
+void encoder_calibrate(void) {
+    printf("Move carrage to the far left and press button...");
+    while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN));  // wait for button press
+    encoder_left = 0;
+    printf(" OK\n");
+    _delay_ms(1000);  // wait for button to be released
+
+    printf("Move carrage to the far right and press button...");
+    int16_t pos = 0;
+    while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN)) {
+        pos += encoder_read_raw();
+        _delay_ms(50);
+    }  // wait for button press
+    encoder_right = pos;
+    printf(" OK: %d\n", encoder_right);
+    _delay_ms(1000);
+
+    printf("Move carrage to the far left and press button...");
+    while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN)) {
+        pos += encoder_read_raw();
+        _delay_ms(50);
+    }  // wait for button press
+    encoder_left = pos;
+    printf(" OK: %d\n", encoder_left);
+}
+

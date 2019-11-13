@@ -20,4 +20,7 @@ float encoder_scale_measurement(float val, int16_t lower, int16_t upper);
 void encoder_reset(void);
 
 
+void encoder_calibrate(void);
+
+
 #endif  // ENCODER_H

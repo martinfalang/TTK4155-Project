@@ -23,7 +23,7 @@
 // float ki = 0;
 // float kd = 0.2;
 float t  = 0.01;  // sample time of pid
-// float output_limit = 60;
+// float output_maximum = 60;
 
 pid_t motor_pos_pid;
 int16_t pos = 0;
@@ -33,18 +33,22 @@ int16_t enc = 0;
 
 int main(void) {
     uart_init();
+    putchar('\n');
     ir_init();
-    dac_init();
-    motor_init();
+
     encoder_init();
+    encoder_calibrate();  // run this when calibrate message is received
+
     solenoid_init();
     can_init(MODE_NORMAL);
     pwm_init();
+    dac_init();
+    motor_init();
 
-    // pid_init(&motor_vel_pid, kp, ki, kd, t, output_limit);
+    // pid_init(&motor_vel_pid, kp, ki, kd, t, output_maximum);
     // motor_vel_pid.setpoint = 0;
 
-    pid_init(&motor_pos_pid, 1, 0.01, 0, t, -1);
+    pid_init(&motor_pos_pid, 2.5, 0.2, 0.5, t, -1, 10);
 
     printf("All inits ran successfully!\n");
 
@@ -74,7 +78,7 @@ int main(void) {
             }
 
             // Control position
-            int16_t pos_ref = recvmsg->data[5];
+            int16_t pos_ref = recvmsg->data[5] * 10;
             motor_pos_pid.setpoint = pos_ref;
             printf("R: %d\tPos: %d\tU: %d\te: %d\n", (int)pos_ref, 
                         (int)motor_pos_pid.measurement, (int)motor_pos_pid.output, 
@@ -102,7 +106,9 @@ ISR(TIMER5_COMPA_vect) {
     pid_next_output(&motor_pos_pid);
     enc = encoder_read_raw();
     motor_pos_pid.measurement_raw += enc;
-    motor_pos_pid.measurement = encoder_scale_measurement(motor_pos_pid.measurement_raw, 0, 100);
+    motor_pos_pid.measurement = encoder_scale_measurement(motor_pos_pid.measurement_raw, 0, 1000);
+    
+    // if (motor_pos_pid.output > 50 || motor_pos_pid.output < -50)
     motor_set_speed(motor_pos_pid.output);
 }
 
