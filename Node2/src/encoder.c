@@ -2,6 +2,7 @@
 
 #include "../../lib/inc/defines.h"
 #include <util/delay.h>
+#include <stdio.h>
 
 // Values of encoder when far left and right
 #define ENCODER_RIGHT       -8500
@@ -37,11 +38,15 @@ int16_t encoder_read_raw(void) {
     return val;
 }
 
-uint8_t encoder_read_scaled(uint8_t lower, uint8_t upper) {
-    int16_t val = encoder_read_raw();
+float encoder_scale_measurement(float val, int16_t lower, int16_t upper) {
+    
+    float res = ((val - ENCODER_LEFT) / (ENCODER_RIGHT - ENCODER_LEFT)) 
+                * (upper - lower) + lower;
 
-    uint8_t res = (upper - lower) * (val - ENCODER_LEFT) / (ENCODER_RIGHT - ENCODER_LEFT);
-
-    return res;
-
+    if (res >= upper)
+        return upper;
+    else if (res <= lower)
+        return lower;
+    else
+        return res;
 }

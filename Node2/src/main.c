@@ -44,7 +44,7 @@ int main(void) {
     // pid_init(&motor_vel_pid, kp, ki, kd, t, output_limit);
     // motor_vel_pid.setpoint = 0;
 
-    pid_init(&motor_pos_pid, 0.05, 0.01, 0, t, -1);
+    pid_init(&motor_pos_pid, 1, 0.01, 0, t, -1);
 
     printf("All inits ran successfully!\n");
 
@@ -74,12 +74,13 @@ int main(void) {
             }
 
             // Control position
-            int16_t pos_ref = recvmsg->data[5] * -80;
+            int16_t pos_ref = recvmsg->data[5];
             motor_pos_pid.setpoint = pos_ref;
             printf("R: %d\tPos: %d\tU: %d\te: %d\n", (int)pos_ref, 
                         (int)motor_pos_pid.measurement, (int)motor_pos_pid.output, 
                         (int)motor_pos_pid.current_error);
 
+            // printf("Meas: %d\tEnc: %d\n", motor_pos_pid.measurement, enc);
 
             // Turn the servo using the touch sliders
             // int16_t degrees = 180 - (int16_t)(recvmsg->data[6] * 1.8);
@@ -100,7 +101,8 @@ ISR(TIMER5_COMPA_vect) {
     // Control pos
     pid_next_output(&motor_pos_pid);
     enc = encoder_read_raw();
-    motor_pos_pid.measurement += enc;
+    motor_pos_pid.measurement_raw += enc;
+    motor_pos_pid.measurement = encoder_scale_measurement(motor_pos_pid.measurement_raw, 0, 100);
     motor_set_speed(motor_pos_pid.output);
 }
 

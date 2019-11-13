@@ -10,6 +10,7 @@ typedef struct pid_param {
     float Kd;  /** Derivative gain */
     float T;   /** Time step of discretization in ms */
     
+    float measurement_raw;
     float measurement;
     float setpoint;
 
