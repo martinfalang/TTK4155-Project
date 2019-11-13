@@ -19,6 +19,8 @@ void encoder_init(void) {
     // Calibrate button
     DDRK &= ~(1 << ENCODER_CALIBRATE_BTN_PIN);  // set at input
     PORTK |= (1 << ENCODER_CALIBRATE_BTN_PIN);  // enable internal pull-up
+
+    encoder_reset();
 }
 
 
@@ -60,28 +62,44 @@ float encoder_scale_measurement(float val, int16_t lower, int16_t upper) {
 
 
 void encoder_calibrate(void) {
-    printf("Move carrage to the far left and press button...");
+    printf("Disconnect power to motor. Press button when complete...");
+    while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN));  // wait for button press
+    printf(" OK\n");
+    _delay_ms(500);  // wait for button to be released
+
+
+    printf("Move carriage to the far left and press button...");
     while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN));  // wait for button press
     encoder_left = 0;
+    encoder_reset();
     printf(" OK\n");
     _delay_ms(1000);  // wait for button to be released
 
-    printf("Move carrage to the far right and press button...");
+    printf("Move carriage to the far right and press button...");
     int16_t pos = 0;
     while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN)) {
         pos += encoder_read_raw();
-        _delay_ms(50);
+        _delay_ms(100);
     }  // wait for button press
     encoder_right = pos;
     printf(" OK: %d\n", encoder_right);
     _delay_ms(1000);
 
-    printf("Move carrage to the far left and press button...");
+    printf("Move carriage to the far left and press button...");
+    encoder_reset();
     while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN)) {
         pos += encoder_read_raw();
-        _delay_ms(50);
+        _delay_ms(100);
     }  // wait for button press
     encoder_left = pos;
     printf(" OK: %d\n", encoder_left);
+
+    printf("Reconnect power to motor. Pres button when complete...");
+    while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN));  // wait for button press
+    printf(" OK\n");
+    _delay_ms(500);  // wait for button to be released
+
+
+    printf("Calibration complete\n");
 }
 

@@ -32,8 +32,8 @@ typedef struct pid_param {
  * @param ki Intergral gain
  * @param kd Derivative gain
  * @param timestep Time step of discretization in ms in range [1, 250]
- * @param output_maximum Limits the output of the PID controller. Value in absolute value. -1 is no limiting.
- * @param output_minimum Lower bound for the output. -1 is no lower bound. 
+ * @param output_maximum Upper bound for the output of the PID controller in absolute value. -1 is no limiting.
+ * @param output_minimum Lower bound for the output of the PID controller in absolute value. -1 is no lower bound. 
  */
 void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float output_maximum, float output_minimum);
 
