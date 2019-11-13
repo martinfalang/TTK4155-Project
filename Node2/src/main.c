@@ -25,18 +25,14 @@ pid_t motor_pos_pid;
 float T  = 0.01;  // sample time of pid
 
 int main(void) {
-    uart_init();
-    putchar('\n');
+    uart_init(); putchar('\n');
     ir_init();
-
-    encoder_init();
-    // encoder_calibrate();  // run this when calibrate message is received
-
-    solenoid_init();
-    can_init(MODE_NORMAL);
     pwm_init();
     dac_init();
     motor_init();
+    encoder_init();
+    solenoid_init();
+    can_init(MODE_NORMAL);
 
     // pid_init(&motor_vel_pid, kp, ki, kd, T, output_maximum);
     // motor_vel_pid.setpoint = 0;
@@ -83,6 +79,5 @@ ISR(TIMER5_COMPA_vect) {
     motor_pos_pid.measurement_raw += encoder_read_raw();
     motor_pos_pid.measurement = encoder_scale_measurement(motor_pos_pid.measurement_raw, 0, 1000);
     motor_set_speed(motor_pos_pid.output);
-    printf("INT\n");
 }
 
