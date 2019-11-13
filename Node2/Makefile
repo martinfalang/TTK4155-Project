@@ -1,7 +1,7 @@
 # List all source files to be compiled; separate with space
 SOURCE_FILES := main.c uart.c spi.c can.c mcp2515.c ir.c motor.c dac.c TWI_Master.c encoder.c solenoid.c pid.c pwm.c
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
-PROGRAM_WITH_JTAG := yes
+PROGRAM_WITH_JTAG := no
 
 # Feel free to ignore anything below this line
 PROGRAMMER := atmelice_isp
@@ -42,8 +42,8 @@ flash: $(BUILD_DIR)/main.hex
 .PHONY: fuse
 fuse:
 	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U efuse:w:0xff:m
-	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U hfuse:w:0x19:m
-	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U lfuse:w:0xfd:m
+	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U hfuse:w:0x98:m
+	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U lfuse:w:0xff:m
 
 .PHONY: clean
 clean:

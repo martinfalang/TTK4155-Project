@@ -44,7 +44,7 @@ int main(void) {
     // pid_init(&motor_vel_pid, kp, ki, kd, t, output_limit);
     // motor_vel_pid.setpoint = 0;
 
-    pid_init(&motor_pos_pid, 0.05, 0.08, 0, t, -1);
+    pid_init(&motor_pos_pid, 0.05, 0.01, 0, t, -1);
 
     printf("All inits ran successfully!\n");
 
@@ -74,7 +74,7 @@ int main(void) {
             }
 
             // Control position
-            int16_t pos_ref = recvmsg->data[5];
+            int16_t pos_ref = recvmsg->data[5] * -80;
             motor_pos_pid.setpoint = pos_ref;
             printf("R: %d\tPos: %d\tU: %d\te: %d\n", (int)pos_ref, 
                         (int)motor_pos_pid.measurement, (int)motor_pos_pid.output, 
@@ -99,7 +99,7 @@ ISR(TIMER5_COMPA_vect) {
 
     // Control pos
     pid_next_output(&motor_pos_pid);
-    enc = encoder_read_scaled(0, 100);
+    enc = encoder_read_raw();
     motor_pos_pid.measurement += enc;
     motor_set_speed(motor_pos_pid.output);
 }
