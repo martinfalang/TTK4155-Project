@@ -57,9 +57,9 @@ oled_menu_el_t _menu_create_element(char *text, oled_menu_action_t action);
 void _menu_perform_action(oled_menu_action_t action);
 
 void _toggle_led(void);
-void _start_game(uint8_t * buffer);
+void _start_game();
 void _stop_game(void);
-void _print_score_to_oled_buffer(uint8_t * buffer);
+void _print_score_to_oled_buffer();
 
 const static can_msg_t _calibrate_msg = { .sid = CALIBRATE_SID, .length = 0 };
 
@@ -134,7 +134,7 @@ void oled_menu_update(void)
         if (prev_score != new_score) {
             // Avoid doing expensive buffer writing if not needed
             prev_score = new_score;
-            _print_score_to_oled_buffer(OLED_BUFFER_BASE);
+            _print_score_to_oled_buffer();
         }
 
         touch_btn_t buttons = touch_read_btns();
@@ -159,13 +159,13 @@ void _toggle_led(void)
     PORTE ^= 1 << PE0;
 }
 
-void _start_game(uint8_t * buffer) {
+void _start_game() {
     _menu_is_locked = true;
     printf("Locking menu\n");
     game_start();
     oled_buffer_clear_screen(OLED_BUFFER_BASE);
-    oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
-    _print_score_to_oled_buffer(buffer);
+    oled_buffer_print_string("Playing...", MEDIUM, 0, OLED_BUFFER_BASE);
+    _print_score_to_oled_buffer();
     // oled_draw_screen(buffer);
 }
 
@@ -175,14 +175,19 @@ void _stop_game(void) {
     printf("Unlocking menu\n");
 }
 
-void _print_score_to_oled_buffer(uint8_t * buffer) {
+void _print_score_to_oled_buffer() {
     // Prints the score to the OLED buffer. 
     // Assumes the header is already printed in _start_game
-    char score_string[20];
+    char score_string[15] = "";
     sprintf(score_string, "Score: %i", game_get_score());
+    // strcpy(score_string, "asdf");
     printf(score_string);
     printf("\n");
-    oled_buffer_print_string((char * ) score_string, LARGE, 2, buffer);
+    oled_buffer_print_string((char * ) score_string, MEDIUM, 1, OLED_BUFFER_BASE);
+}
+
+void _print_test(void) {
+
 }
 
 void _send_calibrate(void) {

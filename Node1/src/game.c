@@ -7,7 +7,7 @@
 static bool _is_playing = false;
 static uint16_t _score = 0;
 
-const static can_msg_t _start_game_msg = { .sid = START_GAME_SID, .length = 0 };
+const static can_msg_t _start_game_msg = { .sid = START_GAME_SID, .length = 1 , .data[0] = 0};
 const static can_msg_t _stop_game_msg = { .sid = STOP_GAME_SID, .length = 0 };
 
 
