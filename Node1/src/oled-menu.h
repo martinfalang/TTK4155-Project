@@ -51,4 +51,7 @@ typedef struct oled_menu {
 void oled_menu_init(void);
 void oled_menu_update(void);
 
+void oled_menu_lock(void);
+void oled_menu_unlock(void);
+
 #endif /* OLED_MENU_H */
