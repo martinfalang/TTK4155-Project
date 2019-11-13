@@ -7,15 +7,19 @@
 static bool _is_playing = false;
 static uint16_t _score = 0;
 
-const static can_msg_t _start_game_msg = { .sid = START_GAME_SID, .length = 1 , .data[0] = 0};
+static can_msg_t _start_game_msg = { .sid = START_GAME_SID, .length = 1 , .data[0] = 0};
 const static can_msg_t _stop_game_msg = { .sid = STOP_GAME_SID, .length = 0 };
 
 
-void game_start(void) {
+// TODO Update with enum
+void game_start(uint8_t difficulty) {
     _is_playing = true;
 
     // Reset score
     _score = 0;
+
+    // Set difficulty
+    _start_game_msg.data[DIFFICULTY_IDX] = difficulty;
 
     // Send message to node 2 to start game
     can_send(&_start_game_msg);
@@ -27,10 +31,12 @@ void game_start(void) {
  * 
  */
 void game_stop(void) {
-    _is_playing = false;
+    if (_is_playing) {
+        _is_playing = false;
 
-    // Send message to node 2 to stop game
-    can_send(&_stop_game_msg);
+        // Send message to node 2 to stop game
+        can_send(&_stop_game_msg);
+    }
 }
 
 /**

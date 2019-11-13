@@ -19,7 +19,9 @@ typedef enum can_ctrl_msg_idx {
     SLIDER_RIGHT_IDX,
 } can_ctrl_msg_idx_t;
 
-// START_GAME has no fields, and therefore no corresponding struct
+typedef enum can_start_msg_idx {
+    DIFFICULTY_IDX = 0,
+} can_start_msg_idx_t;
 
 typedef enum can_sender {
     NODE1 = 1,

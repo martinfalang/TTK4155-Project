@@ -9,7 +9,8 @@
  * 
  */
 
-void game_start(void);
+// TODO Update with enum
+void game_start(uint8_t difficulty);
 void game_stop(void);
 
 uint16_t game_get_score(void);

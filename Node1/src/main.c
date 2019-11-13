@@ -93,6 +93,8 @@ int main(void)
     oled_init();
     oled_menu_init();
 
+    const can_msg_t *recv_msg;
+
 #if DEBUG
     printf("All inits ran successfully!\n");    
 #endif // DEBUG
@@ -101,6 +103,22 @@ int main(void)
         
         if (timer_get_heartbeat_timeout()) {
             heartbeat();
+        }
+
+        if (can_new_msg()) {
+            // 
+            recv_msg = can_get_recv_msg();
+
+            switch (recv_msg->sid)
+            {
+            case STOP_GAME_SID:
+                printf("Beam broken!\n");
+                game_stop();
+                oled_menu_unlock();
+                break;
+            default:
+                break;
+            }
         }
 
         if (timer_get_can_timeout() && game_is_playing()) {
