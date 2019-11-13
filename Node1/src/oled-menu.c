@@ -20,6 +20,7 @@
 #include "oled.h"
 #include "game.h"
 #include "../../lib/inc/can.h"
+#include "../../lib/inc/message_defs.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Defines
@@ -60,6 +61,7 @@ void _start_game(uint8_t * buffer);
 void _stop_game(void);
 void _print_score_to_oled_buffer(uint8_t * buffer);
 
+const static can_msg_t _calibrate_msg = { .sid = CALIBRATE_SID, .length = 0 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Public functions
@@ -117,7 +119,11 @@ void oled_menu_update(void)
         }
 
         prev_dir = dir;
-        draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
+        if (!_menu_is_locked) {
+            // The menu might be locked when doing an action, should only draw menu
+            // if it is not
+            draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
+        }
     } else {
         // Menu is locked e.g. while playing
         // user can unlock by pressing left touch button
@@ -133,23 +139,13 @@ void oled_menu_update(void)
 
         touch_btn_t buttons = touch_read_btns();
 
-        if (buttons.left) {
-            _menu_is_locked = false;
-            game_stop();
+        if (buttons.left && buttons.right) {
+            _stop_game();
         }
 
     }
 
     oled_draw_screen(OLED_BUFFER_BASE);
-}
-
-
-void oled_menu_lock(void) {
-    _menu_is_locked = true;
-}
-
-void oled_menu_unlock(void) {
-    _menu_is_locked = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -164,22 +160,33 @@ void _toggle_led(void)
 }
 
 void _start_game(uint8_t * buffer) {
+    _menu_is_locked = true;
+    printf("Locking menu\n");
     game_start();
     oled_buffer_clear_screen(OLED_BUFFER_BASE);
     oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
     _print_score_to_oled_buffer(buffer);
+    // oled_draw_screen(buffer);
 }
 
 void _stop_game(void) {
     game_stop();
+    _menu_is_locked = false;
+    printf("Unlocking menu\n");
 }
 
 void _print_score_to_oled_buffer(uint8_t * buffer) {
     // Prints the score to the OLED buffer. 
     // Assumes the header is already printed in _start_game
     char score_string[20];
-    sprintf(score_string, "Score: %i", game_get_score()); // );
-    oled_buffer_print_string(score_string, MEDIUM, 1, buffer);
+    sprintf(score_string, "Score: %i", game_get_score());
+    printf(score_string);
+    printf("\n");
+    oled_buffer_print_string((char * ) score_string, LARGE, 2, buffer);
+}
+
+void _send_calibrate(void) {
+    can_send(&_calibrate_msg);
 }
 
 // Menu functions
@@ -187,6 +194,7 @@ void _print_score_to_oled_buffer(uint8_t * buffer) {
 void _menu_init_menus(void)
 {
     // Set up main menu
+    _menu_is_locked = false;
     main_menu.num_elements = 3;
     strcpy(main_menu.header_string, "Main Menu");
     main_menu.selected_idx = 0;
@@ -203,7 +211,7 @@ void _menu_init_menus(void)
     settings_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     settings_menu.selected_idx = 0;
 
-    song_menu_elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_toggle_led));
+    song_menu_elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_send_calibrate));
     song_menu_elements[1] = _menu_create_element("Setting 2", _menu_get_empty_action());
     settings_menu.elements = song_menu_elements;
 }
@@ -268,7 +276,6 @@ oled_menu_action_t _menu_create_menu_ptr_action(oled_menu_t *p_menu)
 oled_menu_action_t _menu_create_func_ptr_action(void *p_func)
 {
     oled_menu_action_t action;
-
     action.is_func_ptr = true;
     action.ptr.p_menu = p_func;
 

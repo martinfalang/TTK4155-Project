@@ -104,6 +104,7 @@ int main(void)
         }
 
         if (timer_get_can_timeout() && game_is_playing()) {
+            printf("Controller data sent\n");
             _send_joystick_and_touch_data();
         }
 
