@@ -8,7 +8,7 @@
 #define EN  PH4
 
 
-#define MOTOR_MAX_INPUT 255
+#define MOTOR_MAX_INPUT 80
 
 
 void motor_init(void);

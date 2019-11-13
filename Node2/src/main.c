@@ -18,11 +18,17 @@
 #include "../../lib/inc/can.h"
 #include "pwm.h"
 
-pid_t motor_pid;
-float kp = 1;
-float ki = 0;
-float kd = 0.02;
+// pid_t motor_vel_pid;
+// float kp = 1;
+// float ki = 0;
+// float kd = 0.2;
 float t  = 0.01;  // sample time of pid
+// float output_limit = 60;
+
+pid_t motor_pos_pid;
+int16_t pos = 0;
+
+int16_t enc = 0;
 
 
 int main(void) {
@@ -35,11 +41,12 @@ int main(void) {
     can_init(MODE_NORMAL);
     pwm_init();
 
-    pid_init(&motor_pid, kp, ki, kd, t);
-    motor_pid.setpoint = 0;
+    // pid_init(&motor_vel_pid, kp, ki, kd, t, output_limit);
+    // motor_vel_pid.setpoint = 0;
+
+    pid_init(&motor_pos_pid, 0.05, 0.08, 0, t, -1);
 
     printf("All inits ran successfully!\n");
-    printf("#r,u,v\n");
 
     const can_msg_t *recvmsg;
 
@@ -49,13 +56,13 @@ int main(void) {
         if (can_new_msg()) {
             recvmsg = can_get_recv_msg();
 
-            for (int i = 0; i < recvmsg->length; ++i) {
+            /* for (int i = 0; i < recvmsg->length; ++i) {
                 printf("%.2X ", recvmsg->data[i]);
-            }
-            putchar('\n');
+            } */
+            // printf("\tu: %d\n", (int)(motor_vel_pid.output));
 
-            int16_t r = recvmsg->data[1] - 51;
-            motor_pid.setpoint = r;
+            // int16_t r = recvmsg->data[1] - 51;
+            // motor_vel_pid.setpoint = r;
 
             // fire solenoid once when joystick is pointed up
             if (recvmsg->data[0] == 2 && solenoid_cmd_prev != recvmsg->data[0]) {
@@ -66,20 +73,19 @@ int main(void) {
                 solenoid_cmd_prev = recvmsg->data[0];
             }
 
-            // Turn the servo using the touch sliders
-            int16_t degrees = 180 - (int16_t)(recvmsg->data[6] * 1.8);
-            printf("deg: %i\n", degrees);
+            // Control position
+            int16_t pos_ref = recvmsg->data[5];
+            motor_pos_pid.setpoint = pos_ref;
+            printf("R: %d\tPos: %d\tU: %d\te: %d\n", (int)pos_ref, 
+                        (int)motor_pos_pid.measurement, (int)motor_pos_pid.output, 
+                        (int)motor_pos_pid.current_error);
 
-            pwm_set_duty_cycle(degrees);
-            // printf("Pos: %i\n", pos);
-            // printf("r: %d   u: %d\n", (int)(10 * motor_pid.setpoint), (int)(10 * motor_pid.output));
-            // putchar('!');
-            // printf("%d", motor_pid.setpoint);
-            // putchar(',');
-            // printf("%d", motor_pid.output);
-            // putchar(',');
-            // printf("%d", motor_pid.measurement);
-            // putchar('\n');
+
+            // Turn the servo using the touch sliders
+            // int16_t degrees = 180 - (int16_t)(recvmsg->data[6] * 1.8);
+            // printf("deg: %i\n", degrees);
+
+            // pwm_set_duty_cycle(degrees);
         }
     }
 
@@ -88,8 +94,13 @@ int main(void) {
 
 
 ISR(TIMER5_COMPA_vect) {
-    pid_next_output(&motor_pid);
-    motor_pid.measurement = encoder_read();
-    motor_set_speed(motor_pid.output);
+    // pid_next_output(&motor_vel_pid);
+    // motor_vel_pid.measurement = encoder_read();
+
+    // Control pos
+    pid_next_output(&motor_pos_pid);
+    enc = encoder_read_scaled(0, 100);
+    motor_pos_pid.measurement += enc;
+    motor_set_speed(motor_pos_pid.output);
 }
 

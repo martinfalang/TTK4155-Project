@@ -3,6 +3,9 @@
 #include "../../lib/inc/defines.h"
 #include <util/delay.h>
 
+// Values of encoder when far left and right
+#define ENCODER_RIGHT       -8500
+#define ENCODER_LEFT        -500
 
 void encoder_init(void) {
     DDRH  |= (1 << OE_) | (1 << SEL) | (1 << RST_);
@@ -19,7 +22,7 @@ void encoder_reset(void) {
 }
 
 
-int16_t encoder_read(void) {
+int16_t encoder_read_raw(void) {
     int16_t val = 0;
     PORTH &= ~(1 << OE_);  // enable output
     PORTH &= ~(1 << SEL);
@@ -34,3 +37,11 @@ int16_t encoder_read(void) {
     return val;
 }
 
+uint8_t encoder_read_scaled(uint8_t lower, uint8_t upper) {
+    int16_t val = encoder_read_raw();
+
+    uint8_t res = (upper - lower) * (val - ENCODER_LEFT) / (ENCODER_RIGHT - ENCODER_LEFT);
+
+    return res;
+
+}

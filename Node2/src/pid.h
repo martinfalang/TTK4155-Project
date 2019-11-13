@@ -18,6 +18,7 @@ typedef struct pid_param {
     float cumulative_error;
 
     float output;
+    float output_limit;
 } pid_t;
 
 
@@ -29,8 +30,9 @@ typedef struct pid_param {
  * @param ki Intergral gain
  * @param kd Derivative gain
  * @param timestep Time step of discretization in ms in range [1, 250]
+ * @param output_limit Limits the output of the PID controller. Value in absolute value. -1 is no limiting. 
  */
-void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep);
+void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float output_limit);
 
 
 /**

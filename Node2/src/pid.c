@@ -4,9 +4,8 @@
 
 #include <stdio.h>
 
-#define PID_OUTPUT_MAX 60
 
-void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep) {
+void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float output_limit) {
     pid->Kp = kp;
     pid->Ki = ki;
     pid->Kd = kd;
@@ -20,6 +19,7 @@ void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep) {
     pid->cumulative_error = 0;
 
     pid->output = 0;
+    pid->output_limit = output_limit;
 
 
     // Setup timer
@@ -38,16 +38,18 @@ void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep) {
 void pid_next_output(pid_t *pid) {
     pid->previous_error = pid->current_error;
     pid->current_error = pid->setpoint - pid->measurement;
-    pid->cumulative_error += pid->current_error;
+    pid->cumulative_error += pid->current_error * pid->T;
 
     pid->output = pid->Kp * pid->current_error
-                + pid->T * pid->Ki * pid->cumulative_error
-                - pid->Kd / pid->T * (pid->current_error - pid->previous_error);
+                + pid->Ki * pid->cumulative_error
+                + pid->Kd / pid->T * (pid->current_error - pid->previous_error);
 
-    if (pid->output >= PID_OUTPUT_MAX)
-        pid->output = PID_OUTPUT_MAX;
-    else if (pid->output <= -PID_OUTPUT_MAX)
-        pid->output = -PID_OUTPUT_MAX;
+    if (pid->output_limit >= 0) {
+        if (pid->output >= pid->output_limit)
+            pid->output = pid->output_limit;
+        else if (pid->output <= -pid->output_limit)
+            pid->output = -pid->output_limit;
+    }
 }
 
 

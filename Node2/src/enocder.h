@@ -15,7 +15,8 @@
 
 
 void encoder_init(void);
-int16_t encoder_read(void);
+int16_t encoder_read_raw(void);
+uint8_t encoder_read_scaled(uint8_t lower, uint8_t upper);
 void encoder_reset(void);
 
 

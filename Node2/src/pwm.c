@@ -91,7 +91,7 @@ void pwm_set_duty_cycle(int16_t degrees)
 
     // OCR1A = ticks;
 
-    if (PWM_LOWER_OCR_LIM <= ticks <= PWM_UPPER_OCR_LIM)
+    if (PWM_LOWER_OCR_LIM <= ticks && ticks <= PWM_UPPER_OCR_LIM)
         OCR1A = ticks;
        
     // ticks = PWM_UPPER_OCR_LIM;
