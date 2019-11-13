@@ -1,7 +1,11 @@
+#ifndef MESSAGE_DEFS_H
+#define MESSAGE_DEFS_H
+
 typedef enum can_msg_type {
     CTRL_SID = 345, // Controller / joystick / slider data // TODO: Set actual value
     START_GAME_SID = 234, // TODO: Set actual value
-    STOP_GAME_SID = 123 // TODO: Set actual value-
+    STOP_GAME_SID = 123, // TODO: Set actual value
+    CALIBRATE_SID = 456, // TODO: Set actual value // For running the calibration routine for the position controller
 } can_msg_type_t;
 
 // Definitions of messages corresponding to different message types 
@@ -25,3 +29,5 @@ typedef enum can_sender {
 typedef enum can_stop_game_msg {
     SENDER_IDX
 } can_stop_game_msg_t;
+
+#endif /* MESSAGE_DEFS_H */

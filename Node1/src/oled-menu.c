@@ -8,6 +8,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>             // For led toggle
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
@@ -17,6 +18,7 @@
 #include "touch.h"
 #include "oled-buffer.h"
 #include "oled.h"
+#include "game.h"
 #include "../../lib/inc/can.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +34,7 @@
 
 static oled_menu_t *p_current_menu;
 static oled_menu_t main_menu;
-static oled_menu_t song_menu;
+static oled_menu_t settings_menu;
 static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
 static oled_menu_el_t song_menu_elements[NUM_SONG_MENU_ELEMENTS];
 
@@ -126,13 +128,14 @@ void oled_menu_update(void)
         if (prev_score != new_score) {
             // Avoid doing expensive buffer writing if not needed
             prev_score = new_score;
-            print_score_to_oled_buffer(OLED_BUFFER_BASE);
+            _print_score_to_oled_buffer(OLED_BUFFER_BASE);
         }
 
         touch_btn_t buttons = touch_read_btns();
 
         if (buttons.left) {
             _menu_is_locked = false;
+            game_stop();
         }
 
     }
@@ -162,7 +165,7 @@ void _toggle_led(void)
 
 void _start_game(uint8_t * buffer) {
     game_start();
-    oled_buffer_clear(OLED_BUFFER_BASE);
+    oled_buffer_clear_screen(OLED_BUFFER_BASE);
     oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
     _print_score_to_oled_buffer(buffer);
 }
@@ -175,7 +178,7 @@ void _print_score_to_oled_buffer(uint8_t * buffer) {
     // Prints the score to the OLED buffer. 
     // Assumes the header is already printed in _start_game
     char score_string[20];
-    strcpy(score_string, sprintf("Score: %d", game_get_score()));
+    sprintf(score_string, "Score: %i", game_get_score()); // );
     oled_buffer_print_string(score_string, MEDIUM, 1, buffer);
 }
 
@@ -189,20 +192,20 @@ void _menu_init_menus(void)
     main_menu.selected_idx = 0;
     main_menu.back_action = _menu_get_empty_action();
 
-    main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_func_ptr_action(&_send_start_game_msg));
+    main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_func_ptr_action(&_start_game));
     main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_func_ptr_action(&_toggle_led));
-    main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&song_menu));
+    main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
     main_menu.elements = main_menu_elements;
 
     // Set up submenus
-    strcpy(song_menu.header_string, "Songs");
-    song_menu.num_elements = 2;
-    song_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
-    song_menu.selected_idx = 0;
+    strcpy(settings_menu.header_string, "Settings");
+    settings_menu.num_elements = 2;
+    settings_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
+    settings_menu.selected_idx = 0;
 
-    song_menu_elements[0] = _menu_create_element("Setting 1", _menu_create_func_ptr_action(&_toggle_led));
+    song_menu_elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_toggle_led));
     song_menu_elements[1] = _menu_create_element("Setting 2", _menu_get_empty_action());
-    song_menu.elements = song_menu_elements;
+    settings_menu.elements = song_menu_elements;
 }
 
 void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)

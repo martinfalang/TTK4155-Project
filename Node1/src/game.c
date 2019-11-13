@@ -1,7 +1,8 @@
 #include "game.h"
 #include "oled-buffer.h"
 #include "oled-menu.h"
-#include "can.h"
+#include "../../lib/inc/can.h"
+#include "../../lib/inc/message_defs.h"
 
 static bool _is_playing = false;
 static uint16_t _score = 0;

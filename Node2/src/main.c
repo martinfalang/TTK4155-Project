@@ -7,6 +7,8 @@
 #include <util/delay.h>
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
+#include "../../lib/inc/message_defs.h"
+
 
 #include "../inc/pid.h"
 
@@ -29,9 +31,10 @@ int main(void) {
     _delay_ms(100);
     // solenoid_give_pulse();
 
+    const can_msg_t *recv_msg;
+
     while (1) {
         // ir_test();
-        const can_msg_t *recv_msg;
 
         if (can_new_msg()) {
             recv_msg = can_get_recv_msg();
@@ -56,6 +59,6 @@ int main(void) {
             default:
                 break;
             }
-        }        
+        }      
     }
 }

@@ -26,10 +26,12 @@
 #include "joystick.h"
 #include "touch.h"
 #include "../../lib/inc/mcp2515_defines.h"
+#include "../../lib/inc/message_defs.h"
 #include "../../lib/inc/can.h"
 #include "oled.h"
 #include "oled-menu.h"
 #include "timer.h"
+#include "game.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
@@ -101,7 +103,7 @@ int main(void)
             heartbeat();
         }
 
-        if (timer_get_can_timeout()) {
+        if (timer_get_can_timeout() && game_is_playing()) {
             _send_joystick_and_touch_data();
         }
 
