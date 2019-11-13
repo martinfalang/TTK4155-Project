@@ -46,4 +46,18 @@ void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float ou
 void pid_next_output(pid_t *pid);
 
 
+/**
+ * @brief Stops the PID timer (TIMER5)
+ * 
+ */
+void pid_stop_timer(void);
+
+
+/**
+ * @brief Starts the PID timer (TIMER5)
+ * 
+ */
+void pid_start_timer(void);
+
+
 #endif  // PID_H

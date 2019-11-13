@@ -25,7 +25,7 @@ void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float ou
 
     // Setup timer
     // CTC mode with TOP = OCR5A, disconnected pin
-    TCCR5B |= (1 << WGM02) | (1 << CS51) | (1 << CS50);
+    TCCR5B |= (1 << WGM02);
     TCCR5A = 0;
 
     uint32_t ocr = (uint32_t)F_CPU * timestep / (2UL * 64UL);
@@ -33,6 +33,8 @@ void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float ou
 
     TIMSK5 |= (1 << OCIE5A);
     sei();
+
+    pid_start_timer();
 }
 
 
@@ -55,8 +57,16 @@ void pid_next_output(pid_t *pid) {
         if (pid->output <= pid->output_minimum && pid->output >= -pid->output_minimum)
             pid->output = 0;
     }
+}
 
 
+void pid_stop_timer(void) {
+    TCCR5B = TCCR5B & 0xF8;  // F8 zeros out prescaler bits, stopping the timer
+}
+
+void pid_start_timer(void) {
+    // prescaler set to 64
+    TCCR5B |= (1 << CS51) | (1 << CS50);
 }
 
 
