@@ -21,11 +21,21 @@
 // Structs
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief A struct holding the left and right button states.
+ *        0: unpressed
+ *        1: pressed
+ * 
+ */
 typedef struct touch_btn {
     int right;
     int left;
 } touch_btn_t;
 
+/**
+ * @brief A struct holding the left and right slider position.
+ * 
+ */
 typedef struct touch_slider {
     int left;
     int right;
@@ -35,8 +45,26 @@ typedef struct touch_slider {
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Initialize the touch buttons and sliders
+ * 
+ */
 void touch_init();
+
+/**
+ * @brief Read the current buttons state
+ * 
+ * @return touch_btn_t A struct holding the current button state, see 
+ *         @c touch_btn_t
+ */
 touch_btn_t touch_read_btns();
+
+/**
+ * @brief Read the current slider position
+ * 
+ * @return touch_slider_t A struct holding the current slider position, see
+ *         @c touch_slider_t 
+ */
 touch_slider_t touch_read_sliders();
 
 #if COMPILE_TOUCH_TEST

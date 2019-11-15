@@ -30,7 +30,19 @@ typedef enum adc_ch {
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Initialize ADC
+ * 
+ */
 void adc_init();
+
+
+/**
+ * @brief Read ADC value
+ * 
+ * @param channel Which channel to read fmor
+ * @return uint8_t The ADC value between 0 and 255
+ */
 uint8_t adc_read(adc_channel_t channel);
 
 #endif /* ADC_H */

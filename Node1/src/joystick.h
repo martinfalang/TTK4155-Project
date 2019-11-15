@@ -26,6 +26,10 @@
 // Structs
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief A struct representing the position of the joystick
+ * 
+ */
 typedef struct pos {
     uint8_t x;
     uint8_t y;
@@ -35,6 +39,10 @@ typedef struct pos {
 // Enums
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Possible joystick direction
+ * 
+ */
 typedef enum joy_btn_dir {
     LEFT,
     RIGHT,
@@ -47,12 +55,41 @@ typedef enum joy_btn_dir {
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Initialize joystick pins
+ * 
+ */
 void joystick_init();
 
+/**
+ * @brief Read the raw ADC value of the joystick axis
+ * 
+ * @return pos_t A position struct with x- and y-values
+ */
 pos_t joystick_read_x_and_y_raw();
+
+/**
+ * @brief Reads the joystick position, scaling it from 0 (left/down) to 100 
+ *        (up/right)
+ * 
+ * @return pos_t A position struct with x- and y-values scaled from 0 to 100.
+ */
 pos_t joystick_get_position();
+
+/**
+ * @brief Interprets the joystick position to give a direction
+ * 
+ * @return joy_btn_dir_t Direction of the joystick
+ */
 joy_btn_dir_t joystick_get_direction();
+
+/**
+ * @brief Reads the joystick button
+ * 
+ * @return uint8_t 
+ */
 uint8_t joystick_read_btn();
+
 
 #if COMPILE_JOYSTICK_TEST
 void joystick_test();

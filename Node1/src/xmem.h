@@ -5,6 +5,10 @@
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Initialize the use of external memory on ATmega162
+ * 
+ */
 void xmem_init(void);
 
 #endif /* XMEM_H */
