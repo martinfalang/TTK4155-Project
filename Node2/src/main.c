@@ -23,6 +23,7 @@
 #include "solenoid.h"
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
+#include "../../lib/inc/timer.h"
 #include "pwm.h"
 #include "game_logic.h"
 
@@ -42,6 +43,8 @@ int main(void) {
     encoder_init();
     solenoid_init();
     can_init(MODE_NORMAL);
+
+    timer_init();
 
     // pid_init(&motor_vel_pid, kp, ki, kd, T, output_maximum);
     // motor_vel_pid.setpoint = 0;
@@ -78,7 +81,11 @@ int main(void) {
                 printf("Got unknown CAN message. Got: %i\n", recvmsg->sid);
                 break;
             }
-        }   
+        } 
+        if (timer_get_1Hz_timeout()) {
+            printf("It works!\n");
+        }
+
     }
 
     return 0;
