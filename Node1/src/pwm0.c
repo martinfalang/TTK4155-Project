@@ -1,5 +1,5 @@
 #include "pwm0.h"
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 
 #include <stdio.h>
 

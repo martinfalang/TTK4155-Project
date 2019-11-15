@@ -32,6 +32,8 @@
 #include "oled-menu.h"
 #include "timer.h"
 #include "game.h"
+#include "buzzer.h"
+#include "songs/star_wars.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
@@ -87,6 +89,7 @@ int main(void)
     joystick_init();
     touch_init();
     timer_init();
+    buzzer_init();
 
     can_init(MODE_NORMAL);
     
@@ -98,6 +101,8 @@ int main(void)
 #if DEBUG
     printf("All inits ran successfully!\n");    
 #endif // DEBUG
+
+    buzzer_play_song_P(star_wars_melody, star_wars_note_types, STAR_WARS_LENGTH);
 
     while(1) {
         

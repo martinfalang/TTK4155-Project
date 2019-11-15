@@ -1,6 +1,6 @@
 #include "buzzer.h"
 #include "pwm0.h"
-#include "defines.h"
+#include "../../lib/inc/defines.h"
 #include <avr/pgmspace.h>
 #include "delay.h"
 
