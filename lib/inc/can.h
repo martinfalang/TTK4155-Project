@@ -13,13 +13,35 @@ typedef struct can_msg {
 } can_msg_t;
 
 // General functions
+/**
+ * @brief Initialize the CAN bus
+ * 
+ * @param state 
+ */
 void can_init(unsigned char state);
 
 // Get functions
+/**
+ * @brief Checks if a new CAN message is ready
+ * 
+ * @return true A new CAN message is ready
+ * @return false No new CAN message is ready
+ */
 bool can_new_msg(void);
+
+/**
+ * @brief Gets the data of the received message
+ * 
+ * @return const can_msg_t* A const pointer to the message data
+ */
 const can_msg_t *can_get_recv_msg(void);
 
 // Send function
+/**
+ * @brief Send a CAN message
+ * 
+ * @param p_msg 
+ */
 void can_send(const can_msg_t* p_msg);
 
 // Test functions

@@ -120,11 +120,11 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 // CANCTRL Register Values
 
-#define MODE_NORMAL     0x00
+#define MODE_NORMAL     0x00  /** Normal mode: send on the CAN bus */
 #define MODE_SLEEP      0x20
-#define MODE_LOOPBACK   0x40
+#define MODE_LOOPBACK   0x40  /** Loopback mode: send internally to itself */
 #define MODE_LISTENONLY 0x60
-#define MODE_CONFIG     0x80
+#define MODE_CONFIG     0x80  /** Config mode: configure the MCP2515 chip */
 #define MODE_POWERUP	0xE0
 #define MODE_MASK		0xE0
 #define ABORT_TX        0x10

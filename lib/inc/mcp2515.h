@@ -8,6 +8,12 @@
 
 
 // General functions
+/**
+ * @brief Initialize the MCP2515 CAN controller chip
+ * 
+ * @param mode Which mode to put the MCP2515 CAn controller chip in. See
+ *             mcp2515_defines.h file for possbile modes. 
+ */
 void mcp2515_init(unsigned char mode);
 void mcp_set_ops_mode(unsigned char mode);
 void mcp2515_reset();
