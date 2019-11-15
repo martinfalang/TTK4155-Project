@@ -2,6 +2,7 @@
 #include "game_logic.h"
 #include "ir.h"
 #include "solenoid.h"
+#include "pwm.h"
 
 #include "../../lib/inc/message_defs.h"
 
@@ -49,9 +50,10 @@ void game_init(game_difficulty_t difficulty, pid_t *motor_pid) {
     }
 
     pid_init(motor_pid, kp, ki, kd, motor_pid->T, motor_pid->output_maximum, 
-                                        motor_pid->output_minimum);
+             motor_pid->output_minimum, motor_pid->error_deadzone);
     playing = true;
 }
+
 
 void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
     if (!playing)
@@ -76,7 +78,7 @@ void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
 
     // Servo motor logic
     int16_t degrees = input_data->data[SLIDER_RIGHT_IDX];
-    // pwm_set_duty_cycle(degrees);
+    pwm_set_duty_cycle(degrees);
 
     // IR beam logic
     if (ir_beam_broken()) {

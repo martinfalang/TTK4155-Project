@@ -24,10 +24,10 @@
 
 
 pid_t motor_pos_pid;
-float T  = 0.01;  // sample time of pid
+const float T  = 0.01;  // sample time of pid
 
 
-extern can_msg_t endofgame_msg;
+extern can_msg_t endofgame_msg;  // TODO: Bad?
 
 int main(void) {
     uart_init(); putchar('\n');
@@ -44,6 +44,7 @@ int main(void) {
     motor_pos_pid.output_maximum = -1;
     motor_pos_pid.output_minimum = 40;
     motor_pos_pid.T = T;
+    motor_pos_pid.error_deadzone = 20;
 
     printf("All inits ran successfully!\n");
 
@@ -73,10 +74,8 @@ int main(void) {
                 printf("Got unknown CAN message. Got: %i\n", recvmsg->sid);
                 break;
             }
-         
         }   
     }
-    
 
     return 0;
 }   

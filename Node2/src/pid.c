@@ -5,7 +5,8 @@
 #include <stdio.h>
 
 
-void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float output_maximum, float output_minimum) {
+void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, 
+             float output_maximum, float output_minimum, float error_deadzone) {
     pid->Kp = kp;
     pid->Ki = ki;
     pid->Kd = kd;
@@ -17,6 +18,7 @@ void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, float ou
     pid->current_error = 0;
     pid->previous_error = 0;
     pid->cumulative_error = 0;
+    pid->error_deadzone = error_deadzone;
 
     pid->output = 0;
     pid->output_maximum = output_maximum;
@@ -42,6 +44,17 @@ void pid_next_output(pid_t *pid) {
     pid->previous_error = pid->current_error;
     pid->current_error = pid->setpoint - pid->measurement;
     pid->cumulative_error += pid->current_error * pid->T;
+    
+    if (pid->error_deadzone >= 0) {
+        if (pid->cumulative_error <= pid->error_deadzone &&
+            pid->cumulative_error >= -pid->error_deadzone) {
+                pid->cumulative_error = 0;
+        }
+        if (pid->current_error <= pid->error_deadzone &&
+            pid->current_error >= -pid->error_deadzone) {
+                pid->current_error = 0;
+        }
+    }
 
     pid->output = pid->Kp * pid->current_error
                 + pid->Ki * pid->cumulative_error
