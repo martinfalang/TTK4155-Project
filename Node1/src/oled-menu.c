@@ -230,7 +230,7 @@ void _menu_init_menus(void)
 {
     // Set up main menu
     _menu_is_locked = false;
-    main_menu.num_elements = 3;
+    main_menu.num_elements = NUM_MAIN_MENU_ELEMENTS;
     strcpy(main_menu.header_string, "Main Menu");
     main_menu.selected_idx = 0;
     main_menu.back_action = _menu_get_empty_action();
