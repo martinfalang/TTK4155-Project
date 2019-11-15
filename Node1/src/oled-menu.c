@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #define NUM_MAIN_MENU_ELEMENTS 4
-#define NUM_SONG_MENU_ELEMENTS 2
+#define NUM_SETTINGS_MENU_ELEMENTS 2
 #define NUM_DIFFICULTY_MENU_ELEMENTS 3
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ static oled_menu_t settings_menu;
 static oled_menu_t difficulty_menu;
 static oled_menu_el_t difficulty_menu_elements[NUM_DIFFICULTY_MENU_ELEMENTS];
 static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
-static oled_menu_el_t song_menu_elements[NUM_SONG_MENU_ELEMENTS];
+static oled_menu_el_t song_menu_elements[NUM_SETTINGS_MENU_ELEMENTS];
 
 static joy_btn_dir_t prev_dir; 
 static bool _menu_is_locked = false;
@@ -244,7 +244,7 @@ void _menu_init_menus(void)
     // Set up submenus
     // Set up settings menu
     strcpy(settings_menu.header_string, "Settings");
-    settings_menu.num_elements = 2;
+    settings_menu.num_elements = NUM_SETTINGS_MENU_ELEMENTS;
     settings_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     settings_menu.selected_idx = 0;
 
