@@ -4,10 +4,10 @@
 # This means that source files can be both in the tests folder and the src folder
 # See https://www.gnu.org/software/make/manual/html_node/General-Search.html#General-Search
 # for more info
-VPATH := . ../src
+VPATH := . ../Node1/src
 
 # List all source files to be compiled; separate with space
-SOURCE_FILES := oled-buffer.c test_main.c oled_buffer_test.c oled_buffer_utils.c
+SOURCE_FILES := highscore.c test_highscore.c test_main.c # oled-buffer.c  oled_buffer_test.c oled_buffer_utils.c
 
 BUILD_DIR := build
 

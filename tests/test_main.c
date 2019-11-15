@@ -3,11 +3,13 @@
 
 #include <stdio.h>
 
-#include "oled_buffer_test.h"
-#include "oled_buffer_utils.h"
+// #include "oled_buffer_test.h"
+// #include "oled_buffer_utils.h"
+#include "test_highscore.h"
 
 int main() {
-    terminal_oled_buffer_test();
+    //terminal_oled_buffer_test();
+    test_highscore();
 
     return 0;
 }

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+#define NUM_HIGHSCORES 5
 #define HIGHSCORE_STR_MAX_LENGTH 19
 
 /**
