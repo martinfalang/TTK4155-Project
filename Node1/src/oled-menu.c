@@ -26,7 +26,7 @@
 // Defines
 ////////////////////////////////////////////////////////////////////////////////
 
-#define NUM_MAIN_MENU_ELEMENTS 3
+#define NUM_MAIN_MENU_ELEMENTS 4
 #define NUM_SONG_MENU_ELEMENTS 2
 #define NUM_DIFFICULTY_MENU_ELEMENTS 3
 
@@ -200,6 +200,11 @@ void _stop_game(void) {
     printf("Unlocking menu\n");
 }
 
+void _play_star_wars(void)  {
+    // TODO: Star wars code here
+    _toggle_led(); // TODO: Remove, is here just to test that it works...
+}
+
 void _print_score_to_oled_buffer() {
     // Prints the score to the OLED buffer. 
     // Assumes the header is already printed in _start_game
@@ -233,6 +238,7 @@ void _menu_init_menus(void)
     main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_menu_ptr_action(&difficulty_menu));
     main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_func_ptr_action(&_toggle_led));
     main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
+    main_menu_elements[3] = _menu_create_element("Play Star Wars", _menu_create_func_ptr_action(&_play_star_wars));
     main_menu.elements = main_menu_elements;
 
     // Set up submenus
