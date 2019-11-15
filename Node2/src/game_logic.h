@@ -6,6 +6,10 @@
 
 #include <stdbool.h>
 
+/**
+ * @brief Possible game difficulties
+ * 
+ */
 typedef enum game_difficulty {
     EASY,
     MEDIUM,
@@ -13,6 +17,12 @@ typedef enum game_difficulty {
 } game_difficulty_t;
 
 
+/**
+ * @brief 
+ * 
+ * @param difficulty 
+ * @param motor_pid 
+ */
 void game_init(game_difficulty_t difficulty, pid_t *motor_pid);
 
 
@@ -24,7 +34,10 @@ void game_init(game_difficulty_t difficulty, pid_t *motor_pid);
  */
 void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid);
 
-
+/**
+ * @brief The set of commands that should run when the game ends
+ * 
+ */
 void game_over();
 
 

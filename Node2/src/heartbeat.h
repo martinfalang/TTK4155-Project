@@ -2,9 +2,16 @@
 #define HEARTBEAT_H
 
 
+/**
+ * @brief Initialize the heartbeat LED
+ * 
+ */
 void heartbeat_init(void);
 
-
+/**
+ * @brief Toggles the heartbeat LED
+ * 
+ */
 void heartbeat(void);
 
 

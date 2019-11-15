@@ -10,9 +10,27 @@
 
 #define MOTOR_MAX_INPUT 80
 
-
+/**
+ * @brief Initializes the motor 
+ * 
+ */
 void motor_init(void);
+
+/**
+ * @brief Enables or disables the motor
+ * 
+ * @param en @p en @c = @c 1 enables the motor, @p en @c = @c 0 disables
+ */
 void motor_enable(int en);
+
+/**
+ * @brief Sets the direction of the motor
+ * 
+ * @param dir @p dir @c = @c 1 sets the direction one way, @p dir @c = @c 0 sets
+ *            the direcion the other way. Which direcition is which way depends
+ *            on the motor voltage polarity and have to be figured out 
+ *            experimentally. 
+ */
 void motor_set_dir(int dir);
 
 /**

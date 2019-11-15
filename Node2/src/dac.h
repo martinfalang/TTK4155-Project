@@ -11,8 +11,19 @@
 
 
 
-
+/**
+ * @brief Initialize the MAX521 DAC
+ * 
+ */
 void dac_init(void);
+
+/**
+ * @brief Write a value to the DAC
+ * 
+ * @param level Which level from 0 (i.e. 0 V) to 255 (i.e. 5 V) the DAC should 
+ *              output
+ * @param outn Which output channel of the DAC to write to
+ */
 void dac_write(unsigned char level, int outn);
 
 
