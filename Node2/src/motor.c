@@ -1,7 +1,6 @@
 #include "motor.h"
 #include "dac.h"
 
-
 void motor_init(void) {
     dac_init();
 
@@ -30,6 +29,17 @@ void motor_set_dir(int dir) {
 
 
 void motor_set_speed(int speed) {
-    unsigned char level = speed * 2.55f;
-    dac_write(level, 0);
+    static const int neg_dir = 1;  // 0 or 1: the direction of travel when speed is negative
+    if (speed < 0) {
+        motor_set_dir(neg_dir);
+        speed *= -1;
+    }
+    else {
+        motor_set_dir(!neg_dir);
+    }
+    
+    if (speed > MOTOR_MAX_INPUT)
+        speed = MOTOR_MAX_INPUT;
+
+    dac_write(speed, 0);
 }

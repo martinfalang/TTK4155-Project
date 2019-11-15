@@ -6,6 +6,7 @@
 void dac_init(void) {
     sei();
     TWI_Master_Initialise();
+    dac_write(0, 0);
 }
 
 
