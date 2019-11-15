@@ -3,11 +3,11 @@
 #define DEFINES_H
 
 // Debug - set this to 1 to allow test functions
-#define DEBUG                   1
+#define DEBUG                   0
 #define COMPILE_SRAM_TEST       0
 #define COMPILE_TOUCH_TEST      0
 #define COMPILE_JOYSTICK_TEST   0
-#define COMPILE_CAN_TEST        1
+#define COMPILE_CAN_TEST        0
 
 // Global CPU frequency
 #if defined (__AVR_ATmega162__)

@@ -26,10 +26,12 @@
 #include "joystick.h"
 #include "touch.h"
 #include "../../lib/inc/mcp2515_defines.h"
+#include "../../lib/inc/message_defs.h"
 #include "../../lib/inc/can.h"
 #include "oled.h"
 #include "oled-menu.h"
 #include "timer.h"
+#include "game.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
@@ -52,16 +54,15 @@ void _send_joystick_and_touch_data(void) {
     touch_slider_t touch_sliders = touch_read_sliders();
 
     can_msg_t msg = {
-        .sid = 0,
+        .sid = CTRL_SID,
         .length = 7,
-        .data[0] = joystick_dir,
-        .data[1] = joystick_pos.x,
-        .data[2] = joystick_pos.y,
-        .data[3] = touch_btns.left,
-        .data[4] = touch_btns.right,
-        .data[5] = touch_sliders.left,
-        .data[6] = touch_sliders.right,
-
+        .data[JOY_DIR_IDX] = joystick_dir,
+        .data[JOY_POS_X_IDX] = joystick_pos.x,
+        .data[JOY_POS_X_IDX] = joystick_pos.y,
+        .data[BTNS_LEFT_IDX] = touch_btns.left,
+        .data[BTNS_RIGHT_IDX] = touch_btns.right,
+        .data[SLIDER_LEFT_IDX] = touch_sliders.left,
+        .data[SLIDER_RIGHT_IDX] = touch_sliders.right,
     };
 
     can_send(&msg);
@@ -92,6 +93,8 @@ int main(void)
     oled_init();
     oled_menu_init();
 
+    const can_msg_t *recv_msg;
+
 #if DEBUG
     printf("All inits ran successfully!\n");    
 #endif // DEBUG
@@ -102,7 +105,24 @@ int main(void)
             heartbeat();
         }
 
-        if (timer_get_can_timeout()) {
+        if (can_new_msg()) {
+            // 
+            recv_msg = can_get_recv_msg();
+
+            switch (recv_msg->sid)
+            {
+            case STOP_GAME_SID:
+                printf("Beam broken!\n");
+                game_stop();
+                oled_menu_unlock();
+                break;
+            default:
+                break;
+            }
+        }
+
+        if (timer_get_can_timeout() && game_is_playing()) {
+            printf("Controller data sent\n");
             _send_joystick_and_touch_data();
         }
 
