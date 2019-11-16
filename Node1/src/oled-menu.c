@@ -21,6 +21,8 @@
 #include "game.h"
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/message_defs.h"
+#include "buzzer.h"
+#include "songs/star_wars.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Defines
@@ -201,8 +203,9 @@ void _stop_game(void) {
 }
 
 void _play_star_wars(void)  {
-    // TODO: Star wars code here
-    _toggle_led(); // TODO: Remove, is here just to test that it works...
+    buzzer_init();
+    buzzer_play_song_P(star_wars_melody, star_wars_note_types, 
+                    STAR_WARS_LENGTH);
 }
 
 void _print_score_to_oled_buffer() {

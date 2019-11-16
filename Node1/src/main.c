@@ -32,6 +32,7 @@
 #include "oled-menu.h"
 #include "timer.h"
 #include "game.h"
+#include "buzzer.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions

@@ -21,4 +21,6 @@ void pwm0_set_prescaler(pwm0_prescaler_t mode);
 
 uint16_t pwm0_get_prescaler();
 
+void pwm0_stop(void);
+
 #endif /* PWM_H */

@@ -1,9 +1,9 @@
+#include "../../lib/inc/defines.h"
 #include "buzzer.h"
 #include "pwm0.h"
-#include "defines.h"
-#include <avr/pgmspace.h>
 #include "delay.h"
 
+#include <avr/pgmspace.h>
 #include <stdio.h>
 
 
@@ -26,7 +26,8 @@ void buzzer_play_note(const note_t note, const uint8_t type) {
 
 
 void buzzer_stop() {
-    pwm0_set_prescaler(PREOFF);
+    // pwm0_set_prescaler(PREOFF);
+    pwm0_stop();
 }
 
 

@@ -14,8 +14,8 @@ const note_t star_wars_melody[] PROGMEM = {
 };
 
 const note_type_t star_wars_note_types[] PROGMEM = {
-    2, 2, 4, 4, 4, 2, 2, 4, 
-    4, 4, 2, 2, 4, 4, 4, 2
+    2, 2, 6, 6, 6, 2, 2, 6, 
+    6, 6, 2, 2, 6, 6, 6, 2
 };
 
 #endif // STAR_WARS_H
