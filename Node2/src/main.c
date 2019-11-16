@@ -81,11 +81,7 @@ int main(void) {
                 printf("Got unknown CAN message. Got: %i\n", recvmsg->sid);
                 break;
             }
-        } 
-        if (timer_get_1Hz_timeout()) {
-            printf("It works!\n");
         }
-
     }
 
     return 0;

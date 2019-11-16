@@ -121,7 +121,7 @@ int main(void)
             }
         }
 
-        if (timer_get_10Hz_timeout() && game_is_playing()) {
+        if (timer_get_6Hz_timeout() && game_is_playing()) {
             printf("Controller data sent\n");
             _send_joystick_and_touch_data();
         }
