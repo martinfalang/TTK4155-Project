@@ -11,44 +11,59 @@
 // Defines
 ////////////////////////////////////////////////////////////////////////////////
 
-// Flash heartbeat with 1 Hz
-#define HEARTBEAT_FREQ      60
+#define _1HZ_COUNT          60
+#define _6HZ_COUNT          10
+#define _10HZ_COUNT         6
 
-// Send joystick with 10 Hz
-#define CAN_FREQ            6
+#if defined (__AVR_ATmega162__)
+#define TIMER_ISR_VECT      TIMER2_COMP_vect
+
+#elif defined (__AVR_ATmega2560__)
+
+#define TIMER_ISR_VECT      TIMER3_COMPA_vect
+
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief Initializes timer2
+ * @brief Initializes timer
  * 
  */
 void timer_init(void);
 
 /**
- * @brief Checks if the OLED timer have timed out and should update the screen
+ * @brief Checks if the 60Hz timer has timed out
  * 
  * @return true Has timed out
  * @return false Has not timed out
  */
-bool timer_get_oled_timeout(void);
+bool timer_get_60Hz_timeout(void);
 
 /**
- * @brief Checks if the heartbeat timer has timed out and should toggle the LED
+ * @brief Checks if the 1Hz counter has timed out 
  * 
  * @return true Has timed out
  * @return false Has not timed out
  */
-bool timer_get_heartbeat_timeout(void);
+bool timer_get_1Hz_timeout(void);
 
 /**
- * @brief Check if the CAN timer has timed out and should send a CAN message
+ * @brief Checks if the 6Hz counter has timed out 
  * 
  * @return true Has timed out
  * @return false Has not timed out
  */
-bool timer_get_can_timeout(void);
+bool timer_get_6Hz_timeout(void);
+
+/**
+ * @brief Checks if the 10Hz counter has timed out 
+ * 
+ * @return true Has timed out
+ * @return false Has not timed out
+ */
+bool timer_get_10Hz_timeout(void);
 
 #endif // TIMER_H

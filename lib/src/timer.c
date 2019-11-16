@@ -10,7 +10,8 @@
 // Includes
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "timer.h"
+#include "../inc/timer.h"
+#include "../inc/defines.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -20,15 +21,20 @@
 // Private variables
 ////////////////////////////////////////////////////////////////////////////////
 
-static bool timeout = false;
-static unsigned char heartbeat_counter = 0;
-static unsigned char can_counter = 0;        
+static bool _60Hz_timeout = false;
+static unsigned char _1Hz_counter = 0;
+static unsigned char _6Hz_counter = 0;
+static unsigned char _10Hz_counter = 0;        
 
 ////////////////////////////////////////////////////////////////////////////////
 // Public functions
 ////////////////////////////////////////////////////////////////////////////////
 
 void timer_init(void) {
+
+    // Node 1 timer
+#if defined (__AVR_ATmega162__)
+
     // Initializes a timer that raises an interrupt 
     // setting a flag telling if the screen should be updated
 
@@ -58,29 +64,60 @@ void timer_init(void) {
 
     // Enable interrupts globally
     sei();
+
+#elif defined (__AVR_ATmega2560__)
+    // Setup timer 3
+    // CTC mode with TOP = OCR3A, disconnected pin
+    TCCR3B |= (1 << WGM02);
+    TCCR3A = 0;
+
+    // Set for 60 Hz
+    uint32_t ocr = (uint32_t)F_CPU * 0.033 / (2UL * 64UL);
+    OCR3A = (uint16_t)ocr;
+
+    TIMSK3 |= (1 << OCIE3A);
+    sei();
+
+    // Start timer
+    TCCR3B |= (1 << CS31) | (1 << CS30);
+
+#endif
 }
 
-ISR(TIMER2_COMP_vect) {
-    timeout = true;
-    can_counter++;
-    heartbeat_counter++;
+ISR(TIMER_ISR_VECT) {
+    _60Hz_timeout = true;
+    _10Hz_counter++;
+    _1Hz_counter++;
 }
 
-bool timer_get_oled_timeout(void) {
-    return timeout;
-}
-
-bool timer_get_heartbeat_timeout(void) {
-    if (heartbeat_counter >= HEARTBEAT_FREQ) {
-        heartbeat_counter = 0;
+bool timer_get_60Hz_timeout(void) {
+    if (_60Hz_timeout) {
+        _60Hz_timeout = false;
         return true;
     }
     return false;
 }
-bool timer_get_can_timeout(void) {
 
-    if (can_counter >= CAN_FREQ) {
-        can_counter = 0;
+bool timer_get_1Hz_timeout(void) {
+    if (_1Hz_counter >= _1HZ_COUNT) {
+        _1Hz_counter = 0;
+        return true;
+    }
+    return false;
+}
+
+bool timer_get_6Hz_timeout(void) {
+    if (_6Hz_counter >= _6HZ_COUNT) {
+        _6Hz_counter = 0;
+        return true;
+    }
+    return false;
+}
+
+bool timer_get_10Hz_timeout(void) {
+
+    if (_10Hz_counter >= _10HZ_COUNT) {
+        _10Hz_counter = 0;
         return true;
     }
     return false;
