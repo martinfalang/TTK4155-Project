@@ -23,6 +23,7 @@
 
 static bool _60Hz_timeout = false;
 static unsigned char _1Hz_counter = 0;
+static unsigned char _6Hz_counter = 0;
 static unsigned char _10Hz_counter = 0;        
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +71,7 @@ void timer_init(void) {
     TCCR3B |= (1 << WGM02);
     TCCR3A = 0;
 
-    // Fix this to get correct time
+    // Set for 60 Hz
     uint32_t ocr = (uint32_t)F_CPU * 0.033 / (2UL * 64UL);
     OCR3A = (uint16_t)ocr;
 
@@ -104,6 +105,15 @@ bool timer_get_1Hz_timeout(void) {
     }
     return false;
 }
+
+bool timer_get_6Hz_timeout(void) {
+    if (_6Hz_counter >= _6HZ_COUNT) {
+        _6Hz_counter = 0;
+        return true;
+    }
+    return false;
+}
+
 bool timer_get_10Hz_timeout(void) {
 
     if (_10Hz_counter >= _10HZ_COUNT) {
