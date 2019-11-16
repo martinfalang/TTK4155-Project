@@ -98,9 +98,7 @@ int main(void)
 
     const can_msg_t *recv_msg;
 
-#if DEBUG
     printf("All inits ran successfully!\n");    
-#endif // DEBUG
 
     // buzzer_play_song_P(star_wars_melody, star_wars_note_types, STAR_WARS_LENGTH);
 
@@ -111,7 +109,7 @@ int main(void)
         }
 
         if (can_new_msg()) {
-            // 
+             
             recv_msg = can_get_recv_msg();
 
             switch (recv_msg->sid)

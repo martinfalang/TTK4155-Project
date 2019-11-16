@@ -88,6 +88,7 @@ ISR(TIMER_ISR_VECT) {
     _60Hz_timeout = true;
     _10Hz_counter++;
     _1Hz_counter++;
+    _6Hz_counter++;
 }
 
 bool timer_get_60Hz_timeout(void) {
