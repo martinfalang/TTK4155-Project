@@ -28,9 +28,9 @@
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/message_defs.h"
 #include "../../lib/inc/can.h"
+#include "../../lib/inc/timer.h"
 #include "oled.h"
 #include "oled-menu.h"
-#include "timer.h"
 #include "game.h"
 #include "buzzer.h"
 #include "songs/star_wars.h"
@@ -106,7 +106,7 @@ int main(void)
 
     while(1) {
         
-        if (timer_get_heartbeat_timeout()) {
+        if (timer_get_1Hz_timeout()) {
             heartbeat();
         }
 
@@ -129,12 +129,12 @@ int main(void)
             }
         }
 
-        if (timer_get_can_timeout() && game_is_playing()) {
+        if (timer_get_6Hz_timeout() && game_is_playing()) {
             printf("Controller data sent\n");
             _send_joystick_and_touch_data();
         }
 
-        if (timer_get_oled_timeout()) {
+        if (timer_get_60Hz_timeout()) {
             oled_menu_update();
         }
     } 
