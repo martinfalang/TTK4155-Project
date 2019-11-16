@@ -34,9 +34,6 @@ uint16_t _highscore_read(uint8_t place);
 // Public functions
 ////////////////////////////////////////////////////////////////////////////////
 void highscore_reset(void) {
-    /* for (uint8_t i = 1; i <= NUM_HIGHSCORES; ++i) {
-        _highscore_write(i, (NUM_HIGHSCORES + 1 - i) * 5); // 25, 20, ...
-    } */
     _highscore_write(1, 25);
     _highscore_write(2, 20);
     _highscore_write(3, 15);
@@ -83,7 +80,7 @@ void _insert_score(uint8_t place, uint16_t score) {
     // EXAMPLE:
     // _highscores before:
     // [25, 20, 15, 10, 5]
-    // _highscores after _insert_score(13)
+    // _highscores after _insert_score(13, 4)
     // [25, 20, 15, 13, 10]
 
     for (uint8_t p = NUM_HIGHSCORES; p > place; --p) {

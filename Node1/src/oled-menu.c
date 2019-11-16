@@ -269,7 +269,7 @@ void _menu_init_menus(void)
     settings_menu.selected_idx = 0;
 
     song_menu_elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_send_calibrate));
-    song_menu_elements[1] = _menu_create_element("Insert highscore", _menu_create_func_ptr_action(&_insert_new_highscore_test));
+    song_menu_elements[1] = _menu_create_element("Reset highscores", _menu_create_func_ptr_action(&highscore_reset));
     settings_menu.elements = song_menu_elements;
 
     // Set up difficulties menu

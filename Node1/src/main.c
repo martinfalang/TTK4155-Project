@@ -88,7 +88,6 @@ int main(void)
     joystick_init();
     touch_init();
     timer_init();
-    // highscore_reset();
 
     can_init(MODE_NORMAL);
     
