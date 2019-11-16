@@ -3,6 +3,7 @@
 #include "ir.h"
 #include "solenoid.h"
 #include "pwm.h"
+#include "../../lib/inc/timer.h"
 
 #include "../../lib/inc/message_defs.h"
 
@@ -10,6 +11,7 @@
 
 int solenoid_cmd_prev = 0;
 bool playing = false;
+uint8_t score = 0;
 
 can_msg_t endofgame_msg;
 
@@ -17,6 +19,8 @@ void game_init(game_difficulty_t difficulty, pid_t *motor_pid) {
     // always one data with event for what triggered game over
     endofgame_msg.length = 1;
     endofgame_msg.sid = STOP_GAME_SID;
+
+    score = 0;
 
     float kp;
     float ki;
@@ -59,6 +63,10 @@ void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
     if (!playing)
         return;
 
+    if (timer_get_1Hz_timeout()) {
+        score++;
+    }
+
     // Solenoid logic
     if (input_data->data[JOY_DIR_IDX] == 2 && 
             solenoid_cmd_prev != input_data->data[JOY_DIR_IDX]) {
@@ -80,12 +88,22 @@ void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
     int16_t degrees = input_data->data[SLIDER_RIGHT_IDX];
     pwm_set_duty_cycle(degrees);
 
+    can_msg_t score_msg = {
+        .sid = SCORE_SID,
+        .length = 1,
+        .data[0] = score
+    };
+
+    can_send(&score_msg);
+
     // IR beam logic
     if (ir_beam_broken()) {
         ir_reset();
         endofgame_msg.data[0] = 1;  // TODO: change event number for IR broken
         game_over();
     }
+
+
 } 
 
 
