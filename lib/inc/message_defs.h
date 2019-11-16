@@ -5,6 +5,7 @@ typedef enum can_msg_type {
     CTRL_SID = 345, // Controller / joystick / slider data // TODO: Set actual value
     START_GAME_SID = 234, // TODO: Set actual value
     STOP_GAME_SID = 123, // TODO: Set actual value
+    SCORE_SID = 100,
     CALIBRATE_SID = 456, // TODO: Set actual value // For running the calibration routine for the position controller
 } can_msg_type_t;
 

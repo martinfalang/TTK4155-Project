@@ -25,11 +25,6 @@ void game_start(uint8_t difficulty) {
     can_send(&_start_game_msg);
 }
 
-/**
- * @brief Handles when the user wants to exit the game before the IR beam
- *        is broken, normally by pressing the left touch button in-game.
- * 
- */
 void game_stop(void) {
     if (_is_playing) {
         _is_playing = false;
@@ -39,28 +34,16 @@ void game_stop(void) {
     }
 }
 
-/**
- * @brief Returns whether one is currently in a game
- *
- */
+
 bool game_is_playing(void) {
     return _is_playing;
 }
 
-/**
- * @brief Gets the current score
- * 
- * @return uint16_t The current score
- */
 uint16_t game_get_score(void) {
     return _score;
 }
 
-/**
- * @brief Sets the new score
- * 
- * @param new_score New score
- */
+
 void game_set_score(uint16_t new_score) {
     _score = new_score;
 }

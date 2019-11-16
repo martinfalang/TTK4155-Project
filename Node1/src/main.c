@@ -89,7 +89,7 @@ int main(void)
     joystick_init();
     touch_init();
     timer_init();
-    buzzer_init();
+    // buzzer_init();
 
     can_init(MODE_NORMAL);
     
@@ -102,7 +102,7 @@ int main(void)
     printf("All inits ran successfully!\n");    
 #endif // DEBUG
 
-    buzzer_play_song_P(star_wars_melody, star_wars_note_types, STAR_WARS_LENGTH);
+    // buzzer_play_song_P(star_wars_melody, star_wars_note_types, STAR_WARS_LENGTH);
 
     while(1) {
         
@@ -121,6 +121,9 @@ int main(void)
                 game_stop();
                 oled_menu_unlock();
                 break;
+
+            case SCORE_SID:
+                game_set_score(recv_msg->data[0]);
             default:
                 break;
             }
