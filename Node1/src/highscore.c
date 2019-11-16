@@ -3,41 +3,62 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Includes
 ////////////////////////////////////////////////////////////////////////////////
+#include "../../lib/inc/defines.h"
 #include <stdio.h>
+#include <avr/eeprom.h> // For non-volatile storage
+
+////////////////////////////////////////////////////////////////////////////////
+// Defines
+////////////////////////////////////////////////////////////////////////////////
+#define HIGHSCORE_USE_EEPROM // Comment out to compile without using EEPROM
+
+#ifdef HIGHSCORE_USE_EEPROM
+#define HIGHSCORE_EEPROM_BASE (uint8_t *) 0x64
+#endif /* HIGHSCORE_USE_EEPROM */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Global variables
 ////////////////////////////////////////////////////////////////////////////////
+#ifndef HIGHSCORE_USE_EEPROM
 static uint16_t _highscores[NUM_HIGHSCORES];
-
+#endif /* HIGHSCORE_USE_EEPROM
+ */
 ////////////////////////////////////////////////////////////////////////////////
 // Private function declarations
 ////////////////////////////////////////////////////////////////////////////////
 void _insert_score(uint8_t place, uint16_t score);
+void _highscore_write(uint8_t place, uint16_t score);
+uint16_t _highscore_read(uint8_t place);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Public functions
 ////////////////////////////////////////////////////////////////////////////////
-void highscore_init(void) {
-    _highscores[0] = 25;
-    _highscores[1] = 20;
-    _highscores[2] = 15;
-    _highscores[3] = 10;
-    _highscores[4] = 5;
+void highscore_reset(void) {
+    /* for (uint8_t i = 1; i <= NUM_HIGHSCORES; ++i) {
+        _highscore_write(i, (NUM_HIGHSCORES + 1 - i) * 5); // 25, 20, ...
+    } */
+    _highscore_write(1, 25);
+    _highscore_write(2, 20);
+    _highscore_write(3, 15);
+    _highscore_write(4, 10);
+    _highscore_write(5, 5);
+
 }
 
 uint16_t highscore_get(uint8_t place) {
     if (1 <= place && place <= NUM_HIGHSCORES) {
-        return _highscores[place - 1];
+        return _highscore_read(place);
     }
     return 0;
 };
 
 void highscore_print_score(char * out, uint8_t place) {
     uint16_t score = highscore_get(place);
+    printf("Updating score\n");
 
     if (score){
         sprintf(out, "#%d: %d", place, score);
+        printf("#%d: %d\n", place, score);
     }
 };
 
@@ -61,12 +82,33 @@ void _insert_score(uint8_t place, uint16_t score) {
 
     // EXAMPLE:
     // _highscores before:
-    // [15, 10, 5]
+    // [25, 20, 15, 10, 5]
     // _highscores after _insert_score(13)
-    // [15, 13, 10]
+    // [25, 20, 15, 13, 10]
 
-    for (uint8_t i = NUM_HIGHSCORES - 1; i >= place - 1; --i) {
-        _highscores[i] = _highscores[i-1];
+    for (uint8_t p = NUM_HIGHSCORES; p > place; --p) {
+        _highscore_write(p, _highscore_read(p - 1));
     }
+    _highscore_write(place, score);
+}
+
+void _highscore_write(uint8_t place, uint16_t score) {
+    #ifdef HIGHSCORE_USE_EEPROM
+    // Write to EEPROM. Use update function, which doesn't write if
+    // the same data is already there to increase the lifetime of the EEPROM
+    eeprom_update_byte(HIGHSCORE_EEPROM_BASE + place - 1, score);
+    #else
+    // Don't use EEPROM
     _highscores[place - 1] = score;
+    #endif
+
+}
+uint16_t _highscore_read(uint8_t place) {
+    #ifdef HIGHSCORE_USE_EEPROM
+    // Read from EEPROM
+    return eeprom_read_byte(HIGHSCORE_EEPROM_BASE + place - 1);
+    #else
+    // Don't use EEPROM, read from memory instead
+    return _highscores[place - 1];
+    #endif
 }

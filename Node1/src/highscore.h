@@ -4,13 +4,12 @@
 #include <stdint.h>
 
 #define NUM_HIGHSCORES 5
-#define HIGHSCORE_STR_MAX_LENGTH 19
 
 /**
  * @brief Initializes the highscore list to a predefined state
  * 
  */
-void highscore_init(void);
+void highscore_reset(void);
 
 /**
  * @brief Gets the score associated with the given place, and -1 if it doesn't

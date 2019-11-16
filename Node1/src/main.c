@@ -32,6 +32,7 @@
 #include "oled-menu.h"
 #include "timer.h"
 #include "game.h"
+#include "highscore.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
@@ -87,6 +88,7 @@ int main(void)
     joystick_init();
     touch_init();
     timer_init();
+    // highscore_reset();
 
     can_init(MODE_NORMAL);
     
