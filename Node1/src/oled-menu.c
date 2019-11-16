@@ -26,8 +26,8 @@
 // Defines
 ////////////////////////////////////////////////////////////////////////////////
 
-#define NUM_MAIN_MENU_ELEMENTS 3
-#define NUM_SONG_MENU_ELEMENTS 2
+#define NUM_MAIN_MENU_ELEMENTS 4
+#define NUM_SETTINGS_MENU_ELEMENTS 2
 #define NUM_DIFFICULTY_MENU_ELEMENTS 3
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ static oled_menu_t settings_menu;
 static oled_menu_t difficulty_menu;
 static oled_menu_el_t difficulty_menu_elements[NUM_DIFFICULTY_MENU_ELEMENTS];
 static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
-static oled_menu_el_t song_menu_elements[NUM_SONG_MENU_ELEMENTS];
+static oled_menu_el_t song_menu_elements[NUM_SETTINGS_MENU_ELEMENTS];
 
 static joy_btn_dir_t prev_dir; 
 static bool _menu_is_locked = false;
@@ -200,6 +200,11 @@ void _stop_game(void) {
     printf("Unlocking menu\n");
 }
 
+void _play_star_wars(void)  {
+    // TODO: Star wars code here
+    _toggle_led(); // TODO: Remove, is here just to test that it works...
+}
+
 void _print_score_to_oled_buffer() {
     // Prints the score to the OLED buffer. 
     // Assumes the header is already printed in _start_game
@@ -225,7 +230,7 @@ void _menu_init_menus(void)
 {
     // Set up main menu
     _menu_is_locked = false;
-    main_menu.num_elements = 3;
+    main_menu.num_elements = NUM_MAIN_MENU_ELEMENTS;
     strcpy(main_menu.header_string, "Main Menu");
     main_menu.selected_idx = 0;
     main_menu.back_action = _menu_get_empty_action();
@@ -233,12 +238,13 @@ void _menu_init_menus(void)
     main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_menu_ptr_action(&difficulty_menu));
     main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_func_ptr_action(&_toggle_led));
     main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
+    main_menu_elements[3] = _menu_create_element("Play Star Wars", _menu_create_func_ptr_action(&_play_star_wars));
     main_menu.elements = main_menu_elements;
 
     // Set up submenus
     // Set up settings menu
     strcpy(settings_menu.header_string, "Settings");
-    settings_menu.num_elements = 2;
+    settings_menu.num_elements = NUM_SETTINGS_MENU_ELEMENTS;
     settings_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     settings_menu.selected_idx = 0;
 
