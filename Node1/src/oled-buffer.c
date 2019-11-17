@@ -171,3 +171,17 @@ void oled_buffer_print_string(char *s, enum TEXT_SIZE size, uint8_t page, uint8_
 }
 
 
+void oled_buffer_draw_picture(uint8_t columns, uint8_t pages, 
+                              const uint8_t picture_P[pages][columns], 
+                              uint8_t column_offset, uint8_t page_offset,
+                              uint8_t *buffer) {
+    oled_buffer_clear_screen(buffer);
+
+    for (uint8_t i = 0; i < pages; ++i) {
+        for (uint8_t j = 0; j < columns; ++j) {
+            uint8_t data = pgm_read_byte(&picture_P[i][j]);
+            oled_buffer_set_page_column(i + page_offset, j + column_offset, 
+                                        data, buffer);
+        }
+    }
+}

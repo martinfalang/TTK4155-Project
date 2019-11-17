@@ -24,6 +24,8 @@
 
 #include "buzzer.h"
 #include "songs/star_wars.h"
+#include "pictures/star_wars_picture_128x32.h"
+#include <avr/pgmspace.h>
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -206,14 +208,13 @@ void _stop_game(void) {
 
 void _play_star_wars(void)  {
     oled_buffer_clear_screen(OLED_BUFFER_BASE);
-    oled_buffer_print_string(" STAR WARS IX", LARGE, 2, OLED_BUFFER_BASE);
-    oled_buffer_print_string("The Rise of Skywakler", MEDIUM, 3, OLED_BUFFER_BASE);
-    oled_buffer_print_string("  December 18, 2019", MEDIUM, 4, OLED_BUFFER_BASE);
+    oled_buffer_draw_picture(STAR_WARS_PICTURE_COLUMNS, STAR_WARS_PICTURE_PAGES, 
+                             starwars_picture_128x32, 0, 1, OLED_BUFFER_BASE);
     oled_draw_screen(OLED_BUFFER_BASE);
 
     buzzer_init();
     buzzer_play_song_P(star_wars_melody, star_wars_note_types, 
-                    STAR_WARS_LENGTH);
+                    STAR_WARS_LENGTH, STAR_WARS_BAR_LENGTH_MS);
 }
 
 void _print_score_to_oled_buffer() {
