@@ -24,7 +24,6 @@
 
 #include "buzzer.h"
 #include "songs/star_wars.h"
-#include "pictures/star_wars_picture.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -206,8 +205,10 @@ void _stop_game(void) {
 }
 
 void _play_star_wars(void)  {
-    oled_buffer_draw_picture(starwars_picture, STAR_WARS_PICTURE_COLUMNS, 
-                            STAR_WARS_PICTURE_PAGES, OLED_BUFFER_BASE);
+    oled_buffer_clear_screen(OLED_BUFFER_BASE);
+    oled_buffer_print_string(" STAR WARS IX", LARGE, 2, OLED_BUFFER_BASE);
+    oled_buffer_print_string("The Rise of Skywakler", MEDIUM, 3, OLED_BUFFER_BASE);
+    oled_buffer_print_string("  December 18, 2019", MEDIUM, 4, OLED_BUFFER_BASE);
     oled_draw_screen(OLED_BUFFER_BASE);
 
     buzzer_init();
@@ -248,7 +249,7 @@ void _menu_init_menus(void)
     main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_menu_ptr_action(&difficulty_menu));
     main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_func_ptr_action(&_toggle_led));
     main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
-    main_menu_elements[3] = _menu_create_element("Play Star Wars", _menu_create_func_ptr_action(&_play_star_wars));
+    main_menu_elements[3] = _menu_create_element("H Y P E", _menu_create_func_ptr_action(&_play_star_wars));
     main_menu.elements = main_menu_elements;
 
     // Set up submenus
