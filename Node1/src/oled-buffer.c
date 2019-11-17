@@ -169,3 +169,15 @@ void oled_buffer_print_string(char *s, enum TEXT_SIZE size, uint8_t page, uint8_
         oled_buffer_print_char(s[i], size, page, left_margin + i * ((uint8_t)size + spacing), buffer);
     }
 }
+
+
+void oled_buffer_draw_picture(const uint8_t *picture_P, uint8_t columns, uint8_t pages, uint8_t *buffer) {
+    oled_buffer_clear_screen(buffer);
+    for (uint8_t i = 0; i < pages; ++i) {
+        for (uint8_t j = 0; j < columns; ++j) {
+            int idx = i * pages + j;
+            oled_buffer_set_page_column(i, j, pgm_read_byte(&picture_P[idx]), buffer);
+        }
+    }
+}
+

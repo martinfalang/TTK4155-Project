@@ -42,4 +42,6 @@ void oled_buffer_print_string(char *s, enum TEXT_SIZE size, uint8_t page, uint8_
 // Drawing functions
 void oled_buffer_draw_line(uint8_t x_start, uint8_t y_start, uint8_t x_end, uint8_t y_end, uint8_t *buffer);
 
+void oled_buffer_draw_picture(const uint8_t *picture_P, uint8_t columns, uint8_t pages, uint8_t *buffer);
+
 #endif /* OLED_BUFFER_H */

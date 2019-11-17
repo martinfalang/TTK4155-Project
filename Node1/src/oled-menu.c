@@ -21,8 +21,11 @@
 #include "game.h"
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/message_defs.h"
+
 #include "buzzer.h"
 #include "songs/star_wars.h"
+#include "pictures/star_wars_picture.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Defines
@@ -203,6 +206,10 @@ void _stop_game(void) {
 }
 
 void _play_star_wars(void)  {
+    oled_buffer_draw_picture(starwars_picture, STAR_WARS_PICTURE_COLUMNS, 
+                            STAR_WARS_PICTURE_PAGES, OLED_BUFFER_BASE);
+    oled_draw_screen(OLED_BUFFER_BASE);
+
     buzzer_init();
     buzzer_play_song_P(star_wars_melody, star_wars_note_types, 
                     STAR_WARS_LENGTH);
