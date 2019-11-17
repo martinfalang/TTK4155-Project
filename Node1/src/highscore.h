@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define NUM_HIGHSCORES 5
+#define NUM_HIGHSCORES 3
 
 /**
  * @brief Initializes the highscore list to a predefined state

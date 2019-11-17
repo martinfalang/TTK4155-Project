@@ -37,8 +37,8 @@ void highscore_reset(void) {
     _highscore_write(1, 25);
     _highscore_write(2, 20);
     _highscore_write(3, 15);
-    _highscore_write(4, 10);
-    _highscore_write(5, 5);
+    // _highscore_write(4, 10);
+    // _highscore_write(5, 5);
 
 }
 

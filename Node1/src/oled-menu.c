@@ -7,6 +7,7 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>             // For led toggle
+#include <util/delay.h>         // for delay_ms
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,17 +46,14 @@ static oled_menu_t main_menu;
 static oled_menu_t highscore_menu;
 static oled_menu_t settings_menu;
 static oled_menu_t difficulty_menu;
-static oled_menu_t playing_menu;
-// static oled_menu_t game_over_menu;
 
 static oled_menu_el_t difficulty_menu_elements[NUM_DIFFICULTY_MENU_ELEMENTS];
 static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
 static oled_menu_el_t song_menu_elements[NUM_SETTINGS_MENU_ELEMENTS];
-static oled_menu_el_t playing_menu_elements[NUM_PLAYING_MENU_ELEMENTS];
-// static oled_menu_el_t game_over_menu_elements[NUM_PLAYING_MENU_ELEMENTS];
 static oled_menu_el_t highscore_menu_elements[NUM_HIGHSCORE_ELEMENTS];
 
 static joy_btn_dir_t prev_dir; 
+static bool _trying_to_exit = false;
 static uint16_t prev_score = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -73,6 +71,7 @@ void _menu_perform_action(oled_menu_action_t action);
 void _update_highscores_menu(void);
 void _insert_new_highscore_test(void);
 
+void _update_score(uint8_t score);
 void _toggle_led(void);
 void _start_game(uint8_t difficulty);
 void _stop_game(void);
@@ -97,14 +96,11 @@ void oled_menu_init(void)
 
 void oled_menu_update(void)
 {
-    // Only update the screen if needed
-    bool should_update = false;
-
-    if (!game_is_playing()) {
+    if (!game_in_game()) {
         joy_btn_dir_t dir = joystick_get_direction();
 
         // If not playing and no new input is given, return
-        if (dir == prev_dir && !game_is_playing()) {
+        if (dir == prev_dir) {
             return;
         }
 
@@ -113,11 +109,9 @@ void oled_menu_update(void)
         case RIGHT:
             _menu_perform_action(
                 p_current_menu->elements[p_current_menu->selected_idx].select_action);
-                should_update = true;
             break;
         case LEFT:
                 _menu_perform_action(p_current_menu->back_action);
-                should_update = true;
             break;
         case UP:
             if (p_current_menu->selected_idx > 0)
@@ -128,7 +122,6 @@ void oled_menu_update(void)
             {
                 p_current_menu->selected_idx = p_current_menu->num_elements - 1;
             }
-            should_update = true;
             break;
         case DOWN:
             if (p_current_menu->selected_idx < p_current_menu->num_elements - 1)
@@ -139,38 +132,61 @@ void oled_menu_update(void)
             {
                 p_current_menu->selected_idx = 0;
             }
-            should_update = true;
             break;
         }
 
         prev_dir = dir;
-    } else {
-        // Print the score if in game and it has changed since last time
+
+        if (!game_is_playing()) { 
+            // Only if not playing, so we don't overwrite what happens in
+            // _game_start
+            draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
+        }
+    } else { // Means we are in game
+        
         uint16_t new_score = game_get_score();
 
-        if (prev_score != new_score && game_is_playing) {
+        if (prev_score != new_score && game_is_playing()) {
             // Avoid doing expensive buffer writing if not needed
-            sprintf(playing_menu.elements[0].element_text, "Score: %i", new_score);
+            // sprintf(playing_menu.elements[0].element_text, "Score: %i", new_score);
             prev_score = new_score;
-            should_update = true;
+            _update_score(new_score);
+            // should_update = true;
         }
 
+        // Print the score if in game and it has changed since last time
         touch_btn_t buttons = touch_read_btns();
 
-        if (buttons.left && buttons.right && game_is_playing()) {
-            sprintf(playing_menu.elements[0].element_text, "Score: %i", game_get_score());
-            _stop_game();
-            should_update = true;   
+        // If not already trying to exit, exit.
+        // If already trying to exit
+        if (!_trying_to_exit && buttons.left && buttons.right) {
+            _trying_to_exit = true;
         }
+
+        // To avoid immediately exiting the game over menu
+        if (_trying_to_exit && !(buttons.left && buttons.right)) {
+            _trying_to_exit = false;
+        }
+
+        if (!game_is_playing()) {  // means game is over, but we have not returned from game over menu
+            _stop_game();
+        }
+        else if (_trying_to_exit) {
+            _stop_game();
+        }
+        else if (_trying_to_exit) { // If both btns pressed while game over
+            game_exit();
+            p_current_menu = &highscore_menu;
+        }
+
     }
 
     // Update the screen if needed
-    if (should_update) {
-        draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
-        oled_draw_screen(OLED_BUFFER_BASE);
-    }
+    // if (should_update) {
+        
+    oled_draw_screen(OLED_BUFFER_BASE);
+    // }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
@@ -183,17 +199,22 @@ void _toggle_led(void)
     PORTE ^= 1 << PE0;
 }
 
-void _start_game(uint8_t difficulty) {
-    
-    printf("Playing\n");
-    game_start(difficulty);
-    p_current_menu = &playing_menu;
-    // oled_buffer_clear_screen(OLED_BUFFER_BASE);
-    // oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
-    // oled_buffer_print_string("Press both touch", MEDIUM, 5, OLED_BUFFER_BASE);
-    // oled_buffer_print_string("buttons to cancel", MEDIUM, 6, OLED_BUFFER_BASE);
+void _update_score(uint8_t score) {
+    char str[10] = "";
+    sprintf(str, "Score: %i", score);
+    oled_buffer_print_string(str, MEDIUM, 2, OLED_BUFFER_BASE);
+}
 
-    // _print_score_to_oled_buffer();
+void _start_game(uint8_t difficulty) {
+    // Handles what the OLED should show when in game
+    printf("Playing\n");
+    oled_buffer_clear_screen(OLED_BUFFER_BASE);
+
+    oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
+    oled_buffer_print_string("Press both touch", MEDIUM, 6, OLED_BUFFER_BASE);
+    oled_buffer_print_string("buttons to stop", MEDIUM, 7, OLED_BUFFER_BASE);
+
+    game_start(difficulty);
 }
 
 
@@ -212,8 +233,10 @@ void _start_game_hard(void) {
 
 void _stop_game(void) {
     game_stop();
-    // p_current_menu = &game_over_menu;
-    printf("Unlocking menu\n");
+
+    oled_buffer_print_string("Game over", LARGE, 0, OLED_BUFFER_BASE);
+    oled_buffer_print_string("Press both touch", MEDIUM, 6, OLED_BUFFER_BASE);
+    oled_buffer_print_string("buttons to return", MEDIUM, 7, OLED_BUFFER_BASE);
 }
 
 void _play_star_wars(void)  {
@@ -281,29 +304,6 @@ void _menu_init_menus(void)
     difficulty_menu_elements[2] = _menu_create_element("Hard", _menu_create_func_ptr_action(&_start_game_hard));
 
     difficulty_menu.elements = difficulty_menu_elements;
-    
-    // Set up "menu" shown while playing
-    strcpy(playing_menu.header_string, "Playing");
-    
-    playing_menu.num_elements = NUM_PLAYING_MENU_ELEMENTS;
-    playing_menu.back_action = _menu_get_empty_action();
-    playing_menu.selected_idx = 0;
-
-    playing_menu_elements[1] = _menu_create_element("Press both touch", _menu_get_empty_action());
-    playing_menu_elements[2] = _menu_create_element("buttons to cancel", _menu_get_empty_action());
-
-    playing_menu.elements = playing_menu_elements;
-
-
-    // Set up after-game menu
-    // strcpy(playing_menu.header_string, "Game over");
-    // playing_menu.num_elements = NUM_GAME_OVER_MENU_ELEMENTS;
-    // playing_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
-    // playing_menu.selected_idx = 0;
-
-    // playing_menu_elements[2] = _menu_create_element("Press back to return", _menu_get_empty_action());    
-
-    // playing_menu.elements = playing_menu_elements;
 }
 
 void _update_highscores_menu(void) {

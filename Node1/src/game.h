@@ -44,4 +44,9 @@ void game_ir_beam_broken(void);
 bool game_is_playing(void);
 
 
+// TODO: Doxygen
+bool game_in_game(void);
+
+void game_exit(void);
+
 #endif  /* NODE1_GAME_H */
