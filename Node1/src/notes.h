@@ -12,7 +12,7 @@ typedef uint16_t note_t;
 typedef uint8_t  note_type_t;
 
 
-#define BAR_LENGTH_MS 1000  // ms
+#define BAR_LENGTH_MS 750  // ms
 
 #define NOTE_B0  31
 #define NOTE_C1  33

@@ -22,6 +22,12 @@
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/message_defs.h"
 
+#include "buzzer.h"
+#include "songs/star_wars.h"
+#include "pictures/star_wars_picture_128x32.h"
+#include <avr/pgmspace.h>
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Defines
 ////////////////////////////////////////////////////////////////////////////////
@@ -201,8 +207,14 @@ void _stop_game(void) {
 }
 
 void _play_star_wars(void)  {
-    // TODO: Star wars code here
-    _toggle_led(); // TODO: Remove, is here just to test that it works...
+    oled_buffer_clear_screen(OLED_BUFFER_BASE);
+    oled_buffer_draw_picture(STAR_WARS_PICTURE_COLUMNS, STAR_WARS_PICTURE_PAGES, 
+                             starwars_picture_128x32, 0, 1, OLED_BUFFER_BASE);
+    oled_draw_screen(OLED_BUFFER_BASE);
+
+    buzzer_init();
+    buzzer_play_song_P(star_wars_melody, star_wars_note_types, 
+                    STAR_WARS_LENGTH, STAR_WARS_BAR_LENGTH_MS);
 }
 
 void _print_score_to_oled_buffer() {
@@ -238,7 +250,7 @@ void _menu_init_menus(void)
     main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_menu_ptr_action(&difficulty_menu));
     main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_func_ptr_action(&_toggle_led));
     main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
-    main_menu_elements[3] = _menu_create_element("Play Star Wars", _menu_create_func_ptr_action(&_play_star_wars));
+    main_menu_elements[3] = _menu_create_element("H Y P E", _menu_create_func_ptr_action(&_play_star_wars));
     main_menu.elements = main_menu_elements;
 
     // Set up submenus

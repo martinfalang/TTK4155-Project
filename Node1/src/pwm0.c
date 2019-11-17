@@ -1,5 +1,5 @@
+#include "../../lib/inc/defines.h"
 #include "pwm0.h"
-#include "defines.h"
 
 #include <stdio.h>
 
@@ -22,6 +22,7 @@ void pwm0_set_freq(uint16_t freq) {
     if (freq == 0) {  // turn off pwm signal
         prescaler = 0;
         pwm0_set_prescaler(PREOFF);
+        return;
     }
 
     // search for best prescaler
@@ -84,7 +85,7 @@ void pwm0_set_freq(uint16_t freq) {
 
 void pwm0_set_prescaler(pwm0_prescaler_t ps) {
     // Set all prescaler bits to zero
-    TCCR0 &= PREOFF;
+    TCCR0 = TCCR0 & PREOFF;
 
     switch (ps) {
         case PREOFF:
@@ -114,10 +115,15 @@ void pwm0_set_prescaler(pwm0_prescaler_t ps) {
 #endif
 
     // By not setting all prescaler bits to 0, the PWM is turned off
-    TCCR0 |= ps;
+    TCCR0 = TCCR0 | ps;
 }
 
 
 uint16_t pwm0_get_prescaler() {
     return prescaler;
+}
+
+
+void pwm0_stop() {
+    TCCR0 = 0;
 }
