@@ -43,4 +43,5 @@ void game_ir_beam_broken(void);
  */
 bool game_is_playing(void);
 
+
 #endif  /* NODE1_GAME_H */

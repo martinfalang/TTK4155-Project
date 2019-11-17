@@ -117,7 +117,6 @@ int main(void)
             case STOP_GAME_SID:
                 printf("Beam broken!\n");
                 game_stop();
-                oled_menu_unlock();
                 break;
 
             case SCORE_SID:

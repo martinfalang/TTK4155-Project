@@ -29,6 +29,8 @@
 #define NUM_MAIN_MENU_ELEMENTS 4
 #define NUM_SETTINGS_MENU_ELEMENTS 2
 #define NUM_DIFFICULTY_MENU_ELEMENTS 3
+#define NUM_PLAYING_MENU_ELEMENTS 7
+#define NUM_GAME_OVER_MENU_ELEMENTS 7
 
 ////////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -38,12 +40,16 @@ static oled_menu_t *p_current_menu;
 static oled_menu_t main_menu;
 static oled_menu_t settings_menu;
 static oled_menu_t difficulty_menu;
+static oled_menu_t playing_menu;
+static oled_menu_t game_over_menu;
+
 static oled_menu_el_t difficulty_menu_elements[NUM_DIFFICULTY_MENU_ELEMENTS];
 static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
 static oled_menu_el_t song_menu_elements[NUM_SETTINGS_MENU_ELEMENTS];
+static oled_menu_el_t playing_menu_elements[NUM_PLAYING_MENU_ELEMENTS];
+static oled_menu_el_t game_over_menu_elements[NUM_PLAYING_MENU_ELEMENTS];
 
 static joy_btn_dir_t prev_dir; 
-static bool _menu_is_locked = false;
 static uint16_t prev_score = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +89,7 @@ void oled_menu_init(void)
 
 void oled_menu_update(void)
 {
-    if (!_menu_is_locked) {
+    if (!game_is_playing()) {
         joy_btn_dir_t dir = joystick_get_direction();
 
         if (dir == prev_dir) {
@@ -122,12 +128,13 @@ void oled_menu_update(void)
         }
 
         prev_dir = dir;
-        if (!_menu_is_locked) {
+        if (!game_is_playing()) {
             // The menu might be locked when doing an action, should only draw menu
             // if it is not
             draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
         }
-    } else {
+    } 
+    else {
         // Menu is locked e.g. while playing
         // user can unlock by pressing left touch button
 
@@ -152,14 +159,6 @@ void oled_menu_update(void)
 }
 
 
-void oled_menu_lock(void) {
-    _menu_is_locked = true;
-}
-void oled_menu_unlock(void) {
-    _menu_is_locked = false;
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
 ////////////////////////////////////////////////////////////////////////////////
@@ -172,12 +171,16 @@ void _toggle_led(void)
 }
 
 void _start_game(uint8_t difficulty) {
-    _menu_is_locked = true;
-    printf("Locking menu\n");
+    
+    printf("Playing\n");
     game_start(difficulty);
-    oled_buffer_clear_screen(OLED_BUFFER_BASE);
-    oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
-    _print_score_to_oled_buffer();
+    p_current_menu = &playing_menu;
+    // oled_buffer_clear_screen(OLED_BUFFER_BASE);
+    // oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
+    // oled_buffer_print_string("Press both touch", MEDIUM, 5, OLED_BUFFER_BASE);
+    // oled_buffer_print_string("buttons to cancel", MEDIUM, 6, OLED_BUFFER_BASE);
+
+    // _print_score_to_oled_buffer();
 }
 
 
@@ -196,7 +199,6 @@ void _start_game_hard(void) {
 
 void _stop_game(void) {
     game_stop();
-    _menu_is_locked = false;
     printf("Unlocking menu\n");
 }
 
@@ -229,7 +231,6 @@ void _send_calibrate(void) {
 void _menu_init_menus(void)
 {
     // Set up main menu
-    _menu_is_locked = false;
     main_menu.num_elements = NUM_MAIN_MENU_ELEMENTS;
     strcpy(main_menu.header_string, "Main Menu");
     main_menu.selected_idx = 0;
@@ -263,6 +264,35 @@ void _menu_init_menus(void)
     difficulty_menu_elements[2] = _menu_create_element("Hard", _menu_create_func_ptr_action(&_start_game_hard));
 
     difficulty_menu.elements = difficulty_menu_elements;
+    
+    // Set up "menu" shown while playing
+    strcpy(playing_menu.header_string, "Playing");
+    
+    playing_menu.num_elements = NUM_PLAYING_MENU_ELEMENTS;
+    playing_menu.back_action = _menu_get_empty_action();
+    playing_menu.selected_idx = 0;
+
+    playing_menu_elements[0] = _menu_create_element("", _menu_get_empty_action());
+    playing_menu_elements[1] = _menu_create_element("", _menu_get_empty_action());
+    playing_menu_elements[2] = _menu_create_element("", _menu_get_empty_action());
+    playing_menu_elements[3] = _menu_create_element("", _menu_get_empty_action());
+    playing_menu_elements[4] = _menu_create_element("", _menu_get_empty_action());
+    playing_menu_elements[5] = _menu_create_element("", _menu_get_empty_action());
+    playing_menu_elements[6] = _menu_create_element("Press both touch", _menu_get_empty_action());
+    playing_menu_elements[7] = _menu_create_element("buttons to cancel", _menu_get_empty_action());
+
+    playing_menu.elements = playing_menu_elements;
+
+
+    // Set up after-game menu
+    strcpy(playing_menu.header_string, "Game over");
+    playing_menu.num_elements = NUM_PLAYING_MENU_ELEMENTS;
+    playing_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
+    playing_menu.selected_idx = 0;
+
+    playing_menu_elements[1] = _menu_create_element("Final score:", _menu_get_empty_action());
+
+    playing_menu.elements = playing_menu_elements;
 }
 
 void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
