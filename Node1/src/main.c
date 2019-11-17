@@ -34,6 +34,7 @@
 #include "game.h"
 #include "buzzer.h"
 #include "songs/star_wars.h"
+#include "highscore.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
