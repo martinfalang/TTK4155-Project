@@ -1,3 +1,17 @@
+/**
+ * @file star_wars_picture_128x32.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Star Wars logo implemented as a paged picture that can be printed to
+ *        the OLED screen. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef STAR_WARS_PICTURE_128X32_H
 #define STAR_WARS_PICTURE_128X32_H
 
