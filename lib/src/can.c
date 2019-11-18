@@ -98,16 +98,27 @@ void can_send(const can_msg_t* p_msg) {
 
 void _can_receive(void) {
     
+    new_msg = false;
+
+    uint8_t int_flag = mcp2515_read_byte(MCP_CANINTF) & 0b11;
+
+    printf("Intflag 0x%x\n", int_flag);
+    
     uint8_t sidl = mcp2515_read_byte(MCP_RXB0SIDL);
     uint8_t sidh = mcp2515_read_byte(MCP_RXB0SIDH);
+
 
     received_msg.sid = sidh << 3 | sidl >> 5; 
     
     received_msg.length = mcp2515_read_byte(MCP_RXB0DLC) & 0xF;
 
+
     mcp2515_read_rx_buffer_data(received_msg.data, received_msg.length);
 
-    new_msg = false;
+    // Manually clear the interrupt flag
+    // This had to be done in order to have reliable operations, possibly due 
+    // to race conditions
+    mcp2515_bit_modify(MCP_CANINTF, 0b1, 0);   
 }
 
 ////////////////////////////////////////////////////////////////////////////////

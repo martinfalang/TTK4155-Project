@@ -6,7 +6,6 @@
 #include "../../lib/inc/defines.h"
 
 #include <avr/interrupt.h>
-#include <avr/io.h>             // For led toggle
 #include <util/delay.h>         // for delay_ms
 
 #include <stdio.h>
@@ -23,21 +22,21 @@
 #include "highscore.h"
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/message_defs.h"
+#include "../../lib/inc/mcp2515.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Defines
 ////////////////////////////////////////////////////////////////////////////////
 
-#define NUM_MAIN_MENU_ELEMENTS 4
-#define NUM_SETTINGS_MENU_ELEMENTS 2
-#define NUM_HIGHSCORE_ELEMENTS NUM_HIGHSCORES // From "highscore.h". 
-// Should not try to print more than 7 highscores with the 8 page OLED.
-#define NUM_DIFFICULTY_MENU_ELEMENTS 3
-#define NUM_INGAME_MENU_ELEMENTS 7
-#define NUM_GAME_OVER_MENU_ELEMENTS 7
+#define NUM_MAIN_MENU_ELEMENTS          4
+#define NUM_SETTINGS_MENU_ELEMENTS      2
+#define NUM_HIGHSCORE_ELEMENTS          NUM_HIGHSCORES
+#define NUM_DIFFICULTY_MENU_ELEMENTS    3
+#define NUM_INGAME_MENU_ELEMENTS        7
+#define NUM_GAME_OVER_MENU_ELEMENTS     7
 
 ////////////////////////////////////////////////////////////////////////////////
-// Global variables
+// Private variables
 ////////////////////////////////////////////////////////////////////////////////
 
 static oled_menu_t *p_current_menu;
@@ -60,7 +59,7 @@ struct oled_menu_elements {
 
 typedef struct oled_menu_elements oled_menu_elements_t;
 
-static oled_menu_elements_t * _elements;
+static oled_menu_elements_t *_elements;
 
 static joy_btn_dir_t prev_dir; 
 static uint16_t prev_score = 0;
@@ -81,21 +80,19 @@ void _menu_perform_action(oled_menu_action_t action);
 void _update_highscores_menu(void);
 void _insert_new_highscore_test(void);
 
-void _update_score(uint8_t score);
-void _toggle_led(void);
 void _start_game(uint8_t difficulty);
 void _stop_game(void);
-void _print_score_to_oled_buffer();
 
 
-const static can_msg_t _calibrate_msg = { .sid = CALIBRATE_SID, .length = 0 };
+const static can_msg_t _calibrate_msg = {
+    .sid = CALIBRATE_SID, 
+    .length = 0 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Public functions
 ////////////////////////////////////////////////////////////////////////////////
 
-void oled_menu_init(void)
-{
+void oled_menu_init(void) {
     _menu_init_menus();
     p_current_menu = &main_menu;
 
@@ -105,16 +102,22 @@ void oled_menu_init(void)
     oled_draw_screen(OLED_BUFFER_BASE);
 }
 
-void oled_menu_update(void)
-{
+void oled_menu_update(void) {
     joy_btn_dir_t dir = joystick_get_direction();
     bool should_update = false;
 
-    // If not playing and no new input is given, return
-    if (dir == prev_dir && !game_is_playing()) {
+    bool in_playing_menu = p_current_menu == &ingame_menu 
+                            || p_current_menu == &game_over_menu;
+
+
+    if (dir == prev_dir && !in_playing_menu) {
+        // If not playing and no new input is given, return
+        // Cannot return in playing menu, as we might want to
+        // update the score
         return;
     }
 
+    // Do menu navigation and actions based on joystick input
     switch (dir)
     {
     case RIGHT:
@@ -158,30 +161,25 @@ void oled_menu_update(void)
         uint16_t new_score = game_get_score();
         
         if (prev_score != new_score || new_score == 0) {
-            // Avoid doing expensive buffer writing if not needed
+            // Print the score if in game and it has changed since last time
             sprintf(ingame_menu.elements[1].element_text, "Score: %i", new_score);
-            printf("Update ingame score\n");
-            _update_score(new_score);
             should_update = true;
         }
-        // Print the score if in game and it has changed since last time
         touch_btn_t buttons = touch_read_btns();
 
         if (!game_is_playing() || buttons.left && buttons.right) {
             // Update the score in game over-menu
             sprintf(game_over_menu.elements[1].element_text, "Score: %i", new_score);
-            printf("Update game over score\n");
-
             p_current_menu = &game_over_menu;
             should_update = true;
             game_stop();
+            _update_highscores_menu();
         }
     
         prev_score = new_score;
     }
 
-    if (should_update)
-    {
+    if (should_update) {
         // Only update the screen if something has changed
         draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
         oled_draw_screen(OLED_BUFFER_BASE);
@@ -195,62 +193,28 @@ void oled_menu_update(void)
 
 // Action functions
 
-void _toggle_led(void)
-{
-    PORTE ^= 1 << PE0;
-}
-
-void _update_score(uint8_t score) {
-    char str[10] = "";
-    sprintf(str, "Score: %i", score);
-    oled_buffer_print_string(str, MEDIUM, 2, OLED_BUFFER_BASE);
-}
-
-// void _start_game(uint8_t difficulty) {
-//     // Handles what the OLED should show when in game
-//     printf("Playing\n");
-//     oled_buffer_clear_screen(OLED_BUFFER_BASE);
-
-//     oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
-//     oled_buffer_print_string("Press both touch", MEDIUM, 6, OLED_BUFFER_BASE);
-//     oled_buffer_print_string("buttons to stop", MEDIUM, 7, OLED_BUFFER_BASE);
-
-//     game_start(difficulty);
-// }
-
-
-// TODO: Add typedefs instead of magic numbers
 void _start_game_easy(void) {
-    game_start(0);
+    game_start(DIFF_EASY);
     p_current_menu = &ingame_menu;
 }
 
 void _start_game_medium(void) {
-    game_start(1);
+    game_start(DIFF_MEDIUM);
     p_current_menu = &ingame_menu;
 
 }
 
 void _start_game_hard(void) {
-    game_start(2);
+    game_start(DIFF_HARD);
     p_current_menu = &ingame_menu;
 }
 
-// void _stop_game(void) {
-//     game_stop();
-
-//     // oled_buffer_print_string("Game over", LARGE, 0, OLED_BUFFER_BASE);
-//     // oled_buffer_print_string("Press both touch", MEDIUM, 6, OLED_BUFFER_BASE);
-//     // oled_buffer_print_string("buttons to return", MEDIUM, 7, OLED_BUFFER_BASE);
-// }
-
 void _play_star_wars(void)  {
     // TODO: Star wars code here
-    _toggle_led(); // TODO: Remove, is here just to test that it works...
 }
 
-void _insert_new_highscore_test(void) {
-    highscore_nominate(highscore_get(1) + 1);
+void _reset_highscores_and_update(void) {
+    highscore_reset();
     _update_highscores_menu();
 }
 
@@ -260,8 +224,7 @@ void _send_calibrate(void) {
 
 // Menu functions
 
-void _menu_init_menus(void)
-{
+void _menu_init_menus(void) {
     // Set menu elements pointer to point to external memory
     _elements = (oled_menu_elements_t *) OLED_MENU_ELEMENTS_BASE;
 
@@ -285,12 +248,14 @@ void _menu_init_menus(void)
     highscore_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     highscore_menu.selected_idx = 0;
 
+    highscore_menu.elements = _elements->highscore_menu_elements;
+
     for (uint8_t i = 0; i < NUM_HIGHSCORE_ELEMENTS; ++i) {
         // Should not do anything when "selecting a score"
-        _elements->highscore_menu_elements[i] = _menu_create_element("asdf", _menu_get_empty_action()); 
+        highscore_menu.elements[i] = _menu_create_element("", _menu_get_empty_action()); 
     }
+
     _update_highscores_menu(); // Generates strings and prints them to the menu
-    highscore_menu.elements = _elements->highscore_menu_elements;
 
     // Set up settings menu
     strcpy(settings_menu.header_string, "Settings");
@@ -301,7 +266,7 @@ void _menu_init_menus(void)
     settings_menu.elements = _elements->setting_menu_elements;
 
     settings_menu.elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_send_calibrate));
-    settings_menu.elements[1] = _menu_create_element("Reset highscores", _menu_create_func_ptr_action(&highscore_reset));
+    settings_menu.elements[1] = _menu_create_element("Reset highscores", _menu_create_func_ptr_action(&_reset_highscores_and_update));
 
     // Set up difficulties menu
     strcpy(difficulty_menu.header_string, "Difficulty");
@@ -352,19 +317,15 @@ void _menu_init_menus(void)
 
     game_over_menu.elements[5] = _menu_create_element("Press right to", _menu_create_menu_ptr_action(&highscore_menu));
     game_over_menu.elements[6] = _menu_create_element("go to highscore", _menu_create_menu_ptr_action(&highscore_menu));
-    
-
-
 }
 
 void _update_highscores_menu(void) {
     for (uint8_t i = 0; i < NUM_HIGHSCORE_ELEMENTS; ++i) {
-        highscore_print_score((char *) _elements->highscore_menu_elements[i].element_text, i+1);
+        highscore_print_score(highscore_menu.elements[i].element_text, i + 1); // Place starts on 1 (1st place)
     }
 }
 
-void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
-{
+void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer) {
     // Clear the buffer
     oled_buffer_clear_screen(buffer);
 
@@ -387,13 +348,11 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
                                     || p_current_menu == &highscore_menu;
                                     
         
-        if (is_selected && !in_menu_without_marker) 
-        {
+        if (is_selected && !in_menu_without_marker) {
             // Add "> " before the string
             strcat(row_string, selected_marker);
         }
-        else
-        {
+        else {
             // Add "  " before the string
             strcat(row_string, not_selected_marker);
         }
@@ -405,8 +364,7 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
     }
 }
 
-oled_menu_action_t _menu_get_empty_action(void)
-{
+oled_menu_action_t _menu_get_empty_action(void) {
     // Returns an empty action
     oled_menu_action_t action;
     action.ptr.p_menu = NULL;
@@ -415,8 +373,7 @@ oled_menu_action_t _menu_get_empty_action(void)
     return action;
 }
 
-oled_menu_action_t _menu_create_menu_ptr_action(oled_menu_t *p_menu)
-{
+oled_menu_action_t _menu_create_menu_ptr_action(oled_menu_t *p_menu) {
     oled_menu_action_t action;
 
     action.is_func_ptr = false;
@@ -425,8 +382,7 @@ oled_menu_action_t _menu_create_menu_ptr_action(oled_menu_t *p_menu)
     return action;
 }
 
-oled_menu_action_t _menu_create_func_ptr_action(void *p_func)
-{
+oled_menu_action_t _menu_create_func_ptr_action(void *p_func) {
     oled_menu_action_t action;
     action.is_func_ptr = true;
     action.ptr.p_menu = p_func;
@@ -434,8 +390,7 @@ oled_menu_action_t _menu_create_func_ptr_action(void *p_func)
     return action;
 }
 
-oled_menu_el_t _menu_create_element(char *text, oled_menu_action_t action)
-{
+oled_menu_el_t _menu_create_element(char *text, oled_menu_action_t action) {
     oled_menu_el_t element;
 
     strcpy(element.element_text, text);
@@ -444,8 +399,7 @@ oled_menu_el_t _menu_create_element(char *text, oled_menu_action_t action)
     return element;
 }
 
-oled_menu_el_t _menu_create_empty_element()
-{
+oled_menu_el_t _menu_create_empty_element() {
     oled_menu_el_t element;
 
     // Set the string to be empty
@@ -456,15 +410,12 @@ oled_menu_el_t _menu_create_empty_element()
     return element;
 }
 
-void _menu_perform_action(oled_menu_action_t action)
-{
-    if (action.is_func_ptr && action.ptr.p_func != NULL)
-    {
+void _menu_perform_action(oled_menu_action_t action) {
+    if (action.is_func_ptr && action.ptr.p_func != NULL) {
         // Call function in function pointer
         action.ptr.p_func();
     }
-    else if (action.ptr.p_menu != NULL)
-    {
+    else if (action.ptr.p_menu != NULL) {
         // Change current menu to the pointer in the performed action if it is not NULL
         p_current_menu = action.ptr.p_menu;
     }

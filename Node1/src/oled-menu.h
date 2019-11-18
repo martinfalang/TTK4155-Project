@@ -26,7 +26,7 @@ typedef union oled_menu_action_ptr {
     void (* p_func)(void);
 } oled_menu_action_ptr_t;
 
-typedef struct ole_menu_action {
+typedef struct oled_menu_action {
     oled_menu_action_ptr_t ptr;
     bool is_func_ptr; // True if ptr is a function pointer, false if it is a oled_menu_t pointer
 } oled_menu_action_t;
@@ -43,6 +43,17 @@ typedef struct oled_menu {
     uint8_t num_elements;
     uint8_t selected_idx; // Index of selected menu element in elements-array
 } oled_menu_t;
+
+////////////////////////////////////////////////////////////////////////////////
+// Structs and unions
+////////////////////////////////////////////////////////////////////////////////
+
+typedef enum oled_menu_types {
+    MAIN_MENU,
+    HIGHSCORE_MENU,
+    SETTINGS_MENU,
+    DIFFICULTY_MENU
+} oled_menu_types_t;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function declarations

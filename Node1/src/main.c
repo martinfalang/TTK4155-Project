@@ -110,17 +110,18 @@ int main(void)
         }
 
         if (can_new_msg()) {
-             
+            // printf("Got new message, biatch!\n");
             recv_msg = can_get_recv_msg();
 
             switch (recv_msg->sid)
             {
             case STOP_GAME_SID:
-                printf("Beam broken!\n");
+                printf("Stop game!\n");
                 game_stop();
                 break;
 
             case SCORE_SID:
+                // printf("Got score!\n");
                 game_set_score(recv_msg->data[0]);
             default:
                 break;
@@ -128,7 +129,7 @@ int main(void)
         }
 
         if (timer_get_6Hz_timeout() && game_is_playing()) {
-            printf("Controller data sent\n");
+            // printf("Controller data sent\n");
             _send_joystick_and_touch_data();
         }
 

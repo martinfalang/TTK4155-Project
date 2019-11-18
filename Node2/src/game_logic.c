@@ -107,7 +107,7 @@ void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
     };
 
     can_send(&score_msg);
-
+    printf("Sent score: %i\n", score);
     // IR beam logic
     if (ir_beam_broken()) {
         ir_reset();

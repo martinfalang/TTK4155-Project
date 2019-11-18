@@ -69,7 +69,7 @@ int main(void) {
     while (1) {
         if (can_new_msg()) {
             recvmsg = can_get_recv_msg();
-            
+
             // TODO: Change cases with defines from file
             switch (recvmsg->sid)
             {

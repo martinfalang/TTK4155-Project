@@ -1,21 +1,38 @@
 #ifndef NODE1_GAME_H
 #define NODE1_GAME_H
 
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include <stdbool.h>
 #include <stdint.h>
 
+////////////////////////////////////////////////////////////////////////////////
+// Enums
+////////////////////////////////////////////////////////////////////////////////
+
+typedef enum difficulty {
+    DIFF_EASY,
+    DIFF_MEDIUM,
+    DIFF_HARD
+} difficulty_t;
+
+////////////////////////////////////////////////////////////////////////////////
+// Function declarations
+////////////////////////////////////////////////////////////////////////////////
+
 /**
- * @brief Handles printing the score to the buffer
+ * @brief Starts the game from Node1's side
  * 
+ * @param difficulty The difficulty to be played at
  */
-
-// TODO Update with enum
-void game_start(uint8_t difficulty);
+void game_start(difficulty_t difficulty);
 
 
 /**
- * @brief Handles when the user wants to exit the game before the IR beam
- *        is broken, normally by pressing the left touch button in-game.
+ * @brief Stop the game either when game was canceled or
+ *          game was over
  * 
  */
 void game_stop(void);
@@ -26,14 +43,14 @@ void game_stop(void);
  * 
  * @param new_score New score
  */
-uint16_t game_get_score(void);
+void game_set_score(uint8_t new_score);
 
 /**
  * @brief Gets the current score
  * 
  * @return uint16_t The current score
  */
-void game_set_score(uint16_t new_score);
+uint8_t game_get_score(void);
 
 void game_ir_beam_broken(void);
 

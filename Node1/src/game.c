@@ -1,3 +1,7 @@
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include "game.h"
 #include "oled-buffer.h"
 #include "oled-menu.h"
@@ -5,23 +9,25 @@
 #include "../../lib/inc/message_defs.h"
 #include "highscore.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// Private functions
+////////////////////////////////////////////////////////////////////////////////
+
 static bool _is_playing = false;
-static bool _in_game = false;
-static uint16_t _score = 0;
+static uint8_t _score = 0;
 
 static can_msg_t _start_game_msg = { .sid = START_GAME_SID, .length = 1 , .data[0] = 0};
 const static can_msg_t _stop_game_msg = { .sid = STOP_GAME_SID, .length = 0 };
 
+////////////////////////////////////////////////////////////////////////////////
+// Public functions
+////////////////////////////////////////////////////////////////////////////////
 
-// TODO Update with enum
-void game_start(uint8_t difficulty) {
+void game_start(difficulty_t difficulty) {
     _is_playing = true;
-    _in_game = true;
 
-    // Reset score
     _score = 0;
 
-    // Set difficulty
     _start_game_msg.data[DIFFICULTY_IDX] = difficulty;
 
     // Send message to node 2 to start game
@@ -39,24 +45,14 @@ void game_stop(void) {
     }
 }
 
-
 bool game_is_playing(void) {
     return _is_playing;
 }
 
-uint16_t game_get_score(void) {
+uint8_t game_get_score(void) {
     return _score;
 }
 
-
-void game_set_score(uint16_t new_score) {
+void game_set_score(uint8_t new_score) {
     _score = new_score;
-}
-
-bool game_in_game(void) {
-    return _in_game;
-}
-
-void game_exit(void) {
-    _in_game = false;
 }

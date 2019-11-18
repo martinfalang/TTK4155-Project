@@ -34,12 +34,13 @@ uint16_t _highscore_read(uint8_t place);
 // Public functions
 ////////////////////////////////////////////////////////////////////////////////
 void highscore_reset(void) {
-    _highscore_write(1, 25);
-    _highscore_write(2, 20);
-    _highscore_write(3, 15);
-    _highscore_write(4, 10);
-    _highscore_write(5, 2);
+    _highscore_write(1, 0);
+    _highscore_write(2, 0);
+    _highscore_write(3, 0);
+    _highscore_write(4, 0);
+    _highscore_write(5, 0);
 
+    
 }
 
 uint16_t highscore_get(uint8_t place) {
@@ -53,9 +54,10 @@ void highscore_print_score(char * out, uint8_t place) {
     uint16_t score = highscore_get(place);
     printf("Updating score\n");
 
-    if (score){
+    if (score) { // != 0
         sprintf(out, "#%d: %d", place, score);
-        printf("#%d: %d\n", place, score);
+    } else {
+        sprintf(out, "#%d: -", place);
     }
 };
 
