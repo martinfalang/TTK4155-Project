@@ -44,6 +44,7 @@
 #define ADC_SIZE    1024
 #define SRAM_BASE   (uint8_t*)0x1800
 #define OLED_BUFFER_BASE (SRAM_BASE)
+#define OLED_MENU_ELEMENTS_BASE (SRAM_BASE + 0x400)
 #define SRAM_SIZE   2048
 
 // OLED

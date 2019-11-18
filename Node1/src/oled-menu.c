@@ -32,7 +32,6 @@
 #define NUM_SETTINGS_MENU_ELEMENTS 2
 #define NUM_HIGHSCORE_ELEMENTS NUM_HIGHSCORES // From "highscore.h". 
 // Should not try to print more than 7 highscores with the 8 page OLED.
-#define NUM_SONG_MENU_ELEMENTS 2
 #define NUM_DIFFICULTY_MENU_ELEMENTS 3
 #define NUM_PLAYING_MENU_ELEMENTS 3
 #define NUM_GAME_OVER_MENU_ELEMENTS 3
@@ -47,10 +46,16 @@ static oled_menu_t highscore_menu;
 static oled_menu_t settings_menu;
 static oled_menu_t difficulty_menu;
 
-static oled_menu_el_t difficulty_menu_elements[NUM_DIFFICULTY_MENU_ELEMENTS];
-static oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
-static oled_menu_el_t song_menu_elements[NUM_SETTINGS_MENU_ELEMENTS];
-static oled_menu_el_t highscore_menu_elements[NUM_HIGHSCORE_ELEMENTS];
+struct oled_menu_elements {
+    oled_menu_el_t difficulty_menu_elements[NUM_DIFFICULTY_MENU_ELEMENTS];
+    oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
+    oled_menu_el_t song_menu_elements[NUM_SETTINGS_MENU_ELEMENTS];
+    oled_menu_el_t highscore_menu_elements[NUM_HIGHSCORE_ELEMENTS];
+};
+
+typedef struct oled_menu_elements oled_menu_elements_t;
+
+static oled_menu_elements_t * _elements;
 
 static joy_btn_dir_t prev_dir; 
 static bool _trying_to_exit = false;
@@ -257,17 +262,20 @@ void _send_calibrate(void) {
 
 void _menu_init_menus(void)
 {
+    // Set menu elements pointer to point to external memory
+    _elements = (oled_menu_elements_t *) OLED_MENU_ELEMENTS_BASE;
+
     // Set up main menu
     main_menu.num_elements = NUM_MAIN_MENU_ELEMENTS;
     strcpy(main_menu.header_string, "Main Menu");
     main_menu.selected_idx = 0;
     main_menu.back_action = _menu_get_empty_action();
 
-    main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_menu_ptr_action(&difficulty_menu));
-    main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_menu_ptr_action(&highscore_menu));
-    main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
-    main_menu_elements[3] = _menu_create_element("Play Star Wars", _menu_create_func_ptr_action(&_play_star_wars));
-    main_menu.elements = main_menu_elements;
+    _elements->main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_menu_ptr_action(&difficulty_menu));
+    _elements->main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_menu_ptr_action(&highscore_menu));
+    _elements->main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
+    _elements->main_menu_elements[3] = _menu_create_element("Play Star Wars", _menu_create_func_ptr_action(&_play_star_wars));
+    main_menu.elements = _elements->main_menu_elements;
 
     // Set up submenus
     // Set up highscores "menu"
@@ -278,10 +286,10 @@ void _menu_init_menus(void)
 
     for (uint8_t i = 0; i < NUM_HIGHSCORE_ELEMENTS; ++i) {
         // Should not do anything when "selecting a score"
-        highscore_menu_elements[i] = _menu_create_element("asdf", _menu_get_empty_action()); 
+        _elements->highscore_menu_elements[i] = _menu_create_element("asdf", _menu_get_empty_action()); 
     }
     _update_highscores_menu(); // Generates strings and prints them to the menu
-    highscore_menu.elements = highscore_menu_elements;
+    highscore_menu.elements = _elements->highscore_menu_elements;
 
     // Set up settings menu
     strcpy(settings_menu.header_string, "Settings");
@@ -289,9 +297,9 @@ void _menu_init_menus(void)
     settings_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     settings_menu.selected_idx = 0;
 
-    song_menu_elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_send_calibrate));
-    song_menu_elements[1] = _menu_create_element("Reset highscores", _menu_create_func_ptr_action(&highscore_reset));
-    settings_menu.elements = song_menu_elements;
+    _elements->song_menu_elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_send_calibrate));
+    _elements->song_menu_elements[1] = _menu_create_element("Reset highscores", _menu_create_func_ptr_action(&highscore_reset));
+    settings_menu.elements = _elements->song_menu_elements;
 
     // Set up difficulties menu
     strcpy(difficulty_menu.header_string, "Difficulty");
@@ -299,16 +307,16 @@ void _menu_init_menus(void)
     difficulty_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     difficulty_menu.selected_idx = 0;
 
-    difficulty_menu_elements[0] = _menu_create_element("Easy", _menu_create_func_ptr_action(&_start_game_easy));
-    difficulty_menu_elements[1] = _menu_create_element("Medium", _menu_create_func_ptr_action(&_start_game_medium));
-    difficulty_menu_elements[2] = _menu_create_element("Hard", _menu_create_func_ptr_action(&_start_game_hard));
+    _elements->difficulty_menu_elements[0] = _menu_create_element("Easy", _menu_create_func_ptr_action(&_start_game_easy));
+    _elements->difficulty_menu_elements[1] = _menu_create_element("Medium", _menu_create_func_ptr_action(&_start_game_medium));
+    _elements->difficulty_menu_elements[2] = _menu_create_element("Hard", _menu_create_func_ptr_action(&_start_game_hard));
 
-    difficulty_menu.elements = difficulty_menu_elements;
+    difficulty_menu.elements = _elements->difficulty_menu_elements;
 }
 
 void _update_highscores_menu(void) {
     for (uint8_t i = 0; i < NUM_HIGHSCORE_ELEMENTS; ++i) {
-        highscore_print_score((char *) highscore_menu_elements[i].element_text, i+1);
+        highscore_print_score((char *) _elements->highscore_menu_elements[i].element_text, i+1);
     }
 }
 
