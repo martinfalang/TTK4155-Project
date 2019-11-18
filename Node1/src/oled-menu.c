@@ -33,8 +33,8 @@
 #define NUM_HIGHSCORE_ELEMENTS NUM_HIGHSCORES // From "highscore.h". 
 // Should not try to print more than 7 highscores with the 8 page OLED.
 #define NUM_DIFFICULTY_MENU_ELEMENTS 3
-#define NUM_PLAYING_MENU_ELEMENTS 3
-#define NUM_GAME_OVER_MENU_ELEMENTS 3
+#define NUM_INGAME_MENU_ELEMENTS 7
+#define NUM_GAME_OVER_MENU_ELEMENTS 7
 
 ////////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -45,12 +45,17 @@ static oled_menu_t main_menu;
 static oled_menu_t highscore_menu;
 static oled_menu_t settings_menu;
 static oled_menu_t difficulty_menu;
+static oled_menu_t ingame_menu;
+static oled_menu_t game_over_menu;
 
 struct oled_menu_elements {
-    oled_menu_el_t difficulty_menu_elements[NUM_DIFFICULTY_MENU_ELEMENTS];
     oled_menu_el_t main_menu_elements[NUM_MAIN_MENU_ELEMENTS];
-    oled_menu_el_t song_menu_elements[NUM_SETTINGS_MENU_ELEMENTS];
+    oled_menu_el_t difficulty_menu_elements[NUM_DIFFICULTY_MENU_ELEMENTS];
+    oled_menu_el_t setting_menu_elements[NUM_SETTINGS_MENU_ELEMENTS];
     oled_menu_el_t highscore_menu_elements[NUM_HIGHSCORE_ELEMENTS];
+    oled_menu_el_t ingame_menu_elements[NUM_INGAME_MENU_ELEMENTS];
+    oled_menu_el_t game_over_menu_elements[NUM_GAME_OVER_MENU_ELEMENTS];
+    
 };
 
 typedef struct oled_menu_elements oled_menu_elements_t;
@@ -58,7 +63,6 @@ typedef struct oled_menu_elements oled_menu_elements_t;
 static oled_menu_elements_t * _elements;
 
 static joy_btn_dir_t prev_dir; 
-static bool _trying_to_exit = false;
 static uint16_t prev_score = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +76,7 @@ oled_menu_action_t _menu_get_empty_action(void);
 oled_menu_action_t _menu_create_menu_ptr_action(oled_menu_t *p_menu);
 oled_menu_action_t _menu_create_func_ptr_action(void *p_func);
 oled_menu_el_t _menu_create_element(char *text, oled_menu_action_t action);
+oled_menu_el_t _menu_create_empty_element();
 void _menu_perform_action(oled_menu_action_t action);
 void _update_highscores_menu(void);
 void _insert_new_highscore_test(void);
@@ -81,6 +86,7 @@ void _toggle_led(void);
 void _start_game(uint8_t difficulty);
 void _stop_game(void);
 void _print_score_to_oled_buffer();
+
 
 const static can_msg_t _calibrate_msg = { .sid = CALIBRATE_SID, .length = 0 };
 
@@ -101,78 +107,86 @@ void oled_menu_init(void)
 
 void oled_menu_update(void)
 {
-    if (!game_in_game()) {
-        joy_btn_dir_t dir = joystick_get_direction();
+    joy_btn_dir_t dir = joystick_get_direction();
+    bool should_update = false;
 
-        // If not playing and no new input is given, return
-        if (dir == prev_dir) {
-            return;
-        }
+    // If not playing and no new input is given, return
+    if (dir == prev_dir && !game_is_playing()) {
+        return;
+    }
 
-        switch (dir)
+    switch (dir)
+    {
+    case RIGHT:
+        _menu_perform_action(
+            p_current_menu->elements[p_current_menu->selected_idx].select_action);
+            should_update = true;
+        break;
+    case LEFT:
+            _menu_perform_action(p_current_menu->back_action);
+            should_update = true;
+        break;
+    case UP:
+        if (p_current_menu->selected_idx > 0)
         {
-        case RIGHT:
-            _menu_perform_action(
-                p_current_menu->elements[p_current_menu->selected_idx].select_action);
-            break;
-        case LEFT:
-                _menu_perform_action(p_current_menu->back_action);
-            break;
-        case UP:
-            if (p_current_menu->selected_idx > 0)
-            {
-                --p_current_menu->selected_idx;
-            }
-            else
-            {
-                p_current_menu->selected_idx = p_current_menu->num_elements - 1;
-            }
-            break;
-        case DOWN:
-            if (p_current_menu->selected_idx < p_current_menu->num_elements - 1)
-            {
-                ++p_current_menu->selected_idx;
-            }
-            else
-            {
-                p_current_menu->selected_idx = 0;
-            }
-            break;
+            --p_current_menu->selected_idx;
         }
-
-        prev_dir = dir;
-
-        if (!game_is_playing()) { 
-            // Only if not playing, so we don't overwrite what happens in
-            // _game_start
-            draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
+        else
+        {
+            p_current_menu->selected_idx = p_current_menu->num_elements - 1;
         }
-    } else { // Means we are in game
+        should_update = true;
+        break;
+    case DOWN:
+        if (p_current_menu->selected_idx < p_current_menu->num_elements - 1)
+        {
+            ++p_current_menu->selected_idx;
+        }
+        else
+        {
+            p_current_menu->selected_idx = 0;
+        }
+        should_update = true;
+        break;
+    }
+
+    prev_dir = dir;
+    
+
+    if (p_current_menu == &ingame_menu) {
         
         uint16_t new_score = game_get_score();
-
-        if (prev_score != new_score && game_is_playing()) {
+        
+        if (prev_score != new_score || new_score == 0) {
             // Avoid doing expensive buffer writing if not needed
-            // sprintf(playing_menu.elements[0].element_text, "Score: %i", new_score);
-            prev_score = new_score;
+            sprintf(ingame_menu.elements[1].element_text, "Score: %i", new_score);
+            printf("Update ingame score\n");
             _update_score(new_score);
-            // should_update = true;
+            should_update = true;
         }
-
         // Print the score if in game and it has changed since last time
         touch_btn_t buttons = touch_read_btns();
 
+        if (!game_is_playing() || buttons.left && buttons.right) {
+            // Update the score in game over-menu
+            sprintf(game_over_menu.elements[1].element_text, "Score: %i", new_score);
+            printf("Update game over score\n");
 
-        
-        // Add some logic to change menu here
-
+            p_current_menu = &game_over_menu;
+            should_update = true;
+            game_stop();
+        }
+    
+        prev_score = new_score;
     }
 
-    // Update the screen if needed
-    // if (should_update) {
-        
-    oled_draw_screen(OLED_BUFFER_BASE);
-    // }
+    if (should_update)
+    {
+        // Only update the screen if something has changed
+        draw_oled_menu(p_current_menu, OLED_BUFFER_BASE);
+        oled_draw_screen(OLED_BUFFER_BASE);
+    }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -192,39 +206,43 @@ void _update_score(uint8_t score) {
     oled_buffer_print_string(str, MEDIUM, 2, OLED_BUFFER_BASE);
 }
 
-void _start_game(uint8_t difficulty) {
-    // Handles what the OLED should show when in game
-    printf("Playing\n");
-    oled_buffer_clear_screen(OLED_BUFFER_BASE);
+// void _start_game(uint8_t difficulty) {
+//     // Handles what the OLED should show when in game
+//     printf("Playing\n");
+//     oled_buffer_clear_screen(OLED_BUFFER_BASE);
 
-    oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
-    oled_buffer_print_string("Press both touch", MEDIUM, 6, OLED_BUFFER_BASE);
-    oled_buffer_print_string("buttons to stop", MEDIUM, 7, OLED_BUFFER_BASE);
+//     oled_buffer_print_string("Playing...", LARGE, 0, OLED_BUFFER_BASE);
+//     oled_buffer_print_string("Press both touch", MEDIUM, 6, OLED_BUFFER_BASE);
+//     oled_buffer_print_string("buttons to stop", MEDIUM, 7, OLED_BUFFER_BASE);
 
-    game_start(difficulty);
-}
+//     game_start(difficulty);
+// }
 
 
 // TODO: Add typedefs instead of magic numbers
 void _start_game_easy(void) {
-    _start_game(0);
+    game_start(0);
+    p_current_menu = &ingame_menu;
 }
 
 void _start_game_medium(void) {
-    _start_game(1);
+    game_start(1);
+    p_current_menu = &ingame_menu;
+
 }
 
 void _start_game_hard(void) {
-    _start_game(2);
+    game_start(2);
+    p_current_menu = &ingame_menu;
 }
 
-void _stop_game(void) {
-    game_stop();
+// void _stop_game(void) {
+//     game_stop();
 
-    oled_buffer_print_string("Game over", LARGE, 0, OLED_BUFFER_BASE);
-    oled_buffer_print_string("Press both touch", MEDIUM, 6, OLED_BUFFER_BASE);
-    oled_buffer_print_string("buttons to return", MEDIUM, 7, OLED_BUFFER_BASE);
-}
+//     // oled_buffer_print_string("Game over", LARGE, 0, OLED_BUFFER_BASE);
+//     // oled_buffer_print_string("Press both touch", MEDIUM, 6, OLED_BUFFER_BASE);
+//     // oled_buffer_print_string("buttons to return", MEDIUM, 7, OLED_BUFFER_BASE);
+// }
 
 void _play_star_wars(void)  {
     // TODO: Star wars code here
@@ -253,11 +271,12 @@ void _menu_init_menus(void)
     main_menu.selected_idx = 0;
     main_menu.back_action = _menu_get_empty_action();
 
-    _elements->main_menu_elements[0] = _menu_create_element("Play Game", _menu_create_menu_ptr_action(&difficulty_menu));
-    _elements->main_menu_elements[1] = _menu_create_element("Highscores", _menu_create_menu_ptr_action(&highscore_menu));
-    _elements->main_menu_elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
-    _elements->main_menu_elements[3] = _menu_create_element("Play Star Wars", _menu_create_func_ptr_action(&_play_star_wars));
     main_menu.elements = _elements->main_menu_elements;
+
+    main_menu.elements[0] = _menu_create_element("Play Game", _menu_create_menu_ptr_action(&difficulty_menu));
+    main_menu.elements[1] = _menu_create_element("Highscores", _menu_create_menu_ptr_action(&highscore_menu));
+    main_menu.elements[2] = _menu_create_element("Settings", _menu_create_menu_ptr_action(&settings_menu));
+    main_menu.elements[3] = _menu_create_element("Play Star Wars", _menu_create_func_ptr_action(&_play_star_wars));
 
     // Set up submenus
     // Set up highscores "menu"
@@ -279,9 +298,10 @@ void _menu_init_menus(void)
     settings_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     settings_menu.selected_idx = 0;
 
-    _elements->song_menu_elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_send_calibrate));
-    _elements->song_menu_elements[1] = _menu_create_element("Reset highscores", _menu_create_func_ptr_action(&highscore_reset));
-    settings_menu.elements = _elements->song_menu_elements;
+    settings_menu.elements = _elements->setting_menu_elements;
+
+    settings_menu.elements[0] = _menu_create_element("Calibrate position", _menu_create_func_ptr_action(&_send_calibrate));
+    settings_menu.elements[1] = _menu_create_element("Reset highscores", _menu_create_func_ptr_action(&highscore_reset));
 
     // Set up difficulties menu
     strcpy(difficulty_menu.header_string, "Difficulty");
@@ -289,11 +309,52 @@ void _menu_init_menus(void)
     difficulty_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
     difficulty_menu.selected_idx = 0;
 
-    _elements->difficulty_menu_elements[0] = _menu_create_element("Easy", _menu_create_func_ptr_action(&_start_game_easy));
-    _elements->difficulty_menu_elements[1] = _menu_create_element("Medium", _menu_create_func_ptr_action(&_start_game_medium));
-    _elements->difficulty_menu_elements[2] = _menu_create_element("Hard", _menu_create_func_ptr_action(&_start_game_hard));
-
     difficulty_menu.elements = _elements->difficulty_menu_elements;
+
+    difficulty_menu.elements[0] = _menu_create_element("Easy", _menu_create_func_ptr_action(&_start_game_easy));
+    difficulty_menu.elements[1] = _menu_create_element("Medium", _menu_create_func_ptr_action(&_start_game_medium));
+    difficulty_menu.elements[2] = _menu_create_element("Hard", _menu_create_func_ptr_action(&_start_game_hard));
+
+
+    // Set up ingame menu
+    strcpy(ingame_menu.header_string, "Playing...");
+    ingame_menu.num_elements = NUM_INGAME_MENU_ELEMENTS;
+    ingame_menu.back_action = _menu_get_empty_action();
+    ingame_menu.selected_idx = 0;
+
+    ingame_menu.elements = _elements->ingame_menu_elements;
+
+    ingame_menu.elements[0] = _menu_create_empty_element();
+    ingame_menu.elements[1] = _menu_create_empty_element();
+
+    ingame_menu.elements[2] = _menu_create_empty_element();
+    ingame_menu.elements[3] = _menu_create_empty_element();
+    ingame_menu.elements[4] = _menu_create_empty_element();
+
+    ingame_menu.elements[5] = _menu_create_element("Press both touch", _menu_get_empty_action());
+    ingame_menu.elements[6] = _menu_create_element("buttons to quit!", _menu_get_empty_action());
+
+
+    // Set up game over menu
+    strcpy(game_over_menu.header_string, "Game over");
+    game_over_menu.num_elements = NUM_GAME_OVER_MENU_ELEMENTS;
+    game_over_menu.back_action = _menu_create_menu_ptr_action(&main_menu);
+    
+    game_over_menu.selected_idx = 5;
+
+    game_over_menu.elements = _elements->game_over_menu_elements;
+
+    game_over_menu.elements[0] = _menu_create_element("", _menu_create_menu_ptr_action(&highscore_menu));
+    game_over_menu.elements[1] = _menu_create_element("", _menu_create_menu_ptr_action(&highscore_menu));
+    game_over_menu.elements[2] = _menu_create_element("", _menu_create_menu_ptr_action(&highscore_menu));
+    game_over_menu.elements[3] = _menu_create_element("", _menu_create_menu_ptr_action(&highscore_menu));
+    game_over_menu.elements[4] = _menu_create_element("", _menu_create_menu_ptr_action(&highscore_menu));
+
+    game_over_menu.elements[5] = _menu_create_element("Press right to", _menu_create_menu_ptr_action(&highscore_menu));
+    game_over_menu.elements[6] = _menu_create_element("go to highscore", _menu_create_menu_ptr_action(&highscore_menu));
+    
+
+
 }
 
 void _update_highscores_menu(void) {
@@ -321,7 +382,12 @@ void draw_oled_menu(oled_menu_t *menu, uint8_t *buffer)
         strcpy(row_string, "");
 
         bool is_selected = menu->selected_idx == i;
-        if (is_selected && !game_is_playing()) // Shouldn't show pointer while playing
+        bool in_menu_without_marker = p_current_menu == &ingame_menu 
+                                    || p_current_menu == &game_over_menu
+                                    || p_current_menu == &highscore_menu;
+                                    
+        
+        if (is_selected && !in_menu_without_marker) 
         {
             // Add "> " before the string
             strcat(row_string, selected_marker);
@@ -374,6 +440,18 @@ oled_menu_el_t _menu_create_element(char *text, oled_menu_action_t action)
 
     strcpy(element.element_text, text);
     element.select_action = action;
+
+    return element;
+}
+
+oled_menu_el_t _menu_create_empty_element()
+{
+    oled_menu_el_t element;
+
+    // Set the string to be empty
+    strcpy(element.element_text, "");
+    // Set the action to do nothing
+    element.select_action = _menu_get_empty_action();
 
     return element;
 }

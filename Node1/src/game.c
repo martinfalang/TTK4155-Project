@@ -3,6 +3,7 @@
 #include "oled-menu.h"
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/message_defs.h"
+#include "highscore.h"
 
 static bool _is_playing = false;
 static bool _in_game = false;
@@ -30,6 +31,8 @@ void game_start(uint8_t difficulty) {
 void game_stop(void) {
     if (_is_playing) {
         _is_playing = false;
+
+        highscore_nominate(game_get_score());
 
         // Send message to node 2 to stop game
         can_send(&_stop_game_msg);
