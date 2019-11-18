@@ -1,3 +1,3 @@
-# pingpong
+# Term project for TTK4155 -- Group 10
 
-Term project for TTK4155
+This is group 10's term project in TTK4155 - Embedded and Industrial Computer System Design. 
