@@ -15,6 +15,10 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+////////////////////////////////////////////////////////////////////////////////
+// Defines
+////////////////////////////////////////////////////////////////////////////////
+
 // Debug - set this to 1 to allow test functions
 #define DEBUG                   0
 #define COMPILE_SRAM_TEST       0
@@ -57,6 +61,7 @@
 #define ADC_SIZE    1024
 #define SRAM_BASE   (uint8_t*)0x1800
 #define OLED_BUFFER_BASE (SRAM_BASE)
+#define OLED_MENU_ELEMENTS_BASE (SRAM_BASE + 0x400)
 #define SRAM_SIZE   2048
 
 // OLED

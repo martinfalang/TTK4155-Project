@@ -14,6 +14,8 @@
 #ifndef SERVO_H
 #define SERVO_H
 
+#include <stdint.h>
+
 /**
  * @brief Initialized the PWM for the servo motor
  * 

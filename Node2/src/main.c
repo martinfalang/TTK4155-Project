@@ -11,20 +11,20 @@
  * 
  */
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
 
-#include "../../lib/inc/defines.h"
-#include <util/delay.h>
-
+// Lib includes
 #include "../../lib/inc/uart.h"
+#include "../../lib/inc/defines.h"
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/message_defs.h"
+#include "../../lib/inc/message_defs.h"
 #include "../../lib/inc/timer.h"
 
+// Node2 includes
 #include "ir.h"
 #include "pid.h"
 #include "dac.h"
@@ -34,12 +34,25 @@
 #include "servo.h"
 #include "game_logic.h"
 
+// AVR and C includes
+#include <stdio.h>
+#include <stdbool.h>
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+
+////////////////////////////////////////////////////////////////////////////////
+// Private functions
+////////////////////////////////////////////////////////////////////////////////
 
 pid_t motor_pos_pid;
 const float T  = 0.01;  // sample time of pid
 
-
 extern can_msg_t endofgame_msg;  // TODO: Bad?
+
+////////////////////////////////////////////////////////////////////////////////
+// Main function
+////////////////////////////////////////////////////////////////////////////////
 
 int main(void) {
     uart_init(); putchar('\n');
@@ -68,7 +81,7 @@ int main(void) {
     while (1) {
         if (can_new_msg()) {
             recvmsg = can_get_recv_msg();
-            
+
             // TODO: Change cases with defines from file
             switch (recvmsg->sid)
             {
@@ -93,6 +106,10 @@ int main(void) {
 
     return 0;
 }   
+
+////////////////////////////////////////////////////////////////////////////////
+// Interrupt service routine
+////////////////////////////////////////////////////////////////////////////////
 
 ISR(TIMER5_COMPA_vect) {
     motor_pos_pid.measurement_raw += encoder_read_raw();

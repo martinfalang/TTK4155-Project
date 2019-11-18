@@ -1,13 +1,18 @@
 
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include "../inc/mcp2515.h"
 #include "../inc/spi.h"
 #include "../inc/defines.h"
 
 #include <util/delay.h>
-
-#if DEBUG
 #include <stdio.h>
-#endif // DEBUG
+
+////////////////////////////////////////////////////////////////////////////////
+// Public functions
+////////////////////////////////////////////////////////////////////////////////
 
 void mcp2515_init(unsigned char mode) {
     spi_init();
@@ -16,26 +21,23 @@ void mcp2515_init(unsigned char mode) {
 
     _delay_ms(10);
     
-#if DEBUG
     unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
     unsigned char cur_mode = (val & MODE_MASK);
 
     if (cur_mode != MODE_CONFIG) {
         printf("mcp_init(): Mode not config after reset, mode was: 0x%.2x\n", cur_mode);
     }
-#endif // DEBUG
+
     // Enable interrupts on RX0 buffer
     mcp2515_bit_modify(MCP_CANINTE, MCP_RX0IF, MCP_RX0IF);
 
     mcp_set_ops_mode(mode);
 
-#if DEBUG
     val = mcp2515_read_byte(MCP_CANSTAT);
     cur_mode = (val & MODE_MASK);
     if (cur_mode != mode) {
         printf("mcp_init(): Mode was not set to selected mode 0x%x. Mode was: 0x%x\n", mode, cur_mode);
     }
-#endif // DEBUG
 }
 
 void mcp_set_ops_mode(unsigned char mode) {
