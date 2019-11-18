@@ -16,8 +16,6 @@
 
 #include "mcp2515_defines.h"
 #include <stddef.h>     // for size_t
-#include <stdint.h>
-#include <stdbool.h>    // for bool
 
 
 // General functions
