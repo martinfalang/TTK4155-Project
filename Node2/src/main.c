@@ -14,18 +14,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <avr/io.h>
-#include "../../lib/inc/uart.h"
+#include <avr/interrupt.h>
 
 #include "../../lib/inc/defines.h"
 #include <util/delay.h>
+
+#include "../../lib/inc/uart.h"
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/message_defs.h"
-
-
-#include <avr/interrupt.h>
-
-#include "../../lib/inc/message_defs.h"
+#include "../../lib/inc/timer.h"
 
 #include "ir.h"
 #include "pid.h"
@@ -33,9 +31,6 @@
 #include "motor.h"
 #include "enocder.h"
 #include "solenoid.h"
-#include "../../lib/inc/mcp2515_defines.h"
-#include "../../lib/inc/can.h"
-#include "../../lib/inc/timer.h"
 #include "servo.h"
 #include "game_logic.h"
 

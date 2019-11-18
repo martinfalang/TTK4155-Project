@@ -25,14 +25,14 @@
 #include <avr/interrupt.h>
 
 #include "../../lib/inc/uart.h"
+#include "../../lib/inc/can.h"
+#include "../../lib/inc/mcp2515_defines.h"
+#include "../../lib/inc/timer.h"
+#include "../../lib/inc/message_defs.h"
 #include "xmem.h"
 #include "adc.h"
 #include "joystick.h"
 #include "touch.h"
-#include "../../lib/inc/mcp2515_defines.h"
-#include "../../lib/inc/message_defs.h"
-#include "../../lib/inc/can.h"
-#include "../../lib/inc/timer.h"
 #include "oled.h"
 #include "oled-menu.h"
 #include "game.h"

@@ -2,11 +2,11 @@
 
 // Period 20ms
 // Duty cycle * Period in interval [0.9, 2.1] ms
+#include "servo.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "servo.h"
 
 // Definitions
 // See docs/schematics/arduino-mega2560_r3-sch.pdf for schematics

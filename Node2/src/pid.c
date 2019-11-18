@@ -1,8 +1,8 @@
 #include "pid.h"
 #include <avr/interrupt.h>
-#include "../../lib/inc/defines.h"
-
 #include <stdio.h>
+#include "../../lib/inc/defines.h"  // F_CPU
+
 
 
 void pid_init(pid_t *pid, float kp, float ki, float kd, float timestep, 
