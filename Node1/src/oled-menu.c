@@ -12,20 +12,19 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <avr/pgmspace.h>
 
+#include "../../lib/inc/can.h"
+#include "../../lib/inc/message_defs.h"
 #include "oled-menu.h"
 #include "joystick.h"
 #include "touch.h"
 #include "oled-buffer.h"
 #include "oled.h"
 #include "game.h"
-#include "../../lib/inc/can.h"
-#include "../../lib/inc/message_defs.h"
-
 #include "buzzer.h"
 #include "songs/star_wars.h"
 #include "pictures/star_wars_picture_128x32.h"
-#include <avr/pgmspace.h>
 
 
 ////////////////////////////////////////////////////////////////////////////////

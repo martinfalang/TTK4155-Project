@@ -4,6 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <stdint.h>
+
 #include "../../lib/inc/defines.h"
 #include "oled-buffer.h"
 #include "oled.h"
