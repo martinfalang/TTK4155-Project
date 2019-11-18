@@ -3,12 +3,6 @@
 // Includes
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <avr/io.h>
-#include <util/delay.h>
-#include <avr/interrupt.h>
-
 // Lib includes
 #include "../../lib/inc/uart.h"
 #include "../../lib/inc/defines.h"
@@ -27,6 +21,13 @@
 #include "solenoid.h"
 #include "pwm.h"
 #include "game_logic.h"
+
+// AVR and C includes
+#include <stdio.h>
+#include <stdbool.h>
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
