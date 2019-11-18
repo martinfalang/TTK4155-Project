@@ -1,5 +1,5 @@
 /**
- * @file message_defs.h
+ * @file can_message_defs.h
  * @author Kristian Brudeli
  *         Martin Falang
  *         Eirik Flemsæter Falck
@@ -11,19 +11,19 @@
  * 
  */
 
-#ifndef MESSAGE_DEFS_H
-#define MESSAGE_DEFS_H
+#ifndef can_message_defs_H
+#define can_message_defs_H
 
 ////////////////////////////////////////////////////////////////////////////////
 // Enums
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef enum can_msg_type {
-    CTRL_SID = 345, // Controller / joystick / slider data // TODO: Set actual value
-    START_GAME_SID = 234, // TODO: Set actual value
-    STOP_GAME_SID = 123, // TODO: Set actual value
-    SCORE_SID = 100,
-    CALIBRATE_SID = 456, // TODO: Set actual value // For running the calibration routine for the position controller
+    IO_DATA_SID = 0,
+    START_GAME_SID = 1,
+    STOP_GAME_SID = 2,
+    SCORE_SID = 3,
+    CALIBRATE_SID = 4,
 } can_msg_type_t;
 
 // Definitions of messages corresponding to different message types 
@@ -50,4 +50,4 @@ typedef enum can_stop_game_msg {
     SENDER_IDX
 } can_stop_game_msg_t;
 
-#endif /* MESSAGE_DEFS_H */
+#endif /* can_message_defs_H */

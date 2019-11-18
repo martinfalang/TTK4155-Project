@@ -16,9 +16,7 @@
 
 void mcp2515_init(unsigned char mode) {
     spi_init();
-
     mcp2515_reset();
-
     _delay_ms(10);
     
     unsigned char val = mcp2515_read_byte(MCP_CANSTAT);
@@ -45,11 +43,8 @@ void mcp_set_ops_mode(unsigned char mode) {
 }
 
 void mcp2515_reset() {
-
     spi_slave_select();
-
     spi_write_byte(MCP_RESET);
-
     spi_slave_deselect();
 }
 
@@ -64,11 +59,8 @@ unsigned char mcp2515_read_byte(unsigned char address) {
 }
 
 void mcp2515_read(unsigned char start_address, unsigned char *out_data, unsigned char out_data_length) {
-    
     spi_slave_select();
-
     spi_write_byte(MCP_READ);
-
     spi_write_byte(start_address);
 
     for (unsigned char i = 0; i < out_data_length; i++) {
@@ -80,9 +72,7 @@ void mcp2515_read(unsigned char start_address, unsigned char *out_data, unsigned
 
 
 void mcp2515_read_rx_buffer_data(unsigned char *data, unsigned char data_length) {
-
     spi_slave_select();
-
     spi_write_byte(MCP_READ_RX0_D0);
 
     for (unsigned char i = 0; i < data_length; ++i) {
@@ -93,13 +83,9 @@ void mcp2515_read_rx_buffer_data(unsigned char *data, unsigned char data_length)
 } 
 
 unsigned char mcp2515_read_status(void) {
-
     spi_slave_select();
-
     spi_write_byte(MCP_READ_STATUS);
-
     unsigned char status = spi_read_byte();
-
     spi_slave_deselect();
 
     return status;
@@ -114,11 +100,8 @@ void mcp2515_write_byte(unsigned char address, unsigned char data) {
 }
 
 void mcp2515_write(unsigned char start_address, unsigned char *data, size_t data_length) {
-
     spi_slave_select();
-
     spi_write_byte(MCP_WRITE);
-
     spi_write_byte(start_address);
 
     for (unsigned char i = 0; i < data_length; i++) {
@@ -129,25 +112,16 @@ void mcp2515_write(unsigned char start_address, unsigned char *data, size_t data
 }
 
 void mcp2515_request_to_send(unsigned char command) {
-
     spi_slave_select();
-
     spi_write_byte(command);
-
     spi_slave_deselect();
 }
 
 void mcp2515_bit_modify(unsigned char address, unsigned char mask_byte, unsigned char data) {
-
     spi_slave_select();
-
     spi_write_byte(MCP_BITMOD);
-
     spi_write_byte(address);
-
     spi_write_byte(mask_byte);
-
     spi_write_byte(data);
-
     spi_slave_deselect();
 }

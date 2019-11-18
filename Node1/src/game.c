@@ -6,8 +6,9 @@
 #include "oled-buffer.h"
 #include "oled-menu.h"
 #include "../../lib/inc/can.h"
-#include "../../lib/inc/message_defs.h"
+#include "../../lib/inc/can_message_defs.h"
 #include "highscore.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private functions
@@ -18,6 +19,7 @@ static uint8_t _score = 0;
 
 static can_msg_t _start_game_msg = { .sid = START_GAME_SID, .length = 1 , .data[0] = 0};
 const static can_msg_t _stop_game_msg = { .sid = STOP_GAME_SID, .length = 0 };
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Public functions

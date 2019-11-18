@@ -20,8 +20,8 @@
 #include "../../lib/inc/defines.h"
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
-#include "../../lib/inc/message_defs.h"
-#include "../../lib/inc/message_defs.h"
+#include "../../lib/inc/can_message_defs.h"
+#include "../../lib/inc/can_message_defs.h"
 #include "../../lib/inc/timer.h"
 
 // Node2 includes
@@ -48,7 +48,6 @@
 pid_t motor_pos_pid;
 const float T  = 0.01;  // sample time of pid
 
-extern can_msg_t endofgame_msg;  // TODO: Bad?
 
 ////////////////////////////////////////////////////////////////////////////////
 // Main function
@@ -77,12 +76,10 @@ int main(void) {
 
     const can_msg_t *recvmsg;
 
-    // TODO: Make this less tight
     while (1) {
         if (can_new_msg()) {
             recvmsg = can_get_recv_msg();
 
-            // TODO: Change cases with defines from file
             switch (recvmsg->sid)
             {
             case CALIBRATE_SID: // calibrate
@@ -90,11 +87,10 @@ int main(void) {
                 break;
             case START_GAME_SID: // start game
                 game_init(recvmsg->data[0], &motor_pos_pid);
-            case CTRL_SID: // playing game
+            case IO_DATA_SID: // playing game
                 game_play(recvmsg, &motor_pos_pid);
                 break;
             case STOP_GAME_SID:
-                endofgame_msg.data[0] = 0;
                 game_over();
                 break;
             default:

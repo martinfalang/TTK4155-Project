@@ -28,7 +28,9 @@
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/timer.h"
-#include "../../lib/inc/message_defs.h"
+#include "../../lib/inc/can_message_defs.h"
+#include "../../lib/inc/heartbeat.h"
+
 #include "xmem.h"
 #include "adc.h"
 #include "joystick.h"
@@ -43,15 +45,6 @@
 // Private functions
 ////////////////////////////////////////////////////////////////////////////////
 
-void heartbeat_init() {
-    DDRE |= 1 << DDE0;
-}
-
-void heartbeat()
-{
-    PORTE ^= 1 << PE0;
-}
-
 void _send_joystick_and_touch_data(void) {
     joy_btn_dir_t joystick_dir = joystick_get_direction();
     pos_t joystick_pos = joystick_get_position();
@@ -60,7 +53,7 @@ void _send_joystick_and_touch_data(void) {
     touch_slider_t touch_sliders = touch_read_sliders();
 
     can_msg_t msg = {
-        .sid = CTRL_SID,
+        .sid = IO_DATA_SID,
         .length = 7,
         .data[JOY_DIR_IDX] = joystick_dir,
         .data[JOY_POS_X_IDX] = joystick_pos.x,

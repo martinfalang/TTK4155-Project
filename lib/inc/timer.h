@@ -30,11 +30,11 @@
 #define _10HZ_COUNT         6
 
 #if defined (__AVR_ATmega162__)
-#define TIMER_ISR_VECT      TIMER2_COMP_vect
+    #define TIMER_ISR_VECT      TIMER2_COMP_vect
 
 #elif defined (__AVR_ATmega2560__)
 
-#define TIMER_ISR_VECT      TIMER3_COMPA_vect
+    #define TIMER_ISR_VECT      TIMER3_COMPA_vect
 
 #endif
 

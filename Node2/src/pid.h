@@ -11,8 +11,14 @@
  * 
  */
 
+/**
+ * @brief Struct containing all PID parameters, measurements, setpoint, errors
+ *        and output.
+ *
+ */
 #ifndef PID_H
 #define PID_H
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Includes
@@ -20,10 +26,16 @@
 
 #include <stdint.h>
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // Structs
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Struct containing all PID parameters, measurements, setpoint, errors
+ *        and output.
+ *
+ */
 typedef struct pid_param {
     float Kp;  /** Proportional gain */
     float Ki;  /** Intergral gain */
@@ -43,6 +55,7 @@ typedef struct pid_param {
     float output_maximum;
     float output_minimum;
 } pid_t;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function declarations

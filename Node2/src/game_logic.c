@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////////////
 // Includes
 ////////////////////////////////////////////////////////////////////////////////
@@ -6,16 +5,18 @@
 #include "game_logic.h"
 #include "ir.h"
 #include "solenoid.h"
-#include "pwm.h"
-#include "../../lib/inc/timer.h"
-
-#include "../../lib/inc/message_defs.h"
-#include "ir.h"
-#include "solenoid.h"
 #include "servo.h"
+
+#include "../../lib/inc/timer.h"
+#include "../../lib/inc/can_message_defs.h"
 
 #include <stdio.h>
 
+////////////////////////////////////////////////////////////////////////////////
+// Defines
+////////////////////////////////////////////////////////////////////////////////
+
+#define PRINT_PID_DATA  1
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private variables
@@ -27,8 +28,10 @@ uint8_t score = 0;
 
 can_msg_t endofgame_msg = {
     .length = 1,
-    .sid = STOP_GAME_SID
+    .sid = STOP_GAME_SID,
+    .data[0] = 0
 };
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Public functions
@@ -53,18 +56,16 @@ void game_init(game_difficulty_t difficulty, pid_t *motor_pid) {
             break;
         case MEDIUM:
             // Tune pid with decent settings (slow)
-            // TODO: figure these out
-            kp = 2.3;
+            kp = 1.5;
             ki = 0.5;
-            kd = 0.3;
+            kd = 0.5;
             printf("Difficulty MEDIUM\n");            
             break;
         case HARD:
             // Tune pid with bad settings (oscillations)
-            // TODO: figure these out
-            kp = 2.3;
+            kp = 2.7;
             ki = 0.5;
-            kd = 0.3;
+            kd = 0.1;
             printf("Difficulty HARD\n");
             break;
     }
@@ -96,9 +97,12 @@ void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
     // Control position of motor carrage
     int16_t pos_ref = input_data->data[SLIDER_LEFT_IDX] * 10;
     motor_pos_pid->setpoint = pos_ref;
+
+#if PRINT_PID_DATA
     printf("R: %d\tPos: %d\tU: %d\te: %d\n", (int)pos_ref, 
                 (int)motor_pos_pid->measurement, (int)motor_pos_pid->output, 
                 (int)motor_pos_pid->current_error);
+#endif // PRINT_PID_DATA
 
     // Servo motor logic
     int16_t degrees = input_data->data[SLIDER_RIGHT_IDX];
@@ -111,11 +115,11 @@ void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
     };
 
     can_send(&score_msg);
-    printf("Sent score: %i\n", score);
+
     // IR beam logic
     if (ir_beam_broken()) {
         ir_reset();
-        endofgame_msg.data[0] = 1;  // TODO: change event number for IR broken
+        endofgame_msg.data[0] = 1;
         game_over();
     }
 
@@ -131,5 +135,4 @@ void game_over(void) {
     printf("Game over!\n");
     pid_stop_timer();
     can_send(&endofgame_msg);
-    // TODO: do whatever's gonna happen when game ends in this function
 }

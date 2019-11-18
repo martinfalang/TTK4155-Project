@@ -15,11 +15,23 @@
 #ifndef OLED_H
 #define OLED_H
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Initializes the OLED SSD1308 controller
+ * 
+ */
 void oled_init(void);
+
+/**
+ * @brief Draws the buffer to the OLED screen
+ * 
+ * @param buffer pointer to oled buffer to print from
+ */
 void oled_draw_screen(uint8_t *buffer);
+
 
 #endif /* OLED_H */

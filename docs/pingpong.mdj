@@ -11255,7 +11255,7 @@
 											"top": 830,
 											"width": 108.38623046875,
 											"height": 13,
-											"text": "lib/message_defs"
+											"text": "lib/can_message_defs"
 										},
 										{
 											"_type": "LabelView",
@@ -15052,7 +15052,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFuflfAcLN+1XE="
 					},
-					"name": "lib/message_defs"
+					"name": "lib/can_message_defs"
 				}
 			]
 		},
@@ -21616,7 +21616,7 @@
 											"top": 590,
 											"width": 108.38623046875,
 											"height": 13,
-											"text": "lib/message_defs"
+											"text": "lib/can_message_defs"
 										},
 										{
 											"_type": "LabelView",
@@ -24361,7 +24361,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFufltGXUGddkE="
 					},
-					"name": "lib/message_defs"
+					"name": "lib/can_message_defs"
 				},
 				{
 					"_type": "UMLInterface",
@@ -26010,7 +26010,7 @@
 											"top": 455,
 											"width": 127,
 											"height": 13,
-											"text": "message_defs"
+											"text": "can_message_defs"
 										},
 										{
 											"_type": "LabelView",
@@ -28251,7 +28251,7 @@
 							"top": 424,
 							"width": 137,
 							"height": 103,
-							"text": "message_defs defines a series of enums that is helpful when sending CAN messages between nodes. "
+							"text": "can_message_defs defines a series of enums that is helpful when sending CAN messages between nodes. "
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -28808,7 +28808,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFuflt9GUGkrhU="
 					},
-					"name": "message_defs"
+					"name": "can_message_defs"
 				},
 				{
 					"_type": "UMLClass",

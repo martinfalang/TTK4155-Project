@@ -6,7 +6,6 @@
 #include "../inc/spi.h"
 
 #include <avr/io.h>
-#include <avr/interrupt.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // Public functions
@@ -17,10 +16,6 @@ void spi_init(void) {
     // Set MOSI, SCK and SS as output 
     DDR_SPI |= (1 << DD_MOSI) | (1 << DD_SCK) | (1 << DD_SS);
 
-#if defined(__AVR_ATmega2560__)
-    DDR_SPI |= (1 << PB0);
-#endif
-    
     // This must be done on the arduino because of the routing (maybe)
     // of wires through the I/O shield
 #if defined (__AVR_ATmega2560__)
@@ -30,7 +25,7 @@ void spi_init(void) {
     // Set MISO (used SS as input earlier)
     DDR_SPI &= ~(1 << DD_MISO);// | (1 << DD_SS));
 
-    // Enable SPI, set ATmega162 to master, set clock speed to f_osc/16
+    // Enable SPI, set to master, set clock speed to f_osc/16
     SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);
 
     // Set SS pin high

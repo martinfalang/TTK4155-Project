@@ -1,8 +1,10 @@
+#include "servo.h"
+
 // Module for controlling the servo through PWM
 
 // Period 20ms
 // Duty cycle * Period in interval [0.9, 2.1] ms
-#include "servo.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Includes
@@ -23,8 +25,9 @@
 #define PWM_LOWER_OCR_LIM       55 + PWM_OFFSET  // Lower limit: 55, gives 0.9 ms
 #define PWM_UPPER_OCR_LIM       128 + 10 + PWM_OFFSET // Upper limit: 128 gives 2.1 ms
 
-#define RIGHT_SERVO_DEGS_LIM    0 // TODO - update based on actual values
+#define RIGHT_SERVO_DEGS_LIM    0
 #define LEFT_SERVO_DEGS_LIM     180
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Public functions
