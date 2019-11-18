@@ -1,14 +1,31 @@
+
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include "enocder.h"
 
 #include "../../lib/inc/defines.h"
 #include <util/delay.h>
 #include <stdio.h>
 
-// these initial values seemed to work fine during testing
+////////////////////////////////////////////////////////////////////////////////
+// Defines
+////////////////////////////////////////////////////////////////////////////////
+
+#define ENCODER_CALIBRATE_BTN_PIN PK0
+
+////////////////////////////////////////////////////////////////////////////////
+// Private variables
+////////////////////////////////////////////////////////////////////////////////
+
+// These initial values worked well during testing
 static int16_t encoder_left = -500;
 static int16_t encoder_right = -8500;
 
-#define ENCODER_CALIBRATE_BTN_PIN PK0
+////////////////////////////////////////////////////////////////////////////////
+// Public functions
+////////////////////////////////////////////////////////////////////////////////
 
 void encoder_init(void) {
     DDRH  |= (1 << OE_) | (1 << SEL) | (1 << RST_);
@@ -62,11 +79,11 @@ float encoder_scale_measurement(float val, int16_t lower, int16_t upper) {
 
 
 void encoder_calibrate(void) {
-    printf("Disconnect power to motor. Press button when complete...");
+    
+    printf("Disconnect power to motor and press button...");
     while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN));  // wait for button press
     printf(" OK\n");
     _delay_ms(500);  // wait for button to be released
-
 
     printf("Move carriage to the far left and press button...");
     while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN));  // wait for button press
@@ -94,7 +111,7 @@ void encoder_calibrate(void) {
     encoder_left = pos;
     printf(" OK: %d\n", encoder_left);
 
-    printf("Reconnect power to motor. Pres button when complete...");
+    printf("Reconnect power to motor and press button...");
     while (PINK & (1 << ENCODER_CALIBRATE_BTN_PIN));  // wait for button press
     printf(" OK\n");
     _delay_ms(500);  // wait for button to be released

@@ -1,9 +1,9 @@
 
 /*
-    This module handles the timing of the Atmega162. It makes it possible for 
-    the oled screen to be updated with 60 Hz, a CAN message with joystick and 
-    touch button signals to be sent with 10 Hz, and a heartbeat led to flash 
-    with 1 Hz frequency.
+    This module handles the timing of the Atmega162 and ATmega2560. It makes it 
+    possible only do operations at a specified frequency without using delays. 
+    The 60Hz timer is the main timer and is the refresh rate of the OLED screen. 
+    The other timers are derived from this timer.
 */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -84,13 +84,6 @@ void timer_init(void) {
 #endif
 }
 
-ISR(TIMER_ISR_VECT) {
-    _60Hz_timeout = true;
-    _10Hz_counter++;
-    _1Hz_counter++;
-    _6Hz_counter++;
-}
-
 bool timer_get_60Hz_timeout(void) {
     if (_60Hz_timeout) {
         _60Hz_timeout = false;
@@ -122,4 +115,15 @@ bool timer_get_10Hz_timeout(void) {
         return true;
     }
     return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Interrupt service routine
+////////////////////////////////////////////////////////////////////////////////
+
+ISR(TIMER_ISR_VECT) {
+    _60Hz_timeout = true;
+    _10Hz_counter++;
+    _1Hz_counter++;
+    _6Hz_counter++;
 }
