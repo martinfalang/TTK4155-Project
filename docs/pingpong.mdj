@@ -16112,7 +16112,7 @@
 											"top": 456,
 											"width": 136.9189453125,
 											"height": 13,
-											"text": "+pwm_init()",
+											"text": "+servo_init()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -16129,7 +16129,7 @@
 											"top": 471,
 											"width": 136.9189453125,
 											"height": 13,
-											"text": "+pwm_set_duty_cycle()",
+											"text": "+servo_set_angle()",
 											"horizontalAlignment": 0
 										}
 									],
@@ -24003,7 +24003,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFufxtX19jpWzQ="
 							},
-							"name": "pwm_init"
+							"name": "servo_init"
 						},
 						{
 							"_type": "UMLOperation",
@@ -24011,7 +24011,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFufxtX19jpWzQ="
 							},
-							"name": "pwm_set_duty_cycle"
+							"name": "servo_set_angle"
 						}
 					]
 				},
