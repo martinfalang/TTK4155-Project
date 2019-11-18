@@ -2,7 +2,7 @@
 #include "game_logic.h"
 #include "ir.h"
 #include "solenoid.h"
-#include "pwm.h"
+#include "servo.h"
 
 #include "../../lib/inc/message_defs.h"
 
@@ -78,7 +78,7 @@ void game_play(const can_msg_t *input_data, pid_t *motor_pos_pid) {
 
     // Servo motor logic
     int16_t degrees = input_data->data[SLIDER_RIGHT_IDX];
-    pwm_set_duty_cycle(degrees);
+    servo_set_angle(degrees);
 
     // IR beam logic
     if (ir_beam_broken()) {

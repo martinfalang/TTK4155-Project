@@ -6,7 +6,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "pwm.h"
+#include "servo.h"
 
 // Definitions
 // See docs/schematics/arduino-mega2560_r3-sch.pdf for schematics
@@ -23,7 +23,7 @@
 // General idea: Set one OCR such that we can reset the timer from the interrupt, set the
 // other to generate the PWM signal.
 
-// void pwm_init_interrupt(void)
+// void servo_init_interrupt(void)
 // {
 //     // Enable interrupts when timer reaches TOP (defined bu ICR1)
 //     TIMSK1 |= (1 << TOV1);
@@ -48,11 +48,11 @@
 
 //     degrees += dx;
 
-//     pwm_set_duty_cycle(degrees);
+//     servo_set_angle(degrees);
 // }
 
 // Initialize pwm in fast_pwm-mode
-void pwm_init(void)
+void servo_init(void)
 {
     // Set prescaler to clk_io/256 - CS1 2:0 = 4
     TCCR1B |= _BV(CS12) | _BV(WGM12) | _BV(WGM13);
@@ -65,14 +65,14 @@ void pwm_init(void)
     // Set ICR1 (which defines TOP) to 1250
     ICR1 = 1250;
 
-    pwm_set_duty_cycle(90);
+    servo_set_angle(90);
 
     // Set PWM pin as output. Use OC1A - PB5
     // This also activates the signal
     DDRB |= _BV(PWM_PIN);
 }
 
-void pwm_set_duty_cycle(int16_t degrees)
+void servo_set_angle(int16_t degrees)
 {
     // Sets the duty cycle of the pwm signal corresponding to degrees.
     // This should be tuned s.t. 0 degrees equals 3-O'clock, as in polar coordinates
