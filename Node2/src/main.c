@@ -24,7 +24,7 @@
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/timer.h"
-#include "pwm.h"
+#include "servo.h"
 #include "game_logic.h"
 
 
@@ -37,7 +37,7 @@ extern can_msg_t endofgame_msg;  // TODO: Bad?
 int main(void) {
     uart_init(); putchar('\n');
     ir_init();
-    pwm_init();
+    servo_init();
     dac_init();
     motor_init();
     encoder_init();
