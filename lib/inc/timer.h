@@ -1,3 +1,17 @@
+/**
+ * @file timer.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements timers of different frequency and functions to check if 
+ *        they have timed out. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef TIMER_H
 #define TIMER_H
 

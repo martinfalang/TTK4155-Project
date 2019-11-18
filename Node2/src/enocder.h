@@ -1,3 +1,16 @@
+/**
+ * @file enocder.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions to use the encoder attached to the gameboard. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef ENCODER_H
 #define ENCODER_H
 

@@ -1,3 +1,16 @@
+/**
+ * @file pid.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements struct and functions for a PID controller. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef PID_H
 #define PID_H
 

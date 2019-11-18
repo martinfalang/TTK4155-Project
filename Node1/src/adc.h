@@ -1,3 +1,16 @@
+/**
+ * @file adc.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions to use the ADC0844CCN ADC chip. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef ADC_H
 #define ADC_H
 

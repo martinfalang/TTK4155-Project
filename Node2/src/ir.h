@@ -1,3 +1,16 @@
+/**
+ * @file ir.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions for reading the IR beam on the gamebox. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef IR_H
 #define IR_H
 

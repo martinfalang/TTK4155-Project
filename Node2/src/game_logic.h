@@ -1,3 +1,16 @@
+/**
+ * @file game_logic.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions for the game logic on Node 2. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef GAME_LOGIC_H
 #define GAME_LOGIC_H
 

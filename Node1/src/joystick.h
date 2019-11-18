@@ -1,3 +1,17 @@
+/**
+ * @file joystick.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implement functions for reading the joystick position and button value
+ *        on the USB Multi-function board P1000. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef JOYSTICK_H
 #define JOYSTICK_H
 

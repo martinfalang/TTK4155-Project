@@ -1,3 +1,16 @@
+/**
+ * @file message_defs.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Defines useful enums for sending CAN messages.
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef MESSAGE_DEFS_H
 #define MESSAGE_DEFS_H
 

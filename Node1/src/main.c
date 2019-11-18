@@ -1,10 +1,14 @@
-/*
- * Byggern 2019
- *
- * Created: 28.08.2019 12.19.50
- * Authors :    Kristian Brudeli
- *              Martin Falang
- *              Eirik Flemsæter Falck
+/**
+ * @file Node1/main.c
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Main file for Node 1. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
  */
 
 ////////////////////////////////////////////////////////////////////////////////

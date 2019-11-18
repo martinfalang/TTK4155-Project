@@ -1,3 +1,15 @@
+/**
+ * @file Node2/main.c
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements the main function for Node 2. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
 
 #include <stdio.h>
 #include <stdbool.h>

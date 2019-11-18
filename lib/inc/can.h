@@ -1,3 +1,17 @@
+/**
+ * @file can.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implement CAN bus functions. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+
 #ifndef CAN_H
 #define CAN_H
 
