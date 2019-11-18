@@ -1,10 +1,18 @@
 #ifndef CAN_H
 #define CAN_H
 
-#include "../../lib/inc/defines.h" // for DEBUG
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
 
-#include <stdint.h>     // for uint
-#include <stdbool.h>    // for bool
+#include "../../lib/inc/defines.h"
+
+#include <stdint.h>
+#include <stdbool.h>    
+
+////////////////////////////////////////////////////////////////////////////////
+// Structs
+////////////////////////////////////////////////////////////////////////////////
 
 typedef struct can_msg {
     uint16_t sid;
@@ -12,7 +20,10 @@ typedef struct can_msg {
     uint8_t data[8];
 } can_msg_t;
 
-// General functions
+////////////////////////////////////////////////////////////////////////////////
+// Function declarations
+////////////////////////////////////////////////////////////////////////////////
+
 /**
  * @brief Initialize the CAN bus
  * 
@@ -20,7 +31,6 @@ typedef struct can_msg {
  */
 void can_init(unsigned char state);
 
-// Get functions
 /**
  * @brief Checks if a new CAN message is ready
  * 
@@ -36,7 +46,6 @@ bool can_new_msg(void);
  */
 const can_msg_t *can_get_recv_msg(void);
 
-// Send function
 /**
  * @brief Send a CAN message
  * 
