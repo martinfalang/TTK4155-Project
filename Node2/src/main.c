@@ -1,38 +1,45 @@
 
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <avr/io.h>
-#include "../../lib/inc/uart.h"
-
-#include "../../lib/inc/defines.h"
 #include <util/delay.h>
+#include <avr/interrupt.h>
+
+// Lib includes
+#include "../../lib/inc/uart.h"
+#include "../../lib/inc/defines.h"
 #include "../../lib/inc/mcp2515_defines.h"
 #include "../../lib/inc/can.h"
 #include "../../lib/inc/message_defs.h"
-
-
-#include <avr/interrupt.h>
-
 #include "../../lib/inc/message_defs.h"
+#include "../../lib/inc/timer.h"
 
+// Node2 includes
 #include "ir.h"
 #include "pid.h"
 #include "dac.h"
 #include "motor.h"
 #include "enocder.h"
 #include "solenoid.h"
-#include "../../lib/inc/mcp2515_defines.h"
-#include "../../lib/inc/can.h"
-#include "../../lib/inc/timer.h"
 #include "pwm.h"
 #include "game_logic.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// Private functions
+////////////////////////////////////////////////////////////////////////////////
 
 pid_t motor_pos_pid;
 const float T  = 0.01;  // sample time of pid
 
-
 extern can_msg_t endofgame_msg;  // TODO: Bad?
+
+////////////////////////////////////////////////////////////////////////////////
+// Main function
+////////////////////////////////////////////////////////////////////////////////
 
 int main(void) {
     uart_init(); putchar('\n');
@@ -86,6 +93,10 @@ int main(void) {
 
     return 0;
 }   
+
+////////////////////////////////////////////////////////////////////////////////
+// Interrupt service routine
+////////////////////////////////////////////////////////////////////////////////
 
 ISR(TIMER5_COMPA_vect) {
     motor_pos_pid.measurement_raw += encoder_read_raw();
