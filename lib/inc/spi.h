@@ -1,5 +1,22 @@
+/**
+ * @file spi.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions for SPI communication. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef SPI_H
 #define SPI_H
+
+////////////////////////////////////////////////////////////////////////////////
+// Defines
+////////////////////////////////////////////////////////////////////////////////
 
 #if defined (__AVR_ATmega162__)
     #define DD_SS       DDB4
@@ -16,12 +33,42 @@
 #define DDR_SPI     DDRB
 #define SPI_PORT    PORTB 
 
+////////////////////////////////////////////////////////////////////////////////
+// Function declarations
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @brief Initialize SPI bus in master mode
+ * 
+ */
 void spi_init(void);
 
+/**
+ * @brief Pull the slave select (SS) pin low
+ * 
+ */
 void spi_slave_select(void);
+
+/**
+ * @brief Pull the slave select (SS) pin high
+ * 
+ */
 void spi_slave_deselect(void);
 
+/**
+ * @brief Write a byte to the SPI bus. This functions assumes a slave is 
+ *        selected.
+ * 
+ * @param data 
+ */
 void spi_write_byte(unsigned char data);
+
+/**
+ * @brief Read a byte from the SPI bus. This functions assumes a slave is 
+ *        selected.
+ * 
+ * @return unsigned char The byte read
+ */
 unsigned char spi_read_byte(void);
 
 #endif // SPI_H

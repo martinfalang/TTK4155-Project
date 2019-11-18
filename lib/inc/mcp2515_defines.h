@@ -1,3 +1,16 @@
+/**
+ * @file mcp2515_defines.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Defines register addresses, commands and register values for the 
+ *        MCP2515 chip.
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
 #ifndef __MCP2515_H
 #define __MCP2515_H
 
@@ -12,6 +25,10 @@ v1.00       2003/12/11  Initial release
 
 Copyright 2003 Kimberly Otten Software Consulting
 */
+
+////////////////////////////////////////////////////////////////////////////////
+// Defines
+////////////////////////////////////////////////////////////////////////////////
 
 // Define MCP2515 register addresses
 
@@ -120,11 +137,11 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 // CANCTRL Register Values
 
-#define MODE_NORMAL     0x00
+#define MODE_NORMAL     0x00  /** Normal mode: send on the CAN bus */
 #define MODE_SLEEP      0x20
-#define MODE_LOOPBACK   0x40
+#define MODE_LOOPBACK   0x40  /** Loopback mode: send internally to itself */
 #define MODE_LISTENONLY 0x60
-#define MODE_CONFIG     0x80
+#define MODE_CONFIG     0x80  /** Config mode: configure the MCP2515 chip */
 #define MODE_POWERUP	0xE0
 #define MODE_MASK		0xE0
 #define ABORT_TX        0x10

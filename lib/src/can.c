@@ -1,3 +1,8 @@
+
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
+
 #include "../inc/can.h"
 #include "../inc/mcp2515.h"    
 
@@ -8,12 +13,23 @@
 #include <avr/interrupt.h>  // for interrupts
 #include <avr/io.h>         // for setting int1 to input
 
+
+////////////////////////////////////////////////////////////////////////////////
 // Private variables
+////////////////////////////////////////////////////////////////////////////////
+
 static can_msg_t received_msg;
 static volatile bool new_msg;
 
+////////////////////////////////////////////////////////////////////////////////
 // Private function declarations
-void can_receive();
+////////////////////////////////////////////////////////////////////////////////
+
+void _can_receive();
+
+////////////////////////////////////////////////////////////////////////////////
+// Public functions
+////////////////////////////////////////////////////////////////////////////////
 
 void can_init(unsigned char state) {
     mcp2515_init(state);
@@ -51,7 +67,7 @@ bool can_new_msg(void) {
 }
 
 const can_msg_t *can_get_recv_msg(void) {
-    can_receive();
+    _can_receive();
     return (const can_msg_t *)(&received_msg);
 }
 
@@ -72,7 +88,13 @@ void can_send(const can_msg_t* p_msg) {
     mcp2515_request_to_send(MCP_RTS_TX0);
 }
 
-void can_receive(void) {
+////////////////////////////////////////////////////////////////////////////////
+// Private functions
+////////////////////////////////////////////////////////////////////////////////
+
+void _can_receive(void) {
+    
+    new_msg = false;
     
     uint8_t sidl = mcp2515_read_byte(MCP_RXB0SIDL);
     uint8_t sidh = mcp2515_read_byte(MCP_RXB0SIDH);
@@ -83,23 +105,34 @@ void can_receive(void) {
 
     mcp2515_read_rx_buffer_data(received_msg.data, received_msg.length);
 
-    new_msg = false;
+    // Manually clear the interrupt flag
+    // This had to be done in order to have reliable operations, possibly due 
+    // to race conditions
+    mcp2515_bit_modify(MCP_CANINTF, 0b1, 0);   
 }
 
-// ISR for received can message
+////////////////////////////////////////////////////////////////////////////////
+// Interrupt service routine
+////////////////////////////////////////////////////////////////////////////////
+
 ISR(CAN_INTERRUPT_VEC) {
     new_msg = true;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+// Test functions
+////////////////////////////////////////////////////////////////////////////////
+
 // These functions are used for testing
-#if DEBUG
+#if COMPILE_CAN_TEST
 
 void can_print_msg(const can_msg_t* msg) {
     printf("ID: 0x%.4X\n", msg->sid);
     printf("Len: %d\n", msg->length);
     for (int i = 0; i < msg->length; ++i) {
         uint8_t d = msg->data[i];
-        printf("Data%X: 0x%.2X\n", i, d);
+        printf("D%X: 0x%.2X\n", i, d);
     }
 }
 
@@ -182,4 +215,4 @@ void can_test_node_transmission(void) {
     can_send(&sendmsg);
 }
 
-#endif // DEBUG
+#endif // COMPILE_CAN_TEST

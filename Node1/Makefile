@@ -1,5 +1,8 @@
 # List all source files to be compiled; separate with space
-SOURCE_FILES := main.c sram-test.c xmem.c adc.c joystick.c touch.c uart.c spi.c can.c mcp2515.c
+SOURCE_FILES := main.c uart.c xmem.c adc.c joystick.c touch.c \
+ spi.c can.c mcp2515.c oled-buffer.c oled-menu.c oled.c timer.c game.c buzzer.c\
+ delay.c pwm0.c highscore.c heartbeat.c
+
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes
 
@@ -16,10 +19,9 @@ TARGET_CPU := atmega162
 TARGET_DEVICE := m162
 
 CC := avr-gcc
-CFLAGS := -O -std=c11 -mmcu=$(TARGET_CPU)
+CFLAGS := -O -std=c11 -mmcu=$(TARGET_CPU) -fdiagnostics-color
 
 OBJECT_FILES = $(SOURCE_FILES:%.c=$(BUILD_DIR)/%.o)
-#SRC := $(SOURCE_FILES:%.c=$(SRC_DIR)/%.c)
 
 VPATH := src ../lib/src
 
