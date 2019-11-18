@@ -157,27 +157,9 @@ void oled_menu_update(void)
         // Print the score if in game and it has changed since last time
         touch_btn_t buttons = touch_read_btns();
 
-        // If not already trying to exit, exit.
-        // If already trying to exit
-        if (!_trying_to_exit && buttons.left && buttons.right) {
-            _trying_to_exit = true;
-        }
 
-        // To avoid immediately exiting the game over menu
-        if (_trying_to_exit && !(buttons.left && buttons.right)) {
-            _trying_to_exit = false;
-        }
-
-        if (!game_is_playing()) {  // means game is over, but we have not returned from game over menu
-            _stop_game();
-        }
-        else if (_trying_to_exit) {
-            _stop_game();
-        }
-        else if (_trying_to_exit) { // If both btns pressed while game over
-            game_exit();
-            p_current_menu = &highscore_menu;
-        }
+        
+        // Add some logic to change menu here
 
     }
 
