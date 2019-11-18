@@ -1,3 +1,16 @@
+/**
+ * @file game.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions relevant for the game logic on Node 1. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef NODE1_GAME_H
 #define NODE1_GAME_H
 

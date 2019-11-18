@@ -1,6 +1,16 @@
-/*
-    Menu framework for use with OLED screen
-*/
+/**
+ * @file oled-menu.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements a menu framework for use with the OLED screen. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef OLED_MENU_H
 #define OLED_MENU_H
 

@@ -1,3 +1,16 @@
+/**
+ * @file mcp2515.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions to use the MCP2515 CAN bus chip. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef MCP2515_H
 #define MCP2515_H
 

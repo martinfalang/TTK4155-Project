@@ -1,3 +1,16 @@
+/**
+ * @file oled-buffer.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements a buffer for the paged OLED screen on the USB 
+ *        multi-function board P1000. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
 /*
     General OLED-buffer (given 8-bit column height)
 */

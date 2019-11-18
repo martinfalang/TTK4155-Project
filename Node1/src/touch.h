@@ -1,3 +1,17 @@
+/**
+ * @file touch.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions to check the state of the touch buttons and 
+ *        sliders. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef TOUCH_H
 #define TOUCH_H
 

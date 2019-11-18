@@ -1,3 +1,16 @@
+/**
+ * @file motor.h
+ * @author Kristian Brudeli
+ *         Martin Falang
+ *         Eirik Flemsæter Falck
+ * @brief Implements functions for driving the motor attached to the gamebox. 
+ * @version 0.1
+ * @date 2019-11-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef MOTOR_H
 #define MOTOR_H
 
