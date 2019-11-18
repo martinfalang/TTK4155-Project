@@ -14,10 +14,11 @@
 #ifndef GAME_LOGIC_H
 #define GAME_LOGIC_H
 
+#include <stdbool.h>
+
 #include "../../lib/inc/can.h"
 #include "pid.h"
 
-#include <stdbool.h>
 
 /**
  * @brief Possible game difficulties

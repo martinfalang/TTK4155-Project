@@ -1,8 +1,9 @@
 #include "enocder.h"
-
 #include "../../lib/inc/defines.h"
+
 #include <util/delay.h>
 #include <stdio.h>
+
 
 // these initial values seemed to work fine during testing
 static int16_t encoder_left = -500;

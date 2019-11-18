@@ -1,12 +1,12 @@
-
 #include "game_logic.h"
+
+#include <stdio.h>
+
+#include "../../lib/inc/message_defs.h"
 #include "ir.h"
 #include "solenoid.h"
 #include "servo.h"
 
-#include "../../lib/inc/message_defs.h"
-
-#include <stdio.h>
 
 int solenoid_cmd_prev = 0;
 bool playing = false;

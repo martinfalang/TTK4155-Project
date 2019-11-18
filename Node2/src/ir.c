@@ -1,9 +1,8 @@
-
 #include "ir.h"
 
 #include <avr/io.h>
-#include <stdint.h>
 #include <avr/interrupt.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #define ADC_THRESHOLD               200
